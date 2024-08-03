@@ -1,5 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
+import CustomInputField from "../_components/InputField";
 
 export default function Home() {
   const [email, setEmail] = useState<string>('');
@@ -35,30 +36,24 @@ export default function Home() {
           errorMessage && <p className="text-red-500">{errorMessage}</p>
         )}
           <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-sm">
-          <div className="flex flex-col">
-            <label htmlFor="email"> Email </label>
-              <input 
+            <CustomInputField
                 id="email"
+                label="Email"
                 type="email" 
                 value={email} 
                 placeholder="Enter your email" 
                 onChange={e => setEmail(e.target.value)} 
-                required
-                className="p-2 border border-gray-300 rounded">
-              </input>
-            </div>
-            <div className="flex flex-col">
-           <label htmlFor="password"> Password </label>
-              <input 
+                required={true}
+              />
+              <CustomInputField
                 id="password"
+                label="Password"
                 type="password" 
                 value={password} 
                 placeholder="Enter your password" 
                 onChange={e => setPassword(e.target.value)}
-                required
-                className="p-2 border border-gray-300 rounded">  
-                </input>
-          </div>
+                required={true}
+                />
           <button type="submit" className="bg-gray-500 text-white p-2 rounded justify-center items-center"> Sign In</button>
           </form>
         </div>
