@@ -1,61 +1,67 @@
+import NextAuth, { NextAuthOptions, getServerSession, DefaultSession } from "next-auth";
+import { PrismaClient } from "@prisma/client";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { getServerSession, type DefaultSession, type NextAuthOptions } from "next-auth";
-import { type Adapter } from "next-auth/adapters";
-import EmailProvider from "next-auth/providers/email"; // Add the email provider
-import { env } from "~/env";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { Adapter } from "next-auth/adapters";
 import { db } from "~/server/db";
+import { env } from "~/env";
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
- */
+// Module augmentation for `next-auth` types. This allows you to add custom properties to the `session` object.
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
+// Define the NextAuth options
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
+  adapter: PrismaAdapter(db || new PrismaClient()) as Adapter,
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      authorize: async (credentials) => {
+        if (!credentials?.email || !credentials.password) {
+          return null;
+        }
+
+        const user = await db.user.findUnique({
+          where: { email: credentials.email },
+        });
+        console.log("user", user);
+
+        if (!user) {
+          return null;
+        }
+
+        const isValidPassword = await bcrypt.compare(credentials.password, user.password);
+        if (!isValidPassword) {
+          return null; // Invalid password, triggers the error page
+        }
+
+        return { ...user, id: user.id }; // Successful login, returns the user object
       },
     }),
-  },
-  adapter: PrismaAdapter(db) as Adapter,
-  providers: [
-  
-    /**
-     * Add more providers here if needed.
-     *
-     * For example, the GitHub provider requires you to add the `refresh_token_expires_in` field
-     * to the Account model. Refer to the NextAuth.js docs for the provider you want to use.
-     * @see https://next-auth.js.org/providers/github
-     */
+    // Add more providers if needed
   ],
+  callbacks: {
+    async session({ session, user }) {
+      session.user = user;
+      return session;
+    },
+  },
+  secret: env.NEXTAUTH_SECRET,
 };
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = () => getServerSession(authOptions);
+// Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
+export const getServerAuthSession = async () => {
+  return getServerSession(authOptions);
+};
+
+
