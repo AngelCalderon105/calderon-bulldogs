@@ -18,7 +18,12 @@ declare module "next-auth" {
 
 // Define the NextAuth options
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db || new PrismaClient()) as Adapter,
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "admin/login",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -51,8 +56,15 @@ export const authOptions: NextAuthOptions = {
     // Add more providers if needed
   ],
   callbacks: {
-    async session({ session, user }) {
-      session.user = user;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id; // Add user ID to the JWT token
+        token.email = user.email; // Add user email to the JWT token
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.email = token.email;
       return session;
     },
   },
