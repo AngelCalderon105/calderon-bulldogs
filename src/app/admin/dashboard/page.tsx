@@ -1,32 +1,21 @@
-"use client";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation"; 
-import { useEffect } from "react";
+import { redirect } from "next/navigation";
+import { getServerAuthSession } from "~/server/auth";
 
-export default function AdminDashboard() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+export default async function AdminDashboard() {
 
-  useEffect(() => {
-    if (status === "loading") return; 
-    if (!session) {
-      router.push("/admin/login");
-    }
-  }, [session, status]);
-
-  if (status === "loading") {
-    return <div>Loading...</div>; 
-  }
+  const session = await getServerAuthSession();
 
   if (!session) {
-    return null; 
+    // Redirect to the login page if there is no session
+    redirect("/admin/login");
+    return null; // Stop further execution if redirecting
   }
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <p>Welcome, {session?.user?.email}</p>
-      {/* Admin-specific content */}
-    </div>
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p>Welcome, {session?.user?.email}</p>
+        {/* Admin-specific content */}
+      </div>
   );
 }
