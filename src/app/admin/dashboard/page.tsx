@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import MultipleFileUpload from "~/app/_components/MultipleFileUpload";
 import { getServerAuthSession } from "~/server/auth";
 
 export default async function AdminDashboard() {
@@ -16,6 +17,7 @@ export default async function AdminDashboard() {
         <h1>Admin Dashboard</h1>
         <p>Welcome, {session?.user?.email}</p>
         {/* Admin-specific content */}
+        <MultipleFileUpload/>
       </div>
   );
 }
