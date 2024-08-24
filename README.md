@@ -1,29 +1,27 @@
-# Create T3 App
+# Calderon Bulldogs Where are we where are we where are we
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## Project Overview
 
-## What's next? How do I make an app with this?
+**Calderon Bulldogs** is a full-stack application built for a family-owned bulldog breeding business based in Santa Ana. The site was transformed from a static business website into a CMS-driven application with robust admin features. This project equips the business with tools for managing customer relationships, content, and e-commerce functionality.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### Key Features
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **Customer Relationship Management:** Streamlined puppy reservations, purchases, and customer inquiries.
+- **Content Management System:** Easy-to-use CMS for updating site content, including puppy listings and blog posts.
+- **E-Commerce Functionality:** Integrated e-commerce features for processing payments and managing orders.
+- **Admin Features:** Secure admin panel for managing site content, customer data, and order tracking.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Tech Stack
 
-## Learn More
-
-To learn more about the [T3 Stack](https://crn;eate.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- **Frontend:** 
+  - Next.js
+  - TypeScript
+  - Tailwind CSS
+- **Backend:** 
+  - Next.js (API routes)
+  - tRPC
+- **Database:** 
+  - PostgreSQL
+  - Prisma
+- **Storage:** 
+  - AWS S3 (for image and file storage)
