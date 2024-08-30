@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import MultipleFileUpload from "~/app/_components/MultipleFileUpload";
 import { getServerAuthSession } from "~/server/auth";
-
+import MainGalleryView from "~/app/_components/MainGalleryView"
 export default async function AdminDashboard() {
 
   const session = await getServerAuthSession();
@@ -16,8 +16,8 @@ export default async function AdminDashboard() {
       <div>
         <h1>Admin Dashboard</h1>
         <p>Welcome, {session?.user?.email}</p>
-        {/* Admin-specific content */}
         <MultipleFileUpload/>
+        <MainGalleryView isAdmin={true}/>
       </div>
   );
 }
