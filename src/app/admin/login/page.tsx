@@ -2,6 +2,7 @@
 import { FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation"; 
+import Link from 'next/link'
 import CustomInputField from "../../_components/InputField";
 
 export default function Home() {
@@ -55,6 +56,7 @@ export default function Home() {
             onChange={e => setPassword(e.target.value)}
             required={true}
           />
+          <Link href="/admin/reset-password" className="underline text-blue-500">Forgot Password?</Link>
           <button type="submit" className="bg-gray-500 text-white p-2 rounded justify-center items-center"> Sign In</button>
         </form>
       </div>
