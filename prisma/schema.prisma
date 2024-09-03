@@ -40,3 +40,9 @@ model PasswordResetToken {
 
     @@unique([identifier, token])
 }
+
+model Faqs {
+    id        String  @id @default(cuid()) 
+    question  String  @unique
+    answer    String 
+}
