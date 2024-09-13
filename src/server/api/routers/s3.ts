@@ -2,6 +2,7 @@ import { S3Client, PutObjectCommand, ListObjectsCommand, DeleteObjectCommand } f
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
+import { db } from "~/server/db";
 
 const region = process.env.AWS_REGION as string | undefined;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string | undefined;
@@ -22,7 +23,7 @@ const s3 = new S3Client({
 
 export const s3Router = createTRPCRouter({
   getPresignedUrl: publicProcedure
-    .input(z.object({ fileName: z.string(), fileType: z.string() }))
+    .input(z.object({ fileName: z.string(), fileType: z.string(), tags: z.array(z.string()), }))
     .mutation(async ({ input }) => {
       const folder = "photos/";
       const command = new PutObjectCommand({
@@ -32,6 +33,17 @@ export const s3Router = createTRPCRouter({
       });
 
       const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
+      
+      const s3Url = `https://${bucketName}.s3.${region}.amazonaws.com/${folder}${input.fileName}`
+      
+      await db.fileMetaData.create({
+        data: {
+          s3Url,             
+          fileType: input.fileType, 
+          tags :input.tags
+        },
+      });
+      
       return { presignedUrl };
     }),
 
@@ -54,14 +66,36 @@ export const s3Router = createTRPCRouter({
   }),
 
   deletePhoto: publicProcedure
-    .input(z.object({ key: z.string() }))
+    .input(z.object({
+      key: z.string(),    // The S3 object key for file deletion
+    }))
     .mutation(async ({ input }) => {
+      // Step 1: Delete the file from S3
       const command = new DeleteObjectCommand({
         Bucket: bucketName,
-        Key: input.key,
+        Key: input.key,  
       });
+      const s3Url = `https://${bucketName}.s3.${region}.amazonaws.com/${input.key}`;
 
-      await s3.send(command);
+      try {
+        await s3.send(command);  // Send the delete command to S3
+      } catch (error) {
+        console.error("Error deleting from S3:", error);
+        return { success: false, message: "Error deleting from S3" };
+      }
+
+      // Step 2: Delete the corresponding metadata from the database
+      try {
+        await db.fileMetaData.delete({
+          where: {
+            s3Url: s3Url,  
+          },
+        });
+      } catch (error) {
+        console.error("Error deleting metadata from database:", error);
+        return { success: false, message: "Error deleting metadata from database" };
+      }
+
       return { success: true };
     }),
 });

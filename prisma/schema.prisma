@@ -40,3 +40,17 @@ model PasswordResetToken {
 
     @@unique([identifier, token])
 }
+
+model Faqs {
+    id        String  @id @default(cuid()) 
+    question  String  @unique
+    answer    String 
+}
+
+model FileMetaData {
+  id         Int      @id @default(autoincrement())
+  s3Url      String @unique
+  tags       String[] 
+  uploadDate DateTime @default(now())
+  fileType   String
+  } 
