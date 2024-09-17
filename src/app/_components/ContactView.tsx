@@ -11,7 +11,7 @@ type ContactMethod = "CALL" | "EMAIL" | "FORM";
 
 // ENTER EMAIL AND PHONE NUMBER HERE
 const EMAIL = "CHANGETHISEMAIL@website.com"
-
+const PHONE = "SOMEPHONENUMBER"
 
 const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
   const [contactMethod, setContactMethod] = useState<ContactMethod>("FORM");
@@ -21,10 +21,6 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
       setContactMethod(method);
     };
     return handleClick;
-  };
-
-  const handleEmailClick = () => {
-    window.open(`mailto:${EMAIL}`);
   };
 
   return (
@@ -40,17 +36,17 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
         {contactMethod === "CALL" && (
           <div>
             <h3>Call us at the number below:</h3>
-            <a href="#" className="text-red-500">
-              ADD PHONE NUMBER
+            <a href={`tel:${PHONE}`} target="_blank" className="text-red-500">
+              {PHONE}
             </a>
           </div>
         )}
         {contactMethod === "EMAIL" && (
           <div>
-            <h3>Email us here:</h3>
-            <button className="border-2 border-gray-500 bg-gray-200 p-2 text-red-500" onClick={handleEmailClick}>
+            <h3 className="mb-4">Email us here:</h3>
+            <a className="border-2 border-gray-500 bg-gray-200 p-2 text-red-500" href={`mailto:${EMAIL}`} target="_blank">
               {EMAIL}
-            </button>
+            </a>
           </div>
         )}
         {contactMethod === "FORM" && (
