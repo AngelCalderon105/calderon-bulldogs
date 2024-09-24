@@ -54,3 +54,17 @@ model FileMetaData {
   uploadDate DateTime @default(now())
   fileType   String
   } 
+
+enum ContactType {
+    GENERAL
+    STUD
+    PURCHASE
+}
+
+model ContactForm {
+    id          String   @id @default(cuid())
+    email       String   @db.VarChar(100)
+    phone       Int
+    type        ContactType
+    body        String   @db.VarChar(2000)
+}
