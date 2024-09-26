@@ -48,9 +48,23 @@ model Faqs {
 }
 
 model FileMetaData {
-  id         Int      @id @default(autoincrement())
-  s3Url      String @unique
-  tags       String[] 
-  uploadDate DateTime @default(now())
+  id         Int        @id @default(autoincrement())
+  s3Url      String     @unique
+  tags       String[]   // Optional for main gallery, not needed for puppy gallery
+  puppy      Puppy?     @relation(fields: [puppyId], references: [id]) // Optional relation to Puppy
+  puppyId    Int?       // Optional foreign key to Puppy model
+  uploadDate DateTime   @default(now())
   fileType   String
-  } 
+}
+
+model Puppy {
+  id        Int        @id @default(autoincrement())
+  name      String
+  birthdate  DateTime    // Store the birthdate
+  color     String
+  status    String     // available, sold, reserved
+  price     Float
+  gallery   FileMetaData[]  // relation to FileMetaData (multiple images in gallery)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
