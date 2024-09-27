@@ -6,18 +6,20 @@ export const contactRouter = createTRPCRouter({
   createForm: publicProcedure
     .input(
       z.object({
+        name: z.string(),
         email: z.string(),
-        phone: z.number(),
-        type: z.enum(["GENERAL", "STUD", "PURCHASE"]),
+        phone: z.string(),
+        contactType: z.enum(["GENERAL", "STUD", "PURCHASE"]),
         body: z.string(),
       }),
     )
     .mutation(async ({ input }) => {
       const newForm = await db.contactForm.create({
         data: {
+          name: input.name,
           email: input.email,
           phone: input.phone,
-          type: input.type,
+          contactType: input.contactType,
           body: input.body,
         },
       });

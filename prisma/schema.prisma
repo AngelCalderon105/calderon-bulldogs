@@ -63,8 +63,9 @@ enum ContactType {
 
 model ContactForm {
     id          String   @id @default(cuid())
+    name       String   @db.VarChar(100)
     email       String   @db.VarChar(100)
-    phone       Int
-    type        ContactType
+    phone       String   @db.VarChar(30)
+    contactType  ContactType        
     body        String   @db.VarChar(2000)
 }
