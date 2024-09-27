@@ -30,6 +30,18 @@ export const contactRouter = createTRPCRouter({
     const forms = await db.contactForm.findMany();
     return forms;
   }),
+
+  deleteForm: publicProcedure
+        .input(z.object({
+            id: z.string(),
+        }))
+        .mutation(async ({input}) => {
+            const form = await db.contactForm.delete({
+                where: {id: input.id}
+            });
+
+            return {success: true};
+        }),
 });
 
 // export const faqsRouter = createTRPCRouter({

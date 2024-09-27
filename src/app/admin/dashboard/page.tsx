@@ -3,6 +3,8 @@ import MultipleFileUpload from "~/app/_components/MultipleFileUpload";
 import { getServerAuthSession } from "~/server/auth";
 import MainGalleryView from "~/app/_components/MainGalleryView"
 import FaqView from "~/app/_components/FaqView";
+import ContactView from "~/app/_components/ContactView";
+
 export default async function AdminDashboard() {
 
   const session = await getServerAuthSession();
@@ -20,6 +22,7 @@ export default async function AdminDashboard() {
         <MultipleFileUpload/>
         <MainGalleryView isAdmin={true}/>
         <FaqView isAdmin={true}/>
+        <ContactView isAdmin={true}/>
       </div>
   );
 }
