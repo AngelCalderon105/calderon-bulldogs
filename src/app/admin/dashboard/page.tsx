@@ -3,6 +3,8 @@ import MultipleFileUpload from "~/app/_components/MultipleFileUpload";
 import { getServerAuthSession } from "~/server/auth";
 import MainGalleryView from "~/app/_components/MainGalleryView"
 import FaqView from "~/app/_components/FaqView";
+import AdminEmailUpdate from '~/app/_components/AdminEmailUpdate';
+import AdminPasswordChange from '~/app/_components/AdminPasswordChange';
 export default async function AdminDashboard() {
 
   const session = await getServerAuthSession();
@@ -20,6 +22,8 @@ export default async function AdminDashboard() {
         <MultipleFileUpload/>
         <MainGalleryView isAdmin={true}/>
         <FaqView isAdmin={true}/>
+        <AdminEmailUpdate />
+        <AdminPasswordChange />
       </div>
   );
 }
