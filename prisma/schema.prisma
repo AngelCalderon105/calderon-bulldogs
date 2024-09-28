@@ -54,3 +54,10 @@ model FileMetaData {
   uploadDate DateTime @default(now())
   fileType   String
   } 
+
+model Event {
+  id             Int      @id @default(1)
+  name           String
+  date           DateTime  
+  isEventActive  Boolean
+}
