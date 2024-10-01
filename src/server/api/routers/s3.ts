@@ -25,7 +25,7 @@ export const s3Router = createTRPCRouter({
   getPresignedUrl: publicProcedure
     .input(z.object({ fileName: z.string(), fileType: z.string(), tags: z.array(z.string()), }))
     .mutation(async ({ input }) => {
-      const folder = "photos/";
+      const folder = "main_gallery/";
       const command = new PutObjectCommand({
         Bucket: bucketName,
         Key: `${folder}${input.fileName}`,
@@ -40,30 +40,44 @@ export const s3Router = createTRPCRouter({
         data: {
           s3Url,             
           fileType: input.fileType, 
-          tags :input.tags
+          tags :input.tags.map(tag => tag.toLowerCase())
         },
       });
       
       return { presignedUrl };
     }),
 
-  listPhotos: publicProcedure.query(async () => {
-    const command = new ListObjectsCommand({
-      Bucket: bucketName,
-      Prefix: "photos/",
-    });
+    listPhotos: publicProcedure
+    .input(z.object({ tag: z.string().optional() })) // Tag input is optional
+    .query(async ({ input }) => {
+      const command = new ListObjectsCommand({
+        Bucket: bucketName,
+        Prefix: "main_gallery/",
+      });
 
-    const { Contents } = await s3.send(command);
+      const { Contents } = await s3.send(command);
 
-    const photos = Contents?.filter(item => item.Key && !item.Key.endsWith('/')).map((item) => {
-      return {
-        url: `https://${bucketName}.s3.${region}.amazonaws.com/${item.Key}`,
-        key: item.Key,
-      };
-    });
+      // Get all S3 photos first
+      const photos = Contents?.filter(item => item.Key && !item.Key.endsWith('/')).map((item) => {
+        return {
+          url: `https://${bucketName}.s3.${region}.amazonaws.com/${item.Key}`,
+          key: item.Key,
+        };
+      });
 
-    return photos || [];
-  }),
+      // Now get the metadata from PostgreSQL, filter based on tag if provided
+      const dbPhotos = await db.fileMetaData.findMany({
+        where: input.tag ? { tags: { has: input.tag } } : undefined, // Filter based on tag if provided
+      });
+
+      // Filter S3 photos by matching the URL with the one in the database
+      const filteredPhotos = photos?.filter(photo =>
+        dbPhotos.some(dbPhoto => dbPhoto.s3Url === photo.url)
+      );
+
+      return filteredPhotos || [];
+    }),
+
 
   deletePhoto: publicProcedure
     .input(z.object({
