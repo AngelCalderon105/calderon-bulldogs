@@ -33,7 +33,7 @@ export default function ResetPasswordPage() {
       await resetPassword.mutateAsync({ token, newPassword });
       setSuccess(true);
       setTimeout(() => {
-        router.push("/auth/login");
+        router.push("/admin/login");
       }, 3000); 
     } catch (err) {
       setError((err as Error).message);
