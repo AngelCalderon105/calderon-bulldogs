@@ -2,49 +2,41 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+  // Further reading:
+  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id          String   @id @default(cuid()) 
-    email       String   @db.VarChar(100) @unique
-    password    String
-    createdAt   DateTime @default(now()) @map("created_at")
-    sessions    Session[]
+  id                  String               @id @default(cuid())
+  email               String               @unique @db.VarChar(100)
+  password            String
+  createdAt           DateTime             @default(now()) @map("created_at")
+  sessions            Session[]
+  passwordResetTokens PasswordResetToken[] 
 
-    @@map("users")
+  @@map("users")
 }
-
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    email        String
-    expires      DateTime
-    user         User     @relation(fields: [email], references: [id], onDelete: Cascade)
-}
-
-model PasswordResetToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
-
-    @@unique([identifier, token])
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  email        String
+  expires      DateTime
+  user         User     @relation(fields: [email], references: [id], onDelete: Cascade)
 }
 
 model Faqs {
-    id        String  @id @default(cuid()) 
-    question  String  @unique
-    answer    String 
+  id       String @id @default(cuid())
+  question String @unique
+  answer   String
 }
 
 model FileMetaData {
@@ -56,6 +48,18 @@ model FileMetaData {
   uploadDate DateTime   @default(now())
   fileType   String
   } 
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_token")
+}
+
+
 
 enum ContactType {
     GENERAL
@@ -85,3 +89,4 @@ model Puppy {
   updatedAt DateTime   @updatedAt
 
 }
+

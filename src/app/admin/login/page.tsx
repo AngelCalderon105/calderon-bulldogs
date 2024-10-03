@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation"; 
 import CustomInputField from "../../_components/InputField";
+import Link from "next/link"
 
 export default function Home() {
   const [email, setEmail] = useState<string>('');
@@ -28,6 +29,10 @@ export default function Home() {
       router.push("/admin/dashboard");
     }
   };
+
+  const handleForgotPassword = () => {
+    router.push("/auth/forgot-password")
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center text-black">
@@ -55,6 +60,8 @@ export default function Home() {
             onChange={e => setPassword(e.target.value)}
             required={true}
           />
+        
+         <button type="button" onClick={ handleForgotPassword } className="text-blue-500 hover:underline">Forgot Password?</button>
           <button type="submit" className="bg-gray-500 text-white p-2 rounded justify-center items-center"> Sign In</button>
         </form>
       </div>
