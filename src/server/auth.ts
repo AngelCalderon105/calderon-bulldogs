@@ -63,17 +63,24 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id; // Add user ID to the JWT token
-        token.email = user.email; // Add user email to the JWT token
+        token.id = user.id;
+        token.email = user.email;
       }
+  
       return token;
     },
+  
     async session({ session, token }) {
-      session.user.email = token.email;
+      // Type assertion to tell TypeScript that token.email and token.id are strings
+      if (token.email) {
+        session.user.email = token.email; // Cast token.email to string
+      }
+      session.user.id = token.id as string; // Cast token.id to string
+  
       return session;
     },
-  },
-  secret: env.NEXTAUTH_SECRET,
+  }
+  
 };
 
 // Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
