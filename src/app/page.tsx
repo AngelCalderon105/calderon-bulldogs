@@ -12,7 +12,7 @@ export default async function Home() {
     <GalleryView isAdmin={false} galleryType = "Main Gallery"/>
     <GalleryView isAdmin={false} galleryType = "Stud Gallery"/>
     <FaqView isAdmin={false}/>
-    <EventView/>
+    <EventView isAdmin={false}/>
     <ContactView isAdmin={false} />
     </>
   

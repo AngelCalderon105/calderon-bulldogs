@@ -93,6 +93,8 @@ model Puppy {
 model Event {
   id             Int      @id @default(1)
   name           String
-  date           DateTime  
+  date           DateTime  @default(now())
   isEventActive  Boolean
+  showBanner     Boolean @default(false)
 }
+

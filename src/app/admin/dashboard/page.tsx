@@ -3,6 +3,7 @@ import MultipleFileUpload from "~/app/_components/MultipleFileUpload";
 import { getServerAuthSession } from "~/server/auth";
 import GalleryView from "~/app/_components/GalleryView"
 import FaqView from "~/app/_components/FaqView";
+import EventView from "~/app/_components/EventView";
 import AdminEmailUpdate from '~/app/_components/AdminEmailUpdate';
 import AdminPasswordChange from '~/app/_components/AdminPasswordChange';
 import ContactView from "~/app/_components/ContactView";
@@ -26,6 +27,7 @@ export default async function AdminDashboard() {
         <GalleryView isAdmin={true} galleryType = "Main Gallery"/>
         <GalleryView isAdmin={true} galleryType = "Stud Gallery"/>
         <PuppyManagement isAdmin={true} />
+        <EventView isAdmin={true}/>
         <FaqView isAdmin={true}/>
         <AdminEmailUpdate />
         <AdminPasswordChange />

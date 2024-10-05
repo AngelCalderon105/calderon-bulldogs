@@ -10,7 +10,7 @@ export const eventRouter = createTRPCRouter({
 
     if (!event) {
       // Handle case when event doesn't exist; return a default object
-      return { date: new Date(), isEventActive: false };
+      return { date: new Date(), isEventActive: false, showBanner:false  };
     }
     return event; // Return the entire event object (including date and isEventActive)
   }),
@@ -20,6 +20,7 @@ export const eventRouter = createTRPCRouter({
       z.object({
         date: z.date(), 
         isEventActive: z.boolean(), 
+        showBanner: z.boolean(),
       })
     )
     .mutation(async ({ input }) => {
@@ -30,6 +31,7 @@ export const eventRouter = createTRPCRouter({
           data: {
             date: input.date || new Date(), // Set to current date if not provided
             isEventActive: input.isEventActive, 
+            showBanner: input.showBanner,
           },
         });
         return event; 
