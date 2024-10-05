@@ -19,7 +19,7 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
     const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     return new Date(dateString).toLocaleString("en-CA", {
-      timeZone: "currentTimezone",
+      timeZone: currentTimezone,
       year: "numeric",
       month: "2-digit",
       day: "2-digit",

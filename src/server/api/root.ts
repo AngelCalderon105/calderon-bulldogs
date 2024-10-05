@@ -20,7 +20,7 @@ export const appRouter = createTRPCRouter({
   contact: contactRouter,
   admin: adminRouter,
   auth: authRouter,
-  puppyProfile: puppyProfileRouter
+  puppyProfile: puppyProfileRouter,
   event: eventRouter
 });
 
