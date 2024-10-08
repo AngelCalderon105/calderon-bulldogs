@@ -8,8 +8,14 @@ interface GalleryProps {
   isAdmin: boolean;
 }
 
+const folderName = "main_gallery";
+
 const Gallery: React.FC<GalleryProps> = ({ isAdmin }) => {
-  const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery();
+  const {
+    data: photos,
+    isLoading,
+    refetch,
+  } = api.s3.listPhotos.useQuery({ folderName });
   const deletePhotoMutation = api.s3.deletePhoto.useMutation();
 
   const handleDelete = async (key: string) => {
@@ -17,7 +23,7 @@ const Gallery: React.FC<GalleryProps> = ({ isAdmin }) => {
       try {
         await deletePhotoMutation.mutateAsync({ key });
         alert("Photo deleted successfully!");
-        refetch(); 
+        refetch();
       } catch (error) {
         console.error("Error deleting photo:", error);
         alert("Failed to delete photo.");
@@ -34,8 +40,8 @@ const Gallery: React.FC<GalleryProps> = ({ isAdmin }) => {
   }
 
   return (
-    <div className="p-6 rounded-lg shadow-md">
-      <h2 className="text-md font-semibold mb-4">Gallery</h2>
+    <div className="rounded-lg p-6 shadow-md">
+      <h2 className="text-md mb-4 font-semibold">Gallery</h2>
       <Splide
         options={{
           perPage: 3,
@@ -56,12 +62,12 @@ const Gallery: React.FC<GalleryProps> = ({ isAdmin }) => {
               <img
                 src={photo.url}
                 alt={`Photo ${index + 1}`}
-                className="w-full h-60 object-cover rounded-lg"
+                className="h-60 w-full rounded-lg object-cover"
               />
-              {isAdmin && photo.key && ( 
+              {isAdmin && photo.key && (
                 <button
-                  onClick={() => handleDelete(photo.key as string)} 
-                  className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
+                  onClick={() => handleDelete(photo.key as string)}
+                  className="absolute right-2 top-2 rounded bg-red-500 px-2 py-1 text-white"
                 >
                   Delete
                 </button>

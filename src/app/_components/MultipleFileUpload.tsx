@@ -74,6 +74,7 @@ const MultipleFileUpload: React.FC = () => {
   // Get the presigned URL for uploading
             const { presignedUrl } = await presignedUrlMutation.mutateAsync({
                     fileName: file.name,
+                    folderName: "main_gallery",
                     fileType: file.type,
                     tags, // Pass the tags for this file
                     });
