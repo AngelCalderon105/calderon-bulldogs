@@ -41,14 +41,16 @@ export const s3Router = createTRPCRouter({
     .mutation(async ({ input }) => {
       const command = new PutObjectCommand({
         Bucket: bucketName,
-        Key: `${input.folderName}/${input.fileName}`,  
+        Key: `${input.folderName}/${input.fileName}`,
         // folder name input
         ContentType: input.fileType,
       });
 
       const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
 
-      const s3Url = `https://${bucketName}.s3.${region}.amazonaws.com/${input.folderName}/${input.fileName}`;
+      const key = `${input.folderName}/${input.fileName}`
+
+      const s3Url = `https://${bucketName}.s3.${region}.amazonaws.com/${key}`;
 
       await db.fileMetaData.create({
         data: {
@@ -58,7 +60,7 @@ export const s3Router = createTRPCRouter({
         },
       });
 
-      return { presignedUrl };
+      return { presignedUrl, s3Url };
     }),
 
   listPhotos: publicProcedure

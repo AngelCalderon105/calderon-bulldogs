@@ -22,11 +22,19 @@ const ratingValues: { [key: number]: any } = {
 type RatingValue = 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
 
 export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
-  const { data: allTestimonials, isLoading, isError, refetch } = api.testimonial.listAllTestimonials.useQuery();
-  
-  const createTestimonialMutation = 
+  const {
+    data: allTestimonials,
+    isLoading,
+    isError,
+    refetch,
+  } = api.testimonial.listAllTestimonials.useQuery();
+
+  const createTestimonialMutation =
     api.testimonial.createNewTestimonial.useMutation();
   const presignedUrlMutation = api.s3.getPresignedUrl.useMutation();
+  const deleteTestimonialMutation =
+    api.testimonial.deleteTestimonial.useMutation();
+  const deletePhotoMutation = api.s3.deletePhoto.useMutation();
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -36,21 +44,23 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
 
   const [uploading, setUploading] = useState<boolean>(false);
 
+  const [deleteTestimonialConfirmation, setDeleteTestimonialConfirmation] =
+    useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const uploadFile = async (file: File) => {
     try {
-
-      const now = new Date()
+      const now = new Date();
       const isoString = now.toISOString();
 
+      const uniqueFileName = `${isoString}${file.name}`;
       // Get the presigned URL for uploading
-      const { presignedUrl } = await presignedUrlMutation.mutateAsync({
-        fileName: `${isoString}${file.name}`,
+      const { presignedUrl, s3Url } = await presignedUrlMutation.mutateAsync({
+        fileName: uniqueFileName,
         folderName: "testimonial_uploads",
         fileType: file.type,
-        tags: [""]
+        tags: [""],
       });
 
       await fetch(presignedUrl, {
@@ -58,8 +68,7 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
         body: file,
       });
 
-      return presignedUrl;
-
+      return s3Url;
     } catch (err) {
       console.error("Something went wrong while uploading your file:", err);
       return "";
@@ -68,34 +77,74 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
 
   const handleSubmitForm = async () => {
     try {
-      setUploading(true)
-      const rating  = ratingValues[ratingNumber] as "ONE" | "ONE_HALF" | "TWO" | "TWO_HALF" | "THREE" | "THREE_HALF" | "FOUR" | "FOUR_HALF" | "FIVE"
+      setUploading(true);
+      const rating = ratingValues[ratingNumber] as
+        | "ONE"
+        | "ONE_HALF"
+        | "TWO"
+        | "TWO_HALF"
+        | "THREE"
+        | "THREE_HALF"
+        | "FOUR"
+        | "FOUR_HALF"
+        | "FIVE";
 
-      let photoUrl = ""
+      let photoUrl = "";
       if (imageFile != null) {
-        photoUrl = await uploadFile(imageFile)
+        photoUrl = await uploadFile(imageFile);
       }
-      
-      const newTestimonial = await createTestimonialMutation.mutateAsync({ name, email, rating, comment, photoUrl })
-      setName("")
-      setEmail("")
-      setComment("")
-      clearFile()
-      setUploading(false)
 
-      alert("Testimonial submitted successfully!")
+      const newTestimonial = await createTestimonialMutation.mutateAsync({
+        name,
+        email,
+        rating,
+        comment,
+        photoUrl,
+      });
+      setName("");
+      setEmail("");
+      setComment("");
+      clearFile();
+      setUploading(false);
 
+      alert("Testimonial submitted successfully!");
     } catch (err) {
-      console.error("Something went wrong while submitting testimonial form:", err)
-      setUploading(false)
+      console.error(
+        "Something went wrong while submitting testimonial form:",
+        err,
+      );
+      setUploading(false);
     }
-    
+  };
+
+  const handleDeleteTestimonial: (
+    testimonialId: string,
+    photoKey: string | null,
+  ) => React.MouseEventHandler<HTMLButtonElement> = (
+    testimonialId,
+    photoUrl,
+  ) => {
+    return async (e) => {
+      try {
+        if (photoUrl != null && photoUrl != "") {
+          await deletePhotoMutation.mutateAsync({
+            key: photoUrl.split("amazonaws.com/")[1] as string,
+          });
+        }
+        await deleteTestimonialMutation.mutateAsync({ id: testimonialId });
+        setDeleteTestimonialConfirmation(false);
+        await refetch();
+        alert("Testimonial deleted successfully.");
+      } catch (err) {
+        console.error("Something went wrong while deleting testimonial.");
+      }
+    };
   };
 
   const clearFile = () => {
     // Clear the state
     setImageFile(null);
-    
+
     // Reset the input field
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset the file input
@@ -143,12 +192,12 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
           </div>
 
           <p>Comment</p>
-          <input
+          <textarea
             value={comment}
             onChange={(e) => {
               setComment(e.target.value);
             }}
-            className="mb-4 rounded-xl border-2 border-gray-200 px-3 py-1"
+            className="mb-4 h-32 w-80 rounded-xl border-2 border-gray-200 px-3 py-1 text-start"
             required
           />
 
@@ -162,7 +211,7 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
               if (e.target.files != null && e.target.files.length != 0) {
                 setImageFile(e.target.files[0] as File);
               } else {
-                setImageFile(null)
+                setImageFile(null);
               }
             }}
           />
@@ -171,44 +220,97 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
             {uploading && <p>Uploading...</p>}
             {!uploading && (
               <button
-              onClick={handleSubmitForm}
+                onClick={handleSubmitForm}
                 className="rounded-2xl bg-green-500 px-4 py-2 text-lg font-medium text-white duration-100 hover:bg-green-700 disabled:bg-green-200"
                 disabled={!name || !email || !ratingNumber || !comment}
               >
                 Submit
               </button>
             )}
-            
           </div>
         </div>
       )}
 
       {isAdmin && (
-        <div>
-          {isLoading && (
-            <p>Loading testimonials...</p>
-          )}
+        <div className="flex flex-wrap gap-3">
+          {allTestimonials == undefined || allTestimonials.length == 0 ? (
+            <p>No testimonials available</p>
+          ) : null}
+          {isLoading && <p>Loading testimonials...</p>}
           {allTestimonials?.map((testimonial) => {
-            // get photo
-
             return (
-              <div className="p-4 border-2 rounded-xl border-gray-200 flex flex-col gap-1">
+              <div
+                key={testimonial.id}
+                className="flex w-fit flex-col gap-1 rounded-xl border-2 border-gray-200 p-4"
+              >
                 <h3 className="font-bold">{testimonial.name}</h3>
                 <div>
-                  <span className="underline underline-offset-2">Email</span><span>: {testimonial.email}</span>
+                  <span className="underline underline-offset-2">Email</span>
+                  <span>: {testimonial.email}</span>
                 </div>
                 <div>
-                  <span className="underline underline-offset-2">Rating</span><span>: {testimonial.rating}</span>
+                  <span className="underline underline-offset-2">Rating</span>
+                  <span>: {testimonial.rating}</span>
                 </div>
                 <div>
-                  <span className="underline underline-offset-2">Comment</span><span>: {testimonial.comment}</span>
+                  <span className="underline underline-offset-2">Comment</span>
+                  <span>: {testimonial.comment}</span>
                 </div>
-                
-                <div>
-                  {testimonial.photoUrl}
+
+                <div className="mb-4">
+                  {testimonial.photoUrl && (
+                    <div>
+                      <p>{testimonial.photoUrl}</p>
+                      <img
+                        src={testimonial.photoUrl}
+                        alt={`Photo for testimonial ${testimonial.id} from ${testimonial.photoUrl}`}
+                        className="mt-3 w-48 w-full rounded-lg object-cover"
+                      />
+                    </div>
+                  )}
                 </div>
+
+                <div className="flex w-full justify-end gap-2">
+                  <button className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white">
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => setDeleteTestimonialConfirmation(true)}
+                    className="rounded-xl bg-red-500 px-4 py-1 text-white duration-200 hover:bg-red-700 hover:text-white"
+                  >
+                    Delete
+                  </button>
+                </div>
+
+                {deleteTestimonialConfirmation && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="w-[350px] rounded-2xl bg-white p-6">
+                      <h1 className="mb-3 text-2xl font-bold">Confirmation</h1>
+                      <p className="mb-5">Are you sure?</p>
+                      <div className="flex justify-end gap-2">
+                        <button
+                          className="rounded-xl border-2 border-gray-500 px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                          onClick={() =>
+                            setDeleteTestimonialConfirmation(false)
+                          }
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="rounded-xl bg-red-500 px-4 py-1 text-white hover:bg-red-700"
+                          onClick={handleDeleteTestimonial(
+                            testimonial.id,
+                            testimonial.photoUrl,
+                          )}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            )
+            );
           })}
         </div>
       )}
