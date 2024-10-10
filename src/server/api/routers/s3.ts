@@ -41,7 +41,8 @@ export const s3Router = createTRPCRouter({
     .mutation(async ({ input }) => {
       const command = new PutObjectCommand({
         Bucket: bucketName,
-        Key: `${input.folderName}/${input.fileName}`,
+        Key: `${input.folderName}/${input.fileName}`,  
+        // folder name input
         ContentType: input.fileType,
       });
 
@@ -66,6 +67,7 @@ export const s3Router = createTRPCRouter({
       const command = new ListObjectsCommand({
         Bucket: bucketName,
         Prefix: `${input.folderName}/`,
+        // folder name input
       });
 
       const { Contents } = await s3.send(command);

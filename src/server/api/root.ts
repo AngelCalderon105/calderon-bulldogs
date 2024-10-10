@@ -1,6 +1,7 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { s3Router } from "./routers/s3";
 import { faqsRouter } from "./routers/faqs";
+import { testimonialRouter } from "./routers/testimonials";
 import { contactRouter } from "./routers/contact-form";
 
 /**
@@ -11,7 +12,8 @@ import { contactRouter } from "./routers/contact-form";
 export const appRouter = createTRPCRouter({
   s3: s3Router, //  S3 router added
   faqs: faqsRouter,
-  contact: contactRouter
+  testimonial: testimonialRouter,
+  contact: contactRouter,
 });
 
 // export type definition of API
