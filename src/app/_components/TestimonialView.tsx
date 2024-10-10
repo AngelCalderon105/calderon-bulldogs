@@ -271,9 +271,9 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
                 </div>
 
                 <div className="flex w-full justify-end gap-2">
-                  <button className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white">
+                  {/* <button className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white">
                     Edit
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => setDeleteTestimonialConfirmation(true)}
                     className="rounded-xl bg-red-500 px-4 py-1 text-white duration-200 hover:bg-red-700 hover:text-white"
