@@ -6,6 +6,7 @@ import { contactRouter } from "./routers/contact-form";
 import { puppyProfileRouter } from './routers/puppyProfile';
 import { adminRouter } from "./routers/admin";
 import { authRouter } from './routers/auth'; 
+import { blogRouter} from './routers/blog';
 
 /**
  * This is the primary router for your server.
@@ -18,7 +19,8 @@ export const appRouter = createTRPCRouter({
   contact: contactRouter,
   admin: adminRouter,
   auth: authRouter,
-  puppyProfile: puppyProfileRouter
+  puppyProfile: puppyProfileRouter,
+  blog : blogRouter
 });
 
 // export type definition of API
