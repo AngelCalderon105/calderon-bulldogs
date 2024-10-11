@@ -35,6 +35,8 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
   const deleteTestimonialMutation =
     api.testimonial.deleteTestimonial.useMutation();
   const deletePhotoMutation = api.s3.deletePhoto.useMutation();
+  const configurePublihsedMutation =
+    api.testimonial.configurePublished.useMutation();
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -94,11 +96,14 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
         photoUrl = await uploadFile(imageFile);
       }
 
+      const published = false;
+
       const newTestimonial = await createTestimonialMutation.mutateAsync({
         name,
         email,
         rating,
         comment,
+        published,
         photoUrl,
       });
       setName("");
@@ -115,6 +120,22 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
       );
       setUploading(false);
     }
+  };
+
+  const handleConfigurePublish = (id: string, published: boolean) => {
+    return async () => {
+      try {
+        await configurePublihsedMutation.mutateAsync({
+          id,
+          published,
+        });
+        refetch()
+      } catch (err) {
+        console.error(
+          "Something went wrong while trying to publish/unpublish the testimonial.",
+        );
+      }
+    };
   };
 
   const handleDeleteTestimonial: (
@@ -155,78 +176,121 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
     <div className="mx-12 py-12">
       <h1 className="mb-4 font-bold">Testimonials</h1>
       {!isAdmin && (
-        <div className="w-fit rounded-2xl border-2 border-gray-200 p-6">
-          <h2 className="mb-4 font-medium">Submit Testimonial</h2>
-          <p>Name</p>
-          <input
-            className="mb-4 rounded-xl border-2 border-gray-200 px-3 py-1"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            required
-          />
-          <p>Email</p>
-          <input
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            value={email}
-            className="mb-4 rounded-xl border-2 border-gray-200 px-3 py-1"
-            required
-          />
+        <div>
+          <div className="wrap flex gap-1">
+            {allTestimonials?.map((testimonial) => {
+              return testimonial.published ? (
+                <div
+                  key={testimonial.id}
+                  className="mb-5 flex w-fit flex-col gap-1 rounded-xl border-2 border-gray-200 p-4"
+                >
+                  <h3 className="font-bold">{testimonial.name}</h3>
+                  <div>
+                    <span className="underline underline-offset-2">Email</span>
+                    <span>: {testimonial.email}</span>
+                  </div>
+                  <div>
+                    <span className="underline underline-offset-2">Rating</span>
+                    <span>: {testimonial.rating}</span>
+                  </div>
+                  <div>
+                    <span className="underline underline-offset-2">
+                      Comment
+                    </span>
+                    <span>: {testimonial.comment}</span>
+                  </div>
 
-          <p>Rating</p>
-          <div className="flex gap-4">
+                  <div className="mb-4">
+                    {testimonial.photoUrl && (
+                      <div>
+                        <img
+                          src={testimonial.photoUrl}
+                          alt={`Photo for testimonial ${testimonial.id} from ${testimonial.photoUrl}`}
+                          className="mt-3 w-48 rounded-lg object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div />
+              );
+            })}
+          </div>
+
+          <div className="w-fit rounded-2xl border-2 border-gray-200 p-6">
+            <h2 className="mb-4 font-medium">Submit Testimonial</h2>
+            <p>Name</p>
             <input
-              type="range"
-              min="1"
-              max="5"
-              step="0.5"
+              className="mb-4 rounded-xl border-2 border-gray-200 px-3 py-1"
+              value={name}
               onChange={(e) => {
-                setRatingNumber(Number(e.target.value) as RatingValue);
+                setName(e.target.value);
               }}
               required
             />
-            <p>{ratingNumber}/5</p>
-          </div>
+            <p>Email</p>
+            <input
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              value={email}
+              className="mb-4 rounded-xl border-2 border-gray-200 px-3 py-1"
+              required
+            />
 
-          <p>Comment</p>
-          <textarea
-            value={comment}
-            onChange={(e) => {
-              setComment(e.target.value);
-            }}
-            className="mb-4 h-32 w-80 rounded-xl border-2 border-gray-200 px-3 py-1 text-start"
-            required
-          />
+            <p>Rating</p>
+            <div className="flex gap-4">
+              <input
+                type="range"
+                min="1"
+                max="5"
+                step="0.5"
+                onChange={(e) => {
+                  setRatingNumber(Number(e.target.value) as RatingValue);
+                }}
+                required
+              />
+              <p>{ratingNumber}/5</p>
+            </div>
 
-          <p>Photo upload</p>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            className="mb-4"
-            onChange={(e) => {
-              if (e.target.files != null && e.target.files.length != 0) {
-                setImageFile(e.target.files[0] as File);
-              } else {
-                setImageFile(null);
-              }
-            }}
-          />
+            <p>Comment</p>
+            <textarea
+              value={comment}
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+              className="mb-4 h-32 w-80 rounded-xl border-2 border-gray-200 px-3 py-1 text-start"
+              required
+            />
 
-          <div>
-            {uploading && <p>Uploading...</p>}
-            {!uploading && (
-              <button
-                onClick={handleSubmitForm}
-                className="rounded-2xl bg-green-500 px-4 py-2 text-lg font-medium text-white duration-100 hover:bg-green-700 disabled:bg-green-200"
-                disabled={!name || !email || !ratingNumber || !comment}
-              >
-                Submit
-              </button>
-            )}
+            <p>Photo upload</p>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              className="mb-4"
+              onChange={(e) => {
+                if (e.target.files != null && e.target.files.length != 0) {
+                  setImageFile(e.target.files[0] as File);
+                } else {
+                  setImageFile(null);
+                }
+              }}
+            />
+
+            <div>
+              {uploading && <p>Uploading...</p>}
+              {!uploading && (
+                <button
+                  onClick={handleSubmitForm}
+                  className="rounded-2xl bg-green-500 px-4 py-2 text-lg font-medium text-white duration-100 hover:bg-green-700 disabled:bg-green-200"
+                  disabled={!name || !email || !ratingNumber || !comment}
+                >
+                  Submit
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -236,82 +300,106 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
           {allTestimonials == undefined || allTestimonials.length == 0 ? (
             <p>No testimonials available</p>
           ) : null}
+          {isError && <p>Something went wrong while fetching testimonials.</p>}
           {isLoading && <p>Loading testimonials...</p>}
-          {allTestimonials?.map((testimonial) => {
-            return (
-              <div
-                key={testimonial.id}
-                className="flex w-fit flex-col gap-1 rounded-xl border-2 border-gray-200 p-4"
-              >
-                <h3 className="font-bold">{testimonial.name}</h3>
-                <div>
-                  <span className="underline underline-offset-2">Email</span>
-                  <span>: {testimonial.email}</span>
-                </div>
-                <div>
-                  <span className="underline underline-offset-2">Rating</span>
-                  <span>: {testimonial.rating}</span>
-                </div>
-                <div>
-                  <span className="underline underline-offset-2">Comment</span>
-                  <span>: {testimonial.comment}</span>
-                </div>
+          {allTestimonials
+            ?.sort((a, b) => {
+              return a.published === b.published ? 0 : a.published ? -1 : 1;
+            })
+            .map((testimonial) => {
+              return (
+                <div
+                  key={testimonial.id}
+                  className={`flex w-fit flex-col gap-1 rounded-xl border-2 border-gray-200 p-4 ${testimonial.published ? "bg-yellow-300" : ""}`}
+                >
+                  <h3 className="font-bold">{testimonial.name}</h3>
+                  <div>
+                    <span className="underline underline-offset-2">Email</span>
+                    <p>{testimonial.email}</p>
+                  </div>
+                  <div>
+                    <span className="underline underline-offset-2">Rating</span>
+                    <p>{testimonial.rating}</p>
+                  </div>
+                  <div>
+                    <span className="underline underline-offset-2">
+                      Comment
+                    </span>
+                    <p>{testimonial.comment}</p>
+                  </div>
 
-                <div className="mb-4">
-                  {testimonial.photoUrl && (
-                    <div>
-                      <p>{testimonial.photoUrl}</p>
-                      <img
-                        src={testimonial.photoUrl}
-                        alt={`Photo for testimonial ${testimonial.id} from ${testimonial.photoUrl}`}
-                        className="mt-3 w-48 w-full rounded-lg object-cover"
-                      />
+                  <div className="mb-4">
+                    {testimonial.photoUrl && (
+                      <div>
+                        <img
+                          src={testimonial.photoUrl}
+                          alt={`Photo for testimonial ${testimonial.id} from ${testimonial.photoUrl}`}
+                          className="mt-3 w-48 rounded-lg object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex w-full justify-end gap-2">
+                    {/* <button className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white">
+                    Edit
+                  </button> */}
+                    {testimonial.published ? (
+                      <button
+                        onClick={handleConfigurePublish(testimonial.id, false)}
+                        className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                      >
+                        Unpublish
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleConfigurePublish(testimonial.id, true)}
+                        className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                      >
+                        Publish
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => setDeleteTestimonialConfirmation(true)}
+                      className="rounded-xl bg-red-500 px-4 py-1 text-white duration-200 hover:bg-red-700 hover:text-white"
+                    >
+                      Delete
+                    </button>
+                  </div>
+
+                  {deleteTestimonialConfirmation && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                      <div className="w-[350px] rounded-2xl bg-white p-6">
+                        <h1 className="mb-3 text-2xl font-bold">
+                          Confirmation
+                        </h1>
+                        <p className="mb-5">Are you sure?</p>
+                        <div className="flex justify-end gap-2">
+                          <button
+                            className="rounded-xl border-2 border-gray-500 px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                            onClick={() =>
+                              setDeleteTestimonialConfirmation(false)
+                            }
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="rounded-xl bg-red-500 px-4 py-1 text-white hover:bg-red-700"
+                            onClick={handleDeleteTestimonial(
+                              testimonial.id,
+                              testimonial.photoUrl,
+                            )}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
-
-                <div className="flex w-full justify-end gap-2">
-                  {/* <button className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white">
-                    Edit
-                  </button> */}
-                  <button
-                    onClick={() => setDeleteTestimonialConfirmation(true)}
-                    className="rounded-xl bg-red-500 px-4 py-1 text-white duration-200 hover:bg-red-700 hover:text-white"
-                  >
-                    Delete
-                  </button>
-                </div>
-
-                {deleteTestimonialConfirmation && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="w-[350px] rounded-2xl bg-white p-6">
-                      <h1 className="mb-3 text-2xl font-bold">Confirmation</h1>
-                      <p className="mb-5">Are you sure?</p>
-                      <div className="flex justify-end gap-2">
-                        <button
-                          className="rounded-xl border-2 border-gray-500 px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
-                          onClick={() =>
-                            setDeleteTestimonialConfirmation(false)
-                          }
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className="rounded-xl bg-red-500 px-4 py-1 text-white hover:bg-red-700"
-                          onClick={handleDeleteTestimonial(
-                            testimonial.id,
-                            testimonial.photoUrl,
-                          )}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       )}
     </div>

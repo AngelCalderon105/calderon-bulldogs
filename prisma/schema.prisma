@@ -88,6 +88,7 @@ model Testimonial {
     email       String
     rating      Rating
     comment     String
+    published   Boolean
     photoUrl    String?
     createdAt   DateTime   @default(now())
 }

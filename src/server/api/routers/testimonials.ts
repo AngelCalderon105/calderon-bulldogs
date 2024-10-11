@@ -20,6 +20,7 @@ export const testimonialRouter = createTRPCRouter({
           "FIVE",
         ]),
         comment: z.string(),
+        published: z.boolean(),
         photoUrl: z.string(),
       }),
     )
@@ -30,6 +31,7 @@ export const testimonialRouter = createTRPCRouter({
           email: input.email,
           rating: input.rating,
           comment: input.comment,
+          published: input.published,
           photoUrl: input.photoUrl,
         },
       });
@@ -85,6 +87,23 @@ export const testimonialRouter = createTRPCRouter({
           rating: input.rating,
           comment: input.comment,
           photoUrl: input.photoUrl
+        },
+      });
+      return testimonial;
+    }),
+  
+    configurePublished: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        published: z.boolean()
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const testimonial = await db.testimonial.update({
+        where: { id: input.id },
+        data: {
+          published: input.published,
         },
       });
       return testimonial;
