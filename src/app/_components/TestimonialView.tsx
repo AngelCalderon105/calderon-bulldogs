@@ -3,8 +3,21 @@
 import { useState, useRef } from "react";
 import { api } from "~/trpc/react";
 
+import { XIcon } from "lucide-react";
+
+type RatingValue = 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
+
 interface TestimonialViewProps {
   isAdmin: boolean;
+}
+
+interface Testimonial {
+  id: string;
+  name: string;
+  email: string;
+  comment: string;
+  rating: RatingValue;
+  file: File;
 }
 
 const ratingValues: { [key: number]: any } = {
@@ -19,7 +32,13 @@ const ratingValues: { [key: number]: any } = {
   5: "FIVE",
 };
 
-type RatingValue = 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
+function getKeyFromValue(dictionary: any, value: string) {
+  const foundKey = Object.keys(dictionary).find(
+    (key) => dictionary[Number(key)] === value,
+  );
+
+  return foundKey ? Number(foundKey) : undefined;
+}
 
 export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
   const {
@@ -37,6 +56,7 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
   const deletePhotoMutation = api.s3.deletePhoto.useMutation();
   const configurePublihsedMutation =
     api.testimonial.configurePublished.useMutation();
+  const updateTestimonialMutation = api.testimonial.updateTestimonial.useMutation();
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -44,7 +64,18 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
   const [comment, setComment] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
+  const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedName, setSelectedName] = useState<string>("");
+  const [selectedEmail, setSelectedEmail] = useState<string>("");
+  const [selectedRatingNumber, setSelectedRatingNumber] =
+    useState<RatingValue>(2.5);
+  const [selectedComment, setSelectedComment] = useState<string>("");
+  const [selectedPhotoUrl, setSelectedPhotoUrl] = useState<string>("");
+  const [wantToDelete, setWantToDelete] = useState<boolean>(false);
+
   const [uploading, setUploading] = useState<boolean>(false);
+
+  const [editorOpen, setEditorOpen] = useState<boolean>(true);
 
   const [deleteTestimonialConfirmation, setDeleteTestimonialConfirmation] =
     useState<boolean>(false);
@@ -129,7 +160,7 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
           id,
           published,
         });
-        refetch()
+        refetch();
       } catch (err) {
         console.error(
           "Something went wrong while trying to publish/unpublish the testimonial.",
@@ -160,6 +191,73 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
         console.error("Something went wrong while deleting testimonial.");
       }
     };
+  };
+
+  const handleInitiateEdit: (
+    id: string,
+    name: string,
+    email: string,
+    rating:
+      | "ONE"
+      | "ONE_HALF"
+      | "TWO"
+      | "TWO_HALF"
+      | "THREE"
+      | "THREE_HALF"
+      | "FOUR"
+      | "FOUR_HALF"
+      | "FIVE",
+    comment: string,
+    photoUrl: string | null,
+  ) => React.MouseEventHandler<HTMLButtonElement> = (
+    id,
+    name,
+    email,
+    rating,
+    comment,
+    photoUrl,
+  ) => {
+    return async (e) => {
+      let newRating = getKeyFromValue(ratingValues, rating) as RatingValue;
+
+      setWantToDelete(false)
+
+      setSelectedId(id);
+      setSelectedName(name);
+      setSelectedEmail(email);
+      setSelectedRatingNumber(newRating);
+      setSelectedComment(comment);
+      setSelectedPhotoUrl(photoUrl == null ? "" : photoUrl);
+
+      setEditorOpen(true);
+    };
+  };
+
+  const handleSaveEditChanges = async () => {
+    try {
+      
+      if (selectedPhotoUrl != "" && wantToDelete) {
+        await deletePhotoMutation.mutateAsync({
+          key: selectedPhotoUrl.split("amazonaws.com/")[1] as string,
+        });
+      }
+
+      let ratingValue = ratingValues[selectedRatingNumber]
+      await updateTestimonialMutation.mutateAsync({
+        id: selectedId,
+        name: selectedName,
+        email: selectedEmail,
+        rating: ratingValue,
+        comment: selectedComment,
+        photoUrl: selectedPhotoUrl
+      })
+      setEditorOpen(false)
+      refetch()
+    } catch (err) {
+      console.error("Something went wrong while editing the testimonial:", err)
+      setEditorOpen(false)
+
+    }
   };
 
   const clearFile = () => {
@@ -344,6 +442,19 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
                     {/* <button className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white">
                     Edit
                   </button> */}
+                    <button
+                      onClick={handleInitiateEdit(
+                        testimonial.id,
+                        testimonial.name,
+                        testimonial.email,
+                        testimonial.rating,
+                        testimonial.comment,
+                        testimonial.photoUrl,
+                      )}
+                      className="rounded-xl border-2 border-gray-500 bg-white px-4 py-1 text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                    >
+                      Edit
+                    </button>
                     {testimonial.published ? (
                       <button
                         onClick={handleConfigurePublish(testimonial.id, false)}
@@ -369,11 +480,23 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
                   </div>
 
                   {deleteTestimonialConfirmation && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                      <div className="w-[350px] rounded-2xl bg-white p-6">
-                        <h1 className="mb-3 text-2xl font-bold">
-                          Confirmation
-                        </h1>
+                    <div className="fixed inset-0 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black/10" />
+                      <div className="z-50 w-[350px] rounded-2xl bg-white p-6">
+                        <div className="flex items-start justify-between">
+                          <h1 className="mb-3 mt-2 text-2xl font-bold">
+                            Confirmation
+                          </h1>
+                          <button
+                            onClick={() =>
+                              setDeleteTestimonialConfirmation(false)
+                            }
+                            className="rounded-full p-1 duration-200 hover:bg-gray-200"
+                          >
+                            <XIcon className="h-6 w-6 text-gray-500" />
+                          </button>
+                        </div>
+
                         <p className="mb-5">Are you sure?</p>
                         <div className="flex justify-end gap-2">
                           <button
@@ -392,6 +515,95 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
                             )}
                           >
                             Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {editorOpen && (
+                    <div className="fixed inset-0 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black/10" />
+                      <div className="z-50 min-w-[350px] rounded-2xl bg-white p-6">
+                        <div className="flex items-start justify-between">
+                          <h1 className="mb-3 mt-2 text-2xl font-bold">
+                            Edit Testimonial
+                          </h1>
+                          <button
+                            onClick={() => setEditorOpen(false)}
+                            className="rounded-full p-1 duration-200 hover:bg-gray-200"
+                          >
+                            <XIcon className="h-6 w-6 text-gray-500" />
+                          </button>
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="flex flex-col gap-2">
+                            <div>
+                              <p>Name</p>
+                              <input
+                                type="text"
+                                className="border-2 border-gray-200"
+                                value={selectedName}
+                                onChange={(e) =>
+                                  setSelectedName(e.target.value)
+                                }
+                              />
+                            </div>
+                            <div>
+                              <p>Email</p>
+                              <input
+                                type="text"
+                                className="border-2 border-gray-200"
+                                value={selectedEmail}
+                                onChange={(e) =>
+                                  setSelectedEmail(e.target.value)
+                                }
+                              />
+                            </div>
+                            <div>
+                              <p>Rating</p>
+                              <div className="flex gap-2">
+                                <input
+                                  type="range"
+                                  min="1"
+                                  max="5"
+                                  step="0.5"
+                                  required
+                                  value={selectedRatingNumber}
+                                  onChange={(e) =>
+                                    setSelectedRatingNumber(
+                                      Number(e.target.value) as RatingValue,
+                                    )
+                                  }
+                                />
+                                <p>{selectedRatingNumber}</p>
+                              </div>
+                            </div>
+                            <div>
+                              <p>Comment</p>
+                              <textarea
+                                className="h-32 border-2 border-gray-200"
+                                value={selectedComment}
+                                onChange={(e) =>
+                                  setSelectedComment(e.target.value)
+                                }
+                              />
+                            </div>
+                          </div>
+                          {selectedPhotoUrl != "" && !wantToDelete && <div className="relative">
+                            <button className="absolute bg-red-500 text-white py-1 px-4 rounded-lg hover:bg-red-700 font-medium end-1 top-1 duration-200" onClick={() => setWantToDelete(true)}>Delete Image</button>
+                            <img src={selectedPhotoUrl} className="h-[300px] rounded-lg" />
+                          </div>}
+                          
+                        </div>
+                        <div className="mt-4 flex justify-end gap-2">
+                          <button
+                            onClick={() => setEditorOpen(false)}
+                            className="rounded-lg bg-gray-500 px-4 py-1 font-medium text-white duration-200 hover:bg-gray-700"
+                          >
+                            Cancel
+                          </button>
+                          <button className="rounded-lg bg-green-500 px-4 py-1 font-medium text-white duration-200 hover:bg-green-700" onClick={handleSaveEditChanges}>
+                            Save Changes
                           </button>
                         </div>
                       </div>
