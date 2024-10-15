@@ -30,16 +30,10 @@ const s3 = new S3Client({
 
 export const s3Router = createTRPCRouter({
   getPresignedUrl: publicProcedure
-    .input(
-      z.object({
-        fileName: z.string(),
-        folderName: z.string(),
-        fileType: z.string(),
-        tags: z.array(z.string()),
-      }),
-    )
+    .input(z.object({ fileName: z.string(), fileType: z.string(), folderName: z.string(), tags: z.string(), }))
+
     .mutation(async ({ input }) => {
-      const folder = "main_gallery/";
+      const folder =  `${input.folderName}/${input.tags}/`
       const command = new PutObjectCommand({
         Bucket: bucketName,
         Key: `${input.folderName}/${input.fileName}`,
@@ -57,20 +51,21 @@ export const s3Router = createTRPCRouter({
         data: {
           s3Url,             
           fileType: input.fileType, 
-          tags :input.tags.map(tag => tag.toLowerCase())
+          tags : input.tags
         },
       });
 
       return { presignedUrl, s3Url };
     }),
 
-  listPhotos: publicProcedure
-    .input(z.object({ folderName: z.string().optional(), tag: z.string().optional() }))
+    listPhotos: publicProcedure
+    .input(z.object({ 
+      folder: z.string(), subfolder: z.string(), tag: z.string().optional()})) // Tag input is optional
     .query(async ({ input }) => {
       const command = new ListObjectsCommand({
         Bucket: bucketName,
-        Prefix: `${input.folderName}/`,
-        // folder name input
+        Prefix: `${input.folder}/${input.subfolder}`,
+
       });
 
       const { Contents } = await s3.send(command);
@@ -83,17 +78,8 @@ export const s3Router = createTRPCRouter({
         };
       });
 
-      // Now get the metadata from PostgreSQL, filter based on tag if provided
-      const dbPhotos = await db.fileMetaData.findMany({
-        where: input.tag ? { tags: { has: input.tag } } : undefined, // Filter based on tag if provided
-      });
 
-      // Filter S3 photos by matching the URL with the one in the database
-      const filteredPhotos = photos?.filter(photo =>
-        dbPhotos.some(dbPhoto => dbPhoto.s3Url === photo.url)
-      );
-
-      return filteredPhotos || [];
+      return photos || [];
     }),
 
 

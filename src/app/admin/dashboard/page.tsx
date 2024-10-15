@@ -23,11 +23,14 @@ export default async function AdminDashboard() {
       <div>
         <h1>Admin Dashboard</h1>
         <p>Welcome, {session?.user?.email}</p>
-        <FaqView isAdmin={true} />
+        <MultipleFileUpload galleryType = "main_gallery"/>
+        <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "previous_litters_gallery"/>
+        <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "stud_gallery"/>
+        <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "mother_gallery"/>
+        <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "our_clients_gallery"/>
+
         <TestimonialView isAdmin={true} />
-        <MultipleFileUpload/>
-        <GalleryView isAdmin={true} galleryType = "Main Gallery"/>
-        <GalleryView isAdmin={true} galleryType = "Stud Gallery"/>
+
         <PuppyManagement isAdmin={true} />
         <FaqView isAdmin={true}/>
         <AdminEmailUpdate />
