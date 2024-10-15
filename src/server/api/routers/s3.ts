@@ -39,6 +39,7 @@ export const s3Router = createTRPCRouter({
       }),
     )
     .mutation(async ({ input }) => {
+      const folder = "main_gallery/";
       const command = new PutObjectCommand({
         Bucket: bucketName,
         Key: `${input.folderName}/${input.fileName}`,
@@ -54,9 +55,9 @@ export const s3Router = createTRPCRouter({
 
       await db.fileMetaData.create({
         data: {
-          s3Url,
-          fileType: input.fileType,
-          tags: input.tags,
+          s3Url,             
+          fileType: input.fileType, 
+          tags :input.tags.map(tag => tag.toLowerCase())
         },
       });
 
@@ -64,7 +65,7 @@ export const s3Router = createTRPCRouter({
     }),
 
   listPhotos: publicProcedure
-    .input(z.object({ folderName: z.string() }))
+    .input(z.object({ folderName: z.string().optional(), tag: z.string().optional() }))
     .query(async ({ input }) => {
       const command = new ListObjectsCommand({
         Bucket: bucketName,
@@ -74,17 +75,27 @@ export const s3Router = createTRPCRouter({
 
       const { Contents } = await s3.send(command);
 
-      const photos = Contents?.filter(
-        (item) => item.Key && !item.Key.endsWith("/"),
-      ).map((item) => {
+      // Get all S3 photos first
+      const photos = Contents?.filter(item => item.Key && !item.Key.endsWith('/')).map((item) => {
         return {
           url: `https://${bucketName}.s3.${region}.amazonaws.com/${item.Key}`,
           key: item.Key,
         };
       });
 
-      return photos || [];
+      // Now get the metadata from PostgreSQL, filter based on tag if provided
+      const dbPhotos = await db.fileMetaData.findMany({
+        where: input.tag ? { tags: { has: input.tag } } : undefined, // Filter based on tag if provided
+      });
+
+      // Filter S3 photos by matching the URL with the one in the database
+      const filteredPhotos = photos?.filter(photo =>
+        dbPhotos.some(dbPhoto => dbPhoto.s3Url === photo.url)
+      );
+
+      return filteredPhotos || [];
     }),
+
 
   deletePhoto: publicProcedure
     .input(

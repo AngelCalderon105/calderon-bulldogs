@@ -131,3 +131,5 @@ export const protectedProcedure = t.procedure
       },
     });
   });
+
+  export {t};
