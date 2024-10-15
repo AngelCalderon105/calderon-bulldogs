@@ -13,6 +13,7 @@ const Gallery: React.FC<GalleryProps> = ({ isAdmin, galleryType }) => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 // Fetch photos based on the selected tag
 const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
+  
   { tag: selectedTag || "" }, // Pass selected tag or empty string
   { enabled: !!selectedTag || selectedTag === null } // Ensure query only triggers after tag selection
 );
@@ -23,7 +24,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
       try {
         await deletePhotoMutation.mutateAsync({ key });
         alert("Photo deleted successfully!");
-        refetch(); 
+        refetch();
       } catch (error) {
         console.error("Error deleting photo:", error);
         alert("Failed to delete photo.");
@@ -88,12 +89,12 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
               <img
                 src={photo.url}
                 alt={`Photo ${index + 1}`}
-                className="w-full h-60 object-cover rounded-lg"
+                className="h-60 w-full rounded-lg object-cover"
               />
-              {isAdmin && photo.key && ( 
+              {isAdmin && photo.key && (
                 <button
-                  onClick={() => handleDelete(photo.key as string)} 
-                  className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
+                  onClick={() => handleDelete(photo.key as string)}
+                  className="absolute right-2 top-2 rounded bg-red-500 px-2 py-1 text-white"
                 >
                   Delete
                 </button>

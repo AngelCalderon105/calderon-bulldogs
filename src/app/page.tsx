@@ -1,5 +1,6 @@
 import GalleryView from "~/app/_components/GalleryView"
 import FaqView from "./_components/FaqView";
+import TestimonialView from "./_components/TestimonialView"
 import ContactView from "./_components/ContactView"
 import PuppyManagement from "./_components/PuppyManagement";
 
@@ -12,6 +13,7 @@ export default async function Home() {
     <GalleryView isAdmin={false} galleryType = "Main Gallery"/>
     <GalleryView isAdmin={false} galleryType = "Stud Gallery"/>
     <FaqView isAdmin={false}/>
+    <TestimonialView isAdmin={false} />
     <ContactView isAdmin={false} />
     </>
   
