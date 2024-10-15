@@ -15,12 +15,11 @@ datasource db {
 }
 
 model User {
-  id                  String               @id @default(cuid())
-  email               String               @unique @db.VarChar(100)
-  password            String
-  createdAt           DateTime             @default(now()) @map("created_at")
-  sessions            Session[]
-  passwordResetTokens PasswordResetToken[] 
+    id          String   @id @default(cuid()) 
+    email       String   @db.VarChar(100) @unique
+    password    String
+    createdAt   DateTime @default(now()) @map("created_at")
+    sessions    Session[]
 
   @@map("users")
 }
@@ -46,20 +45,9 @@ model FileMetaData {
   puppy      Puppy?     @relation(fields: [puppyId], references: [id]) // Optional relation to Puppy
   puppyId    Int?       // Optional foreign key to Puppy model
   uploadDate DateTime   @default(now())
+
   fileType   String
   } 
-
-model PasswordResetToken {
-  id        String   @id @default(cuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("password_reset_token")
-}
-
-
 
 enum ContactType {
     GENERAL
@@ -74,19 +62,27 @@ model ContactForm {
     phone       String   @db.VarChar(30)
     contactType  ContactType        
     body        String   @db.VarChar(2000)
-
 }
 
-model Puppy {
-  id        Int        @id @default(autoincrement())
-  name      String
-  birthdate  DateTime    // Store the birthdate
-  color     String
-  status    String     // available, sold, reserved
-  price     Float
-  gallery   FileMetaData[]  // relation to FileMetaData (multiple images in gallery)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-
+enum Rating {
+  ONE
+  ONE_HALF
+  TWO
+  TWO_HALF
+  THREE
+  THREE_HALF
+  FOUR
+  FOUR_HALF
+  FIVE
 }
 
+model Testimonial {
+    id          String     @id @default(cuid())
+    name        String     
+    email       String
+    rating      Rating
+    comment     String
+    published   Boolean
+    photoUrl    String?
+    createdAt   DateTime   @default(now())
+}

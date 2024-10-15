@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import MultipleFileUpload from "~/app/_components/MultipleFileUpload";
 import { getServerAuthSession } from "~/server/auth";
+import TestimonialView from "~/app/_components/TestimonialView";
 import GalleryView from "~/app/_components/GalleryView"
 import FaqView from "~/app/_components/FaqView";
 import AdminEmailUpdate from '~/app/_components/AdminEmailUpdate';
@@ -27,6 +28,9 @@ export default async function AdminDashboard() {
         <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "stud_gallery"/>
         <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "mother_gallery"/>
         <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "our_clients_gallery"/>
+
+        <TestimonialView isAdmin={true} />
+
         <PuppyManagement isAdmin={true} />
         <FaqView isAdmin={true}/>
         <AdminEmailUpdate />
