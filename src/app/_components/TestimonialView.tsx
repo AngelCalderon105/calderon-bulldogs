@@ -93,7 +93,7 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
         fileName: uniqueFileName,
         folderName: "testimonial_uploads",
         fileType: file.type,
-        tags: [""],
+        tags: "",
       });
 
       await fetch(presignedUrl, {

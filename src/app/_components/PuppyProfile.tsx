@@ -20,7 +20,7 @@ interface PuppyType {
     const formattedName = (puppy.name || "").toLowerCase().replace(/\s+/g, "_") + "_gallery"
     return (
         <div className="border rounded-lg p-4 shadow-md">
-          <GalleryView isAdmin = {false} galleryType="puppy_galleries" galleryName ={formattedName}/>
+          <GalleryView isAdmin = {true} galleryType="puppy_galleries" galleryName ={formattedName}/>
           <h3 className="text-lg font-semibold">{puppy.name}</h3>
           <p><strong>Birthdate:</strong> {new Date(puppy.birthdate).toLocaleDateString()}</p>
           <p><strong>Color:</strong> {puppy.color}</p>
