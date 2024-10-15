@@ -10,38 +10,34 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
   const { data: eventData, isLoading, isError } = api.event.getEventData.useQuery();
   const updateEventDateMutation = api.event.setEventDate.useMutation();
 
-  const [date, setDate] = useState<string>(""); // Local state for date
-  const [localIsEventActive, setLocalIsEventActive] = useState<boolean>(false); // Local state for event active status
+  const [date, setDate] = useState<string>(""); 
+  const [localIsEventActive, setLocalIsEventActive] = useState<boolean>(false); 
   const [timeRemaining, setTimeRemaining] = useState<string>("");
-  const [showBanner, setShowBanner] = useState<boolean>(false); // Local state for banner
+  const [showBanner, setShowBanner] = useState<boolean>(false); 
 
-  const getFormattedDate = (dateString: Date) => {
-    const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-    return new Date(dateString).toLocaleString("en-CA", {
-      timeZone: currentTimezone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
+  // Convert the date to UTC and format it for consistency
+  const getFormattedDate = (dateString: Date | string) => {
+    const utcDate = new Date(dateString);
+    return utcDate.toISOString().split("T")[0]; 
   };
 
-  // Effect to load event data from server
+  //Load event data from server
   useEffect(() => {
     if (eventData) {
-      if (!date) {
-        setDate(getFormattedDate(eventData.date));
-        setLocalIsEventActive(eventData.isEventActive);
+      console.log("Fetched event data:", eventData); 
 
-        // Automatically set showBanner to true if the event is active
-        if (eventData.isEventActive) {
-          setShowBanner(true);
-        } else {
-          setShowBanner(eventData.showBanner); // Otherwise, load showBanner state from server
-        }
+      if (eventData.date) {
+        const formattedDate = getFormattedDate(eventData.date);
+        setDate(formattedDate || ""); 
+      } else {
+        setDate(""); 
       }
+
+      setLocalIsEventActive(eventData.isEventActive ?? false); 
+      setShowBanner(eventData.showBanner ?? false); 
+      console.log("Banner state set to:", eventData.showBanner); 
     }
-  }, [eventData, date]);
+  }, [eventData]);
 
   // Effect to calculate time remaining if event is active
   useEffect(() => {
@@ -67,38 +63,65 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
       }, 1000);
     }
 
-    return () => clearInterval(interval); // Clean up the interval on component unmount
+    return () => clearInterval(interval); 
   }, [localIsEventActive, date]);
 
-  // Handle submission of form to update server with new values
   const handleSubmit = async () => {
+    if (!date) {
+      alert("Please select a date before starting the countdown.");
+      return;
+    }
+
+    const updatedDate = new Date(date); 
+
+    // Check if the date is in the past before updating
+    if (updatedDate < new Date()) {
+      alert("Cannot set a countdown for a past date.");
+      return;
+    }
+
     try {
-      const updatedDate = new Date(date);
       await updateEventDateMutation.mutateAsync({
-        date: updatedDate,
+        name: "Event Countdown",
+        date: updatedDate, 
         isEventActive: !localIsEventActive,
-        showBanner: showBanner, // Pass banner state to mutation
+        showBanner: showBanner, 
       });
       setLocalIsEventActive(!localIsEventActive);
       console.log("Event updated successfully");
+      alert("Event updated successfully!"); 
     } catch (error) {
       console.error("Error updating event:", error);
     }
   };
 
   const handleShowBanner = async (show: boolean) => {
-      try{
-        await updateEventDateMutation.mutateAsync({
-          date: new Date(),
-          isEventActive: localIsEventActive,
-          showBanner: show,
-        });
-        setShowBanner(show);
-        console.log("Event updated successfully");
-      } catch (error) {
-        console.error("Error updating event:", error);
-      }
-  }
+    if (!date) {
+      alert("Please select a date before updating the banner.");
+      return;
+    }
+
+    try {
+      console.log("Before call: showBanner value is", show);
+
+      await updateEventDateMutation.mutateAsync({
+        date: new Date(date), 
+        name: "Event Countdown",
+        isEventActive: localIsEventActive, 
+        showBanner: show, // Set the banner visibility
+      });
+
+      console.log("After mutation call, updating state");
+
+      // Update local state
+      setShowBanner(show);
+
+      console.log("Banner updated successfully");
+      alert("Banner visibility updated!");
+    } catch (error) {
+      console.error("Error updating banner visibility:", error);
+    }
+  };
 
   if (isLoading) return <p>Loading event data...</p>;
   if (isError) return <p>Error fetching event data</p>;
@@ -113,14 +136,15 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
           {localIsEventActive && timeRemaining && <p className="text-xl">{timeRemaining}</p>}
         </div>
       )}
-      
+
+      {/* Show the form only if the user is an admin */}
       {isAdmin && (
         <div className="mt-5 flex flex-row">
           <label>
             Event Date:
             <input
               type="date"
-              value={date}
+              value={date} // Use fallback in case date is empty
               onChange={(e) => setDate(e.target.value)}
               className="block border rounded p-4 mx-2"
             />
@@ -138,7 +162,7 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
           </label>
 
           <button className="p-2 text-sm bg-green-600 text-white rounded" onClick={handleSubmit}>
-            {localIsEventActive ? 'Clear Event' : 'Start count down'}
+            {localIsEventActive ? "Clear Event" : "Start Countdown"}
           </button>
         </div>
       )}

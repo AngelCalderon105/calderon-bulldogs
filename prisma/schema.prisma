@@ -91,7 +91,7 @@ model Puppy {
 }
 
 model Event {
-  id             Int      @id @default(1)
+  id             Int      @id @default(autoincrement())
   name           String
   date           DateTime  @default(now())
   isEventActive  Boolean

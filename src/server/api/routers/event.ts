@@ -4,39 +4,86 @@ import { db } from "~/server/db";
 
 export const eventRouter = createTRPCRouter({
   getEventData: publicProcedure.query(async () => {
-    const event = await db.event.findUnique({
-      where: { id: 1 },
+    // Get the most recent event row based on the event date
+    const event = await db.event.findFirst({
+      orderBy: { date: "desc" }, 
     });
 
     if (!event) {
-      // Handle case when event doesn't exist; return a default object
-      return { date: new Date(), isEventActive: false, showBanner:false  };
+      return { date: new Date(), isEventActive: false, showBanner: false };
     }
-    return event; // Return the entire event object (including date and isEventActive)
+
+    // Check if the event is active and not expired
+    if (event.isEventActive && new Date() > event.date) {
+      // Delete the event if it's expired or inactive
+      await db.event.delete({
+        where: { id: event.id },
+      });
+      return { date: new Date(), isEventActive: false, showBanner: false };
+    }
+
+    return event; 
   }),
 
   setEventDate: publicProcedure
     .input(
       z.object({
-        date: z.date(), 
-        isEventActive: z.boolean(), 
+        name: z.string(),
+        date: z.date(),
+        isEventActive: z.boolean(),
         showBanner: z.boolean(),
       })
     )
     .mutation(async ({ input }) => {
       try {
-        // Update the event with the provided date and active status
-        const event = await db.event.update({
-          where: { id: 1 },
-          data: {
-            date: input.date || new Date(), // Set to current date if not provided
-            isEventActive: input.isEventActive, 
-            showBanner: input.showBanner,
-          },
+        console.log("TRPC call - Processing request");
+
+        const existingEvent = await db.event.findFirst({
+          orderBy: { date: "desc" }, 
         });
-        return event; 
-      } catch (error) {console.log(error);
-        return { success: false, error: "Failed to update event date" };
+
+        // Update or create an event if either isEventActive or showBanner is true
+        if (input.isEventActive || input.showBanner) {
+          console.log("Creating or updating event");
+
+          if (existingEvent) {
+            // If an event already exists, update it
+            const updatedEvent = await db.event.update({
+              where: { id: existingEvent.id },
+              data: {
+                name: input.name,
+                date: input.date || new Date(),
+                isEventActive: input.isEventActive,
+                showBanner: input.showBanner,
+              },
+            });
+            return updatedEvent;
+          } else {
+            // If no event exists, create a new one
+            const newEvent = await db.event.create({
+              data: {
+                name: input.name,
+                date: input.date || new Date(),
+                isEventActive: input.isEventActive,
+                showBanner: input.showBanner,
+              },
+            });
+            return newEvent;
+          }
+        } else {
+          console.log("Clearing the event");
+
+          if (existingEvent) {
+            await db.event.delete({
+              where: { id: existingEvent.id },
+            });
+          }
+
+          return { success: true, message: "Event cleared" };
+        }
+      } catch (error) {
+        console.error("Error in TRPC call", error);
+        return { success: false, error: "Failed to update event" };
       }
     }),
 });
