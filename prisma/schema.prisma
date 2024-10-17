@@ -21,7 +21,7 @@ model User {
   createdAt           DateTime             @default(now()) @map("created_at")
   sessions            Session[]
   passwordResetTokens PasswordResetToken[] 
-
+  blogPosts           BlogPost[] // One-to-many relationship with BlogPost
   @@map("users")
 }
 
@@ -42,24 +42,13 @@ model Faqs {
 model FileMetaData {
   id         Int        @id @default(autoincrement())
   s3Url      String     @unique
-  tags       String[]   // Optional for main gallery, not needed for puppy gallery
+  tags       String?   // Optional for main gallery, not needed for puppy gallery
   puppy      Puppy?     @relation(fields: [puppyId], references: [id]) // Optional relation to Puppy
   puppyId    Int?       // Optional foreign key to Puppy model
   uploadDate DateTime   @default(now())
+
   fileType   String
   } 
-
-model PasswordResetToken {
-  id        String   @id @default(cuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("password_reset_token")
-}
-
-
 
 enum ContactType {
     GENERAL
@@ -74,9 +63,16 @@ model ContactForm {
     phone       String   @db.VarChar(30)
     contactType  ContactType        
     body        String   @db.VarChar(2000)
-
 }
 
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("password_reset_token")
+}
 model Puppy {
   id        Int        @id @default(autoincrement())
   name      String
@@ -87,8 +83,20 @@ model Puppy {
   gallery   FileMetaData[]  // relation to FileMetaData (multiple images in gallery)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-
 }
+
+enum Rating {
+  ONE
+  ONE_HALF
+  TWO
+  TWO_HALF
+  THREE
+  THREE_HALF
+  FOUR
+  FOUR_HALF
+  FIVE
+}
+
 
 model Event {
   id             Int      @id @default(autoincrement())
@@ -98,3 +106,24 @@ model Event {
   showBanner     Boolean @default(false)
 }
 
+model Testimonial {
+    id          String     @id @default(cuid())
+    name        String     
+    email       String
+    rating      Rating
+    comment     String
+    published   Boolean
+    photoUrl    String?
+    createdAt   DateTime   @default(now())
+}
+model BlogPost {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  featured  Boolean  @default(false)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  imageUrl  String? // Optional field to store the image URL
+}

@@ -3,33 +3,40 @@
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { useState, ChangeEvent } from "react";
 import { api } from "~/trpc/react";
-
 import "@splidejs/splide/dist/css/splide.min.css";
+import PuppyProfile from "./PuppyProfile";
 
-const MultipleFileUpload: React.FC = () => {
-    const tagOptions = ["Puppy", "Stud", "Mother", "Previous Litter"]; 
-    const [files, setFiles] = useState<File[]>([]);
-    const [filePreviews, setFilePreviews] = useState<string[]>([]);
-    const [uploading, setUploading] = useState(false);
-    const [fileTags, setFileTags] = useState<string[][]>([]); 
+interface UploadProps {
+  galleryType: string,
+  puppyName?: string;
+}
 
-    const presignedUrlMutation = api.s3.getPresignedUrl.useMutation();
+const MultipleFileUpload: React.FC<UploadProps> = ({ galleryType, puppyName }) => {
+  const tagOptions = ["Previous Litters", "Stud", "Mother", "Our Clients"];
+  const [files, setFiles] = useState<File[]>([]);
+  const [filePreviews, setFilePreviews] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [fileTags, setFileTags] = useState<string[]>([]); // Array of single tags for each file
 
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            const selectedFiles = Array.from(event.target.files);
-            setFiles(selectedFiles);
+  const presignedUrlMutation = api.s3.getPresignedUrl.useMutation();
 
-            const previews = selectedFiles.map((file) => URL.createObjectURL(file));
-            setFilePreviews(previews);
-            setFileTags(selectedFiles.map(() => []));
-        }
-    };
-  const handleTagChange = (index: number, tags: string[]) => {
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const selectedFiles = Array.from(event.target.files);
+      setFiles(selectedFiles);
+
+      const previews = selectedFiles.map((file) => URL.createObjectURL(file));
+      setFilePreviews(previews);
+      setFileTags(new Array(selectedFiles.length).fill("")); // Initialize with empty strings
+    }
+  };
+
+  const handleTagChange = (index: number, tag: string) => {
     const newFileTags = [...fileTags];
-    newFileTags[index] = tags;
+    newFileTags[index] = tag;
     setFileTags(newFileTags);
   };
+
   const handleRemoveFile = (index: number) => {
     const updatedFiles = files.filter((_, i) => i !== index);
     const updatedPreviews = filePreviews.filter((_, i) => i !== index);
@@ -40,52 +47,49 @@ const MultipleFileUpload: React.FC = () => {
     setFileTags(updatedTags);
   };
 
-
   const handleUpload = async () => {
-    // Validate if files are selected
     if (!files || files.length === 0) {
       alert("No files selected.");
       return;
     }
-  
-    // Validate if all files have tags
+    if (galleryType == "main_gallery"){
+
     for (let i = 0; i < files.length; i++) {
-      const tags = fileTags[i] || []; // Ensure tags are never undefined, default to empty array
-  
-      if (tags.length === 0) { // Check if tags are empty
-        alert(`Please enter tags for file ${files[i]?.name || "Unknown File"}`);
-        return; // Stop if any file is missing tags
+      const tag = fileTags[i];
+      if (!tag) {
+        alert(`Please select a tag for file ${files[i]?.name || "Unknown File"}`);
+        return;
       }
     }
-  
-    // Proceed with uploading files
+  }
     setUploading(true);
     try {
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];  
-        // Type guard to ensure 'file' is defined
-        if (!file) {
-        console.error("File is undefined at index:", i);
-        continue; // Skip this iteration if file is undefined
-  }
+        const file = files[i];
+        if (!file) continue;
+        let formattedTag ="";
+        // Format the single tag by converting to lowercase and replacing spaces with underscores
+        if (galleryType == "main_gallery"){
+          formattedTag= (fileTags[i] || "").toLowerCase().replace(/\s+/g, "_") + "_gallery";
+        }
+        // Format the single tag by converting to lowercase and replacing spaces with underscores
+        if (galleryType == "puppy_galleries"){
+          formattedTag = (puppyName || "").toLowerCase().replace(/\s+/g, "_") + "_gallery";
+        }
 
-            const tags = fileTags[i] || []; // Use default empty array to avoid undefined
+        const { presignedUrl } = await presignedUrlMutation.mutateAsync({
+          fileName: file.name,
+          fileType: file.type,
+          folderName: galleryType,
+          tags: formattedTag, 
+        });
 
-  // Get the presigned URL for uploading
-            const { presignedUrl } = await presignedUrlMutation.mutateAsync({
-                    fileName: file.name,
-                    fileType: file.type,
-                    tags, // Pass the tags for this file
-                    });
-  
-        // Upload the file to S3 using the presigned URL
         await fetch(presignedUrl, {
           method: "PUT",
           body: file,
         });
       }
-  
-      // Alert user when the files have been successfully uploaded
+
       alert("Files uploaded successfully!");
     } catch (error) {
       console.error("Error uploading files:", error);
@@ -93,11 +97,8 @@ const MultipleFileUpload: React.FC = () => {
     } finally {
       setUploading(false);
     }
-    
   };
-  
 
-   
   return (
     <div className="p-6 rounded-lg shadow-md">
       <h2 className="text-md font-semibold mb-4">Upload files</h2>
@@ -146,17 +147,15 @@ const MultipleFileUpload: React.FC = () => {
                   >
                     Remove
                   </button>
+                  {galleryType =="main_gallery" &&
                   <label className="block mt-2">
-                    Tags:
+                    Tag:
                     <select
-                      multiple
                       className="block w-full border border-gray-300 rounded py-2 px-3 mt-1"
-                      value={fileTags[index] || []}
-                      onChange={(e) => {
-                        const selectedOptions = Array.from(e.target.selectedOptions).map((opt) => opt.value);
-                        handleTagChange(index, selectedOptions);
-                      }}
-                    >
+                      value={fileTags[index] || ""}
+                      onChange={(e) => handleTagChange(index, e.target.value)}
+                      >
+                      <option value="">Select a tag</option>
                       {tagOptions.map((tag) => (
                         <option key={tag} value={tag}>
                           {tag}
@@ -164,6 +163,8 @@ const MultipleFileUpload: React.FC = () => {
                       ))}
                     </select>
                   </label>
+                    }
+
                 </div>
               </SplideSlide>
             ))}

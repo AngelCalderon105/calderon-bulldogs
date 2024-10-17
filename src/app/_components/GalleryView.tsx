@@ -6,15 +6,18 @@ import "@splidejs/splide/dist/css/splide.min.css";
 
 interface GalleryProps {
   isAdmin: boolean,
+  galleryName: string;
   galleryType: string;
 }
 
-const Gallery: React.FC<GalleryProps> = ({ isAdmin, galleryType }) => {
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+const Gallery: React.FC<GalleryProps> = ({ isAdmin,galleryType, galleryName }) => {
+ 
 // Fetch photos based on the selected tag
 const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
-  { tag: selectedTag || "" }, // Pass selected tag or empty string
-  { enabled: !!selectedTag || selectedTag === null } // Ensure query only triggers after tag selection
+  { folder: galleryType || "", 
+    subfolder: galleryName || ""
+  }, // Pass selected tag or empty string
+
 );
   const deletePhotoMutation = api.s3.deletePhoto.useMutation();
 
@@ -23,7 +26,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
       try {
         await deletePhotoMutation.mutateAsync({ key });
         alert("Photo deleted successfully!");
-        refetch(); 
+        refetch();
       } catch (error) {
         console.error("Error deleting photo:", error);
         alert("Failed to delete photo.");
@@ -31,17 +34,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
     }
   };
 
-   // Refetch photos when the selected tag changes
-   useEffect(() => {
-    refetch();
-  }, [selectedTag, refetch]);
   
-  useEffect(() => {
-    if (galleryType === "Stud Gallery") {
-      setSelectedTag("stud");
-    }
-  }, [galleryType]);
-
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -53,9 +46,9 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
 
   return (
     <div className="p-6 rounded-lg shadow-md">
-      <h2 className="text-md font-semibold mb-4">{galleryType}</h2>
-      {galleryType == "Main Gallery" ? <div className="mb-4">
-        <label htmlFor="tagSelect" className="mr-2">Filter by Tag:</label>
+      <h2 className="text-md font-semibold mb-4">{galleryName}</h2>
+      {galleryName == "Main Gallery" ? <div className="mb-4">
+        {/* <label htmlFor="tagSelect" className="mr-2">Filter by Tag:</label>
         <select
           id="tagSelect"
           className="border px-2 py-1"
@@ -66,7 +59,8 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
           <option value="puppy">Puppy</option>
           <option value="mother">Mother</option>
           <option value="stud">Stud</option>
-        </select>
+          
+        </select> */}
       </div> :  null} 
       <Splide
         options={{
@@ -88,12 +82,12 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
               <img
                 src={photo.url}
                 alt={`Photo ${index + 1}`}
-                className="w-full h-60 object-cover rounded-lg"
+                className="h-60 w-full rounded-lg object-cover"
               />
-              {isAdmin && photo.key && ( 
+              {isAdmin && photo.key && (
                 <button
-                  onClick={() => handleDelete(photo.key as string)} 
-                  className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
+                  onClick={() => handleDelete(photo.key as string)}
+                  className="absolute right-2 top-2 rounded bg-red-500 px-2 py-1 text-white"
                 >
                   Delete
                 </button>

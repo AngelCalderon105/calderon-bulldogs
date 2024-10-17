@@ -1,7 +1,7 @@
 "use client";
 
 import { Divide } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "~/trpc/react";
 
 interface ContactProps {
@@ -21,6 +21,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
     data: allForms,
     isLoading,
     isError,
+    refetch
   } = api.contact.listAllForms.useQuery();
 
   const [contactMethod, setContactMethod] = useState<ContactMethod>("FORM");
@@ -32,6 +33,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
     "GENERAL" | "STUD" | "PURCHASE"
   >("GENERAL");
   const [body, setBody] = useState<string>("");
+
 
   const getMethodFunction = (method: ContactMethod) => {
     const handleClick = () => {
@@ -59,6 +61,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
   const handleDeleteForm = async (formId: string) => {
     try {
       await deleteFormMutation.mutateAsync({ id: formId });
+      await refetch()
       alert(`Form ${formId} deleted successfully. Refresh to see changes.`)
     } catch (error) {
       console.error("Something went wrong while deleting form. " + error)

@@ -2,12 +2,13 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 import { s3Router } from "./routers/s3";
 import { faqsRouter } from "./routers/faqs";
+import { testimonialRouter } from "./routers/testimonials";
 import { contactRouter } from "./routers/contact-form";
 import { puppyProfileRouter } from './routers/puppyProfile';
 import { adminRouter } from "./routers/admin";
 import { authRouter } from './routers/auth'; 
 import { eventRouter } from "./routers/event";
-
+import { blogRouter} from './routers/blog';
 
 /**
  * This is the primary router for your server.
@@ -17,11 +18,13 @@ import { eventRouter } from "./routers/event";
 export const appRouter = createTRPCRouter({
   s3: s3Router, //  S3 router added
   faqs: faqsRouter,
+  testimonial: testimonialRouter,
   contact: contactRouter,
   admin: adminRouter,
   auth: authRouter,
   puppyProfile: puppyProfileRouter,
-  event: eventRouter
+  event: eventRouter,
+  blog : blogRouter
 });
 
 // export type definition of API
