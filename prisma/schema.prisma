@@ -97,6 +97,15 @@ enum Rating {
   FIVE
 }
 
+
+model Event {
+  id             Int      @id @default(autoincrement())
+  name           String
+  date           DateTime  @default(now())
+  isEventActive  Boolean
+  showBanner     Boolean @default(false)
+}
+
 model Testimonial {
     id          String     @id @default(cuid())
     name        String     
