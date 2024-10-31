@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { api } from "~/trpc/react";
+import Link from "next/link";
 import PuppyProfile from "./PuppyProfile";
 import MultipleFileUpload from "./MultipleFileUpload";
 
@@ -62,12 +63,14 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
       )}
       <div className="">
         {puppies?.map((puppy) => (
+           <Link href={`/puppycatalog/${puppy.id}`} key={puppy.id}>
           <PuppyProfile
             key={puppy.id}
             puppy={puppy}
             isAdmin={isAdmin}
             onDelete={() => handleDelete(puppy.id)}
-          />
+            />
+            </Link>
         ))}
       </div>
       {isAdmin && (

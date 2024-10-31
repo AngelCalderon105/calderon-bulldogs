@@ -19,6 +19,7 @@
     "@aws-sdk/client-s3": "^3.637.0",
     "@aws-sdk/s3-request-presigner": "^3.637.0",
     "@next-auth/prisma-adapter": "^1.0.7",
+    "@paypal/react-paypal-js": "^8.7.0",
     "@prisma/client": "^5.20.0",
     "@splidejs/react-splide": "^0.7.12",
     "@splidejs/splide": "^4.1.4",

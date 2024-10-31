@@ -35,4 +35,19 @@ export const puppyProfileRouter = createTRPCRouter({
         where: { id: input.id },
       });
     }),
+    getPuppyById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      // Fetch puppy details from database
+      const puppy = await db.puppy.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!puppy) {
+        throw new Error("Puppy not found");
+      }
+      return {
+        ...puppy
+      };
+    })
   });
