@@ -9,6 +9,8 @@ import { adminRouter } from "./routers/admin";
 import { authRouter } from './routers/auth'; 
 import { eventRouter } from "./routers/event";
 import { blogRouter} from './routers/blog';
+import { studProfileRouter } from "./routers/studProfile";
+import { transactionRouter } from "./routers/transaction";
 
 /**
  * This is the primary router for your server.
@@ -24,7 +26,9 @@ export const appRouter = createTRPCRouter({
   auth: authRouter,
   puppyProfile: puppyProfileRouter,
   event: eventRouter,
-  blog : blogRouter
+  blog : blogRouter,
+  studProfile :studProfileRouter,
+  transaction :transactionRouter
 });
 
 // export type definition of API

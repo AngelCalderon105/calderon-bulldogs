@@ -38,8 +38,10 @@ model FileMetaData {
   uploadDate DateTime @default(now())
   fileType   String
   puppyId    Int?
+  studId     Int?
   tags       String[]
   puppy      Puppy?   @relation(fields: [puppyId], references: [id])
+  stud       Stud?   @relation(fields: [studId], references: [id])
 }
 
 model ContactForm {
@@ -61,6 +63,21 @@ model PasswordResetToken {
   @@map("password_reset_token")
 }
 
+model Transaction {
+  id               Int      @id @default(autoincrement())
+  paypalCustomerId String   // Customer ID from PayPal
+  transactionId    String
+  customerName     String
+  customerEmail    String
+  customerPhone    String
+  transactionTime  DateTime @default(now()) // Automatically store the timestamp
+  stud             Stud     @relation(fields: [studId], references: [id])
+  studId           Int
+
+  @@map("transactions") // Optional: Map to a custom table name in the database
+}
+
+
 model Puppy {
   id        Int            @id @default(autoincrement())
   name      String
@@ -71,6 +88,21 @@ model Puppy {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   gallery   FileMetaData[]
+}
+
+model Stud {
+  id        Int            @id @default(autoincrement())
+  name      String
+  birthdate DateTime
+  breed     String
+  color     String
+  status    String
+  price     Float
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  gallery   FileMetaData[]
+  // Relation to Transaction
+  transactions  Transaction[] // A stud can have multiple transactions
 }
 
 model Event {
