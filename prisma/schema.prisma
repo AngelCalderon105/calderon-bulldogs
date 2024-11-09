@@ -22,6 +22,10 @@ model User {
   sessions            Session[]
   passwordResetTokens PasswordResetToken[] 
   blogPosts           BlogPost[] // One-to-many relationship with BlogPost
+  availabilities      Availability[] // Add this line for the opposite relation
+  // Add this line to create the reverse relation with the Appointment model
+  appointments        Appointment[]       // One-to-many relation with Appointment
+
   @@map("users")
 }
 
@@ -76,13 +80,16 @@ model PasswordResetToken {
 model Puppy {
   id        Int        @id @default(autoincrement())
   name      String
-  birthdate  DateTime    // Store the birthdate
+  birthdate DateTime   // Store the birthdate
   color     String
   status    String     // available, sold, reserved
   price     Float
   gallery   FileMetaData[]  // relation to FileMetaData (multiple images in gallery)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+
+  // Add this line to create the reverse relation with the Appointment model
+  appointments Appointment[] // One-to-many relation with Appointment
 }
 
 enum Rating {
@@ -127,3 +134,42 @@ model BlogPost {
   author    User     @relation(fields: [authorId], references: [id])
   imageUrl  String? // Optional field to store the image URL
 }
+// Add the Appointment model to your schema
+model Appointment {
+  id                     String   @id @default(cuid()) // Primary key, using UUID for unique ID
+  customerName           String
+  customerEmail          String   @db.VarChar(100)
+  customerPhoneNumber    String   @db.VarChar(30)
+  appointmentType        AppointmentType // Type of appointment (e.g., general, puppy, or stud)
+  date                   DateTime // Appointment date
+  startTime              DateTime // Start time of the appointment
+  endTime                DateTime // End time of the appointment
+  createdAt              DateTime @default(now()) // Record creation timestamp
+
+  userId                 String?  // Optional relation to the user who booked
+  user                   User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  puppyId                Int?     // Optional foreign key for puppy relation
+  puppy                  Puppy?   @relation(fields: [puppyId], references: [id], onDelete: SetNull)
+
+  @@index([date, startTime], name: "appointment_time_index") // Index for faster querying of appointments
+}
+
+// Add the AppointmentType enum to your schema
+enum AppointmentType {
+  GENERAL
+  PUPPY
+  STUD
+}
+model Availability {
+  id        String   @id @default(cuid()) // Unique identifier for each availability entry
+  weekday   String   // e.g., 'Monday', 'Tuesday'
+  startTime DateTime // Start time for availability in UTC, handle conversion in the app
+  endTime   DateTime // End time for availability in UTC, handle conversion in the app
+  timeZone  String   @default("PST") // Optional field to indicate the time zone
+  adminId   String   // ID of the admin setting the availability
+  admin     User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([weekday, startTime, endTime], name: "availability_time_index") // Index for quick lookups
+}
+

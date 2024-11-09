@@ -5,8 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE "ContactForm" ADD COLUMN     "name" VARCHAR(100) NOT NULL,
-ALTER COLUMN "phone" SET DATA TYPE VARCHAR(30);
+ALTER TABLE "ContactForm" ALTER COLUMN "phone" TYPE VARCHAR(30);
 
 -- AlterTable
 CREATE SEQUENCE event_id_seq;
