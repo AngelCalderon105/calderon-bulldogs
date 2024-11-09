@@ -41,7 +41,7 @@ export const appointmentRouter = createTRPCRouter({
       const startDateTime = new Date(`${date}T${startTime}:00`);
       if (isNaN(startDateTime.getTime())) {
         console.error('Received Start Time:', input.startTime);
-        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid start time format.' });
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid start time format. <- This is the error I cant seem to fix!' });
       }
 
       let endDateTime = endTime ? new Date(`${date}T${endTime}:00`) : new Date(startDateTime);
