@@ -7,14 +7,17 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: ["var(--font-geist-sans)", ...fontFamily.sans]
-  		},
+  			sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+			  montserrat: ["Montserrat", ...fontFamily.sans], 
+			},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+			dark_blue: '#1E2D67',
+			secondary_grey: '#49454F',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
