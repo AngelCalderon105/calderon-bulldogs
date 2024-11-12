@@ -18,10 +18,10 @@ export default function Footer() {
                     <div className="flex space-x-4 mb-5 md:flex-col lg:flex-row">
                         <p className="mt-2 text-lg">Find us on social media:</p>
                         <div className=" flex items-center md:justify-center">
-                        <a href="#" aria-label="TikTok" className="text-dark_blue hover:text-blue-600 m-2">
+                        <a href="https://www.instagram.com/calderon_bulldogs/" aria-label="TikTok" className="text-dark_blue hover:text-blue-600 m-2">
                            <InstaLogo classname = "mx-2"/>
                            </a>
-                            <a href="#" aria-label="TikTok" className="text-dark_blue hover:text-blue-600 m-2">
+                            <a href="https://www.tiktok.com/@calderonbulldogs" aria-label="TikTok" className="text-dark_blue hover:text-blue-600 m-2">
                                <TiktokLogo classname=""/>
                             </a>
                         </div>
@@ -53,7 +53,7 @@ export default function Footer() {
                         <ul className="space-y-4 text-lg">
                             <li className="flex items-center">
                                <PhoneIcon/>
-                                <a href="tel:+11234567890" className="hover:text-blue-700 underline ml-1.5"> +1 (123) 456 7890</a>
+                                <a href="tel:+11234567890" className="hover:text-blue-700 underline ml-1.5"> +1 (714) 232 9787</a>
                             </li>
                             <li className="flex items-center">
                                 <MailIcon/>
@@ -63,7 +63,7 @@ export default function Footer() {
                             </li>
                             <li className="flex items-center">
                                 <LocationIcon/>
-                                <span className="leading-4 ml-1.5"> 123 Ave 12 NW<br />Los Angeles, CA, 12345</span>
+                                <span className="leading-4 ml-1.5"> Orange County, CA</span>
                             </li>
                         </ul>
                     </div>
