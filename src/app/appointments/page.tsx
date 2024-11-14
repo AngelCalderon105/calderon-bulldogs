@@ -1,309 +1,225 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import Calendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css';
+import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
-import { trpc } from "~/utils/trpc";
-import { format, isBefore, startOfDay } from "date-fns";
 
-interface Appointment {
-  id: string;
-  date: Date;
-  createdAt: Date;
-  customerName: string;
-  customerEmail: string;
-  customerPhoneNumber: string;
-  appointmentType: 'GENERAL' | 'STUD' | 'PUPPY';
-  startTime: Date;
-  endTime: Date;
-  userId: string | null;
-  puppyId: number | null;
-}
-
-const AppointmentPage: React.FC = () => {
+export default function AppointmentScheduler() {
   const router = useRouter();
-  const createAppointmentMutation = trpc.appointment.createAppointment.useMutation();
-  const { data: availabilities } = trpc.availability.getAdminAvailability.useQuery();
-  const getAppointmentsByDate = trpc.appointment.getAppointmentsByDate.useQuery;
-
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [value, setValue] = useState<Date | null>(new Date());
+  const { data: availableDates = [] } = api.availability.getAvailableDates.useQuery<string[]>();
+  const [selectedDateString, setSelectedDateString] = useState<string | null>(value?.toISOString().split("T")[0] || null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [puppyType, setPuppyType] = useState<'GENERAL' | 'STUD' | 'PUPPY' | null>(null);
-  const [availableTimes, setAvailableTimes] = useState<string[]>([]);
-  const [contactInfo, setContactInfo] = useState({
-    name: "",
+  const [formDetails, setFormDetails] = useState({
+    fullName: "",
     email: "",
     phone: "",
+    appointmentType: ""
   });
-  const [appointmentsForSelectedDate, setAppointmentsForSelectedDate] = useState<Appointment[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const availabilityMap = availabilities?.reduce((map, slot) => {
-    if (!map[slot.weekday]) {
-      map[slot.weekday] = [];
-    }
-    (map[slot.weekday] as { startTime: Date; endTime: Date }[]).push({
-      startTime: new Date(slot.startTime),
-      endTime: new Date(slot.endTime),
-    });
-    return map;
-  }, {} as Record<string, { startTime: Date; endTime: Date }[]>);
+  // Fetch available timeslots when selectedDateString changes
+  const { data: timeslotData } = api.availability.getAvailabilityByDate.useQuery(
+    { date: selectedDateString || "" },
+    { enabled: !!selectedDateString }
+  );
 
-  useEffect(() => {
-    const fetchAppointmentsForDate = async (date: Date) => {
-      try {
-        const response = await getAppointmentsByDate({ date: date.toISOString() });
-        if (response.data) {
-          const formattedAppointments: Appointment[] = response.data.map((appt: Appointment) => ({
-            ...appt,
-            startTime: new Date(appt.startTime),
-            endTime: new Date(appt.endTime),
-          }));
-          setAppointmentsForSelectedDate(formattedAppointments);
-        }
-      } catch (error) {
-        console.error('Failed to fetch appointments:', error);
-      }
-    };
+  const timeslots = timeslotData
+    ? timeslotData
+        .filter((slot) => slot.status === "available")
+        .map((slot) => slot.timeSlot)
+    : [];
 
-    if (selectedDate) {
-      fetchAppointmentsForDate(selectedDate);
-    }
-  }, [selectedDate, getAppointmentsByDate]);
-
-  useEffect(() => {
-    if (availabilityMap && selectedDate) {
-      const dayOfWeek = selectedDate.toLocaleDateString("en-US", { weekday: "long" });
-      const availabilityForDay = availabilityMap[dayOfWeek];
-
-      if (availabilityForDay && availabilityForDay.length > 0) {
-        const times: string[] = [];
-
-        availabilityForDay.forEach(({ startTime, endTime }) => {
-          const current = new Date(startTime);
-          while (current <= endTime) {
-            const isTimeAvailable = !appointmentsForSelectedDate.some(
-              (appt) => current >= appt.startTime && current < appt.endTime
-            );
-
-            if (isTimeAvailable) {
-              times.push(format(new Date(current), "h a"));
-            }
-
-            current.setHours(current.getHours() + 1);
-          }
-        });
-
-        setAvailableTimes(times);
-      } else {
-        setAvailableTimes([]);
-      }
+  const handleDateChange = (newValue: Date) => {
+    setValue(newValue);
+    const dateString = newValue.toISOString().split("T")[0] as string;
+    if (availableDates.includes(dateString)) {
+      setSelectedDateString(dateString);
     } else {
-      setAvailableTimes([]);
+      setSelectedDateString(null);
+      setSelectedTime(null);
     }
-  }, [availabilityMap, selectedDate, appointmentsForSelectedDate]);
-
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDate(date);
-    setSelectedTime(null);
   };
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
   };
 
-  const handleContactInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setContactInfo((prev) => ({ ...prev, [name]: value }));
+    setFormDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
   };
 
-  const handleConfirm = async () => {
-    console.log('handleConfirm function triggered');
-    if (!selectedDate || !selectedTime || !puppyType) {
-      alert("Please select a date, time, and type of puppy.");
+  // Define both mutations for booking a slot and creating an appointment
+  const { mutateAsync: bookSlot } = api.availability.bookSlot.useMutation();
+  const { mutateAsync: createAppointment } = api.appointment.createAppointment.useMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null); // Reset error message
+  
+    if (!selectedDateString || !selectedTime) {
+      setErrorMessage("Please select a date and time.");
       return;
     }
-
-    const formattedDate = new Date(selectedDate);
-    const [timeHour, timePeriod] = selectedTime.split(' ');
-
-    if (!timeHour || !timePeriod) {
-      alert('Invalid time format.');
-      return;
-    }
-
-    let hour = parseInt(timeHour, 10);
-    let adjustedHour;
-    if (timePeriod === 'PM' && hour !== 12) {
-      adjustedHour = hour + 12;
-    } else if (timePeriod === 'AM' && hour === 12) {
-      adjustedHour = 0;
-    } else {
-      adjustedHour = hour;
-    }
-
-    if (adjustedHour === undefined) {
-      alert('Failed to parse and adjust time.');
-      return;
-    }
-
-    const startTime = new Date(formattedDate);
-    startTime.setUTCHours(adjustedHour, 0, 0, 0);
-
-    const endTime = new Date(startTime);
-    endTime.setUTCHours(startTime.getUTCHours() + 1);
-
-    if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
-      alert('Invalid start time format.');
-      return;
-    }
-
+  
     try {
-      const response = await createAppointmentMutation.mutateAsync({
-        customerName: contactInfo.name,
-        customerEmail: contactInfo.email,
-        customerPhoneNumber: contactInfo.phone,
-        appointmentType: puppyType,
-        date: formattedDate.toISOString(),
-        startTime: startTime.toISOString(),
-        endTime: endTime.toISOString(),
+      // Call the bookSlot mutation to mark the slot as booked
+      await bookSlot({
+        date: selectedDateString,
+        timeSlot: selectedTime,
       });
+  
+      // If booking is successful, proceed to create the appointment
+      const result = await createAppointment({
+        customerName: formDetails.fullName,
+        customerEmail: formDetails.email,
+        customerPhoneNumber: formDetails.phone,
+        appointmentType: formDetails.appointmentType.toUpperCase() as 'GENERAL' | 'PUPPY' | 'STUD',
+        date: selectedDateString,
+        startTime: selectedTime,
+      });
+  
+      if (result) {
+        console.log("Appointment created successfully:", {
+          selectedDate: selectedDateString,
+          selectedTime,
+          ...formDetails,
+        });
+        // Redirect to the Appointment Confirmation page with query parameters
+        router.push(`/confirmation?date=${selectedDateString}&time=${selectedTime}&type=${formDetails.appointmentType}`);
 
-      console.log('Appointment created:', response);
-      setAvailableTimes((prevTimes) => prevTimes.filter((time) => time !== selectedTime));
-      alert('Appointment successfully created!');
-    } catch (error) {
-      alert('Failed to create appointment. Please try again.');
-      console.error(error);
+        
+        // Clear the form after successful booking
+        setSelectedDateString(null);
+        setSelectedTime(null);
+        setFormDetails({
+          fullName: "",
+          email: "",
+          phone: "",
+          appointmentType: ""
+        });
+      }
+    } catch (error: any) {
+      console.error("Error creating appointment or booking slot:", error);
+  
+      // Check for 24-hour error specifically
+      if (error.message === "Appointments must be booked at least 24 hours in advance.") {
+        setErrorMessage("Please choose a date and time at least 24 hours in advance.");
+      } else {
+        setErrorMessage(error.message || "Failed to book the appointment. Please try again.");
+      }
     }
-  };
-
-  const disabledDates = (date: Date) => {
-    const dayOfWeek = date.toLocaleDateString("en-US", { weekday: "long" });
-    const hasAvailability = availabilityMap && availabilityMap[dayOfWeek] && availabilityMap[dayOfWeek].length > 0;
-
-    const now = new Date();
-    const isPastDate = isBefore(date, startOfDay(now));
-
-    const result = isPastDate || !hasAvailability;
-    console.log(`Date: ${date.toDateString()}, Disabled: ${result}`);
-
-    return result;
   };
 
   return (
-    <div className="container mx-auto py-8 flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-6">Schedule an Appointment</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div>
-          <DayPicker
-            selected={selectedDate}
-            onSelect={handleDateSelect}
-            mode="single"
-            disabled={disabledDates}
-            modifiersClassNames={{
-              disabled: "bg-gray-200 text-gray-500",
-            }}
-          />
-        </div>
-
-        <div>
-          <h2 className="font-semibold mb-2">Appointment Info</h2>
-          <p className="text-sm text-gray-600 mb-4">
-            Select an available date and time for your appointment.
-          </p>
-          <h3 className="font-semibold mb-2">Available Times</h3>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {availableTimes.length > 0 ? (
-              availableTimes.map((time) => (
+    <div className="flex gap-10">
+      <div>
+        <Calendar
+          onChange={(newValue) => handleDateChange(newValue as Date)}
+          value={value}
+          tileClassName={({ date, view }) => {
+            const dateString = date.toISOString().split("T")[0] as string;
+            const isSelected = value?.toISOString().split("T")[0] === dateString;
+            const isAvailable = availableDates.includes(dateString);
+            if (view === "month" && isAvailable) {
+              return isSelected ? "!bg-blue-700 text-white font-bold rounded-full" : "!bg-blue-500 text-white font-bold rounded-full";
+            }
+            return "text-gray-400";
+          }}
+          
+        />
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold">Available Times</h3>
+          <div className="grid grid-cols-3 gap-4 mt-2">
+            {timeslots.length > 0 ? (
+              timeslots.map((time) => (
                 <button
                   key={time}
+                  type="button"
                   onClick={() => handleTimeSelect(time)}
-                  className={`px-4 py-2 border rounded ${
-                    selectedTime === time ? "bg-blue-500 text-white" : "bg-gray-100"
+                  className={`px-4 py-2 rounded ${
+                    selectedTime === time ? "!bg-green-600 text-white" : "!bg-gray-200"
                   }`}
                 >
                   {time}
                 </button>
               ))
             ) : (
-              <p>No available times for the selected date.</p>
+              <p>No available timeslots for the selected date.</p>
             )}
-          </div>
-
-          {selectedDate && selectedTime && (
-            <div className="mt-4 p-4 border rounded bg-gray-50">
-              <h3 className="font-semibold">Appointment Details</h3>
-              <p>Date: {selectedDate.toDateString()}</p>
-              <p>Time: {selectedTime}</p>
-              <p>Puppy Type: {puppyType}</p>
-            </div>
-          )}
-        </div>
-
-        <div>
-          <h2 className="font-semibold mb-2">Contact Information</h2>
-          <div className="flex flex-col space-y-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={contactInfo.name}
-              onChange={handleContactInfoChange}
-              className="p-2 border rounded"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={contactInfo.email}
-              onChange={handleContactInfoChange}
-              className="p-2 border rounded"
-            />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={contactInfo.phone}
-              onChange={handleContactInfoChange}
-              className="p-2 border rounded"
-            />
-            <select
-              value={puppyType || ""}
-              onChange={(e) => setPuppyType(e.target.value as 'GENERAL' | 'STUD' | 'PUPPY')}
-              className="p-2 border rounded"
-            >
-              <option value="" disabled>
-                Select Appointment Type
-              </option>
-              <option value="GENERAL">General</option>
-              <option value="STUD">Stud</option>
-              <option value="PUPPY">Puppy</option>
-            </select>
-            <div className="flex space-x-4 mt-4">
-              <button
-                onClick={() => {
-                  setSelectedDate(undefined);
-                  setSelectedTime(null);
-                  setContactInfo({ name: "", email: "", phone: "" });
-                  setPuppyType(null);
-                }}
-                className="px-4 py-2 border rounded bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConfirm}
-                className="px-4 py-2 border rounded bg-blue-600 text-white"
-              >
-                Confirm
-              </button>
-            </div>
           </div>
         </div>
       </div>
+
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <h2 className="text-xl font-bold">Schedule an Appointment</h2>
+        <p className="text-sm text-gray-500">
+          This info will change depending on whether they want a specific breed, puppy, or general visit for puppies.
+        </p>
+        
+        <label className="font-semibold">Full Name</label>
+        <input
+          type="text"
+          name="fullName"
+          value={formDetails.fullName}
+          onChange={handleInputChange}
+          className="p-2 border rounded"
+          placeholder="Full Name"
+          required
+        />
+
+        <label className="font-semibold">Email Address</label>
+        <input
+          type="email"
+          name="email"
+          value={formDetails.email}
+          onChange={handleInputChange}
+          className="p-2 border rounded"
+          placeholder="Email Address"
+          required
+        />
+
+        <label className="font-semibold">Phone Number</label>
+        <input
+          type="tel"
+          name="phone"
+          value={formDetails.phone}
+          onChange={handleInputChange}
+          className="p-2 border rounded"
+          placeholder="Phone Number"
+          required
+        />
+
+        <label className="font-semibold">Select Appointment Type</label>
+        <select
+          name="appointmentType"
+          value={formDetails.appointmentType}
+          onChange={handleInputChange}
+          className="p-2 border rounded"
+          required
+        >
+          <option value="">Select Appointment Type</option>
+          <option value="GENERAL">General</option>
+          <option value="PUPPY">Puppy</option>
+          <option value="STUD">Stud</option>
+        </select>
+
+        <div className="flex gap-4 mt-4">
+          <button type="button" className="px-4 py-2 bg-gray-300 rounded">
+            Cancel
+          </button>
+          <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
+            Confirm
+          </button>
+        </div>
+
+        {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+      </form>
     </div>
   );
-};
-
-export default AppointmentPage;
+}

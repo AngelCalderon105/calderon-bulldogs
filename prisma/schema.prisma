@@ -23,8 +23,6 @@ model User {
   passwordResetTokens PasswordResetToken[] 
   blogPosts           BlogPost[] // One-to-many relationship with BlogPost
   availabilities      Availability[] // Add this line for the opposite relation
-  // Add this line to create the reverse relation with the Appointment model
-  appointments        Appointment[]       // One-to-many relation with Appointment
 
   @@map("users")
 }
@@ -134,6 +132,13 @@ model BlogPost {
   author    User     @relation(fields: [authorId], references: [id])
   imageUrl  String? // Optional field to store the image URL
 }
+
+enum AppointmentStatus {
+  CONFIRMED
+  PENDING
+  CANCELED
+}
+
 // Add the Appointment model to your schema
 model Appointment {
   id                     String   @id @default(cuid()) // Primary key, using UUID for unique ID
@@ -144,11 +149,8 @@ model Appointment {
   date                   DateTime // Appointment date
   startTime              DateTime // Start time of the appointment
   endTime                DateTime // End time of the appointment
+  status                 AppointmentStatus @default(PENDING)
   createdAt              DateTime @default(now()) // Record creation timestamp
-
-  userId                 String?  // Optional relation to the user who booked
-  user                   User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
   puppyId                Int?     // Optional foreign key for puppy relation
   puppy                  Puppy?   @relation(fields: [puppyId], references: [id], onDelete: SetNull)
 
@@ -161,15 +163,16 @@ enum AppointmentType {
   PUPPY
   STUD
 }
-model Availability {
-  id        String   @id @default(cuid()) // Unique identifier for each availability entry
-  weekday   String   // e.g., 'Monday', 'Tuesday'
-  startTime DateTime // Start time for availability in UTC, handle conversion in the app
-  endTime   DateTime // End time for availability in UTC, handle conversion in the app
-  timeZone  String   @default("PST") // Optional field to indicate the time zone
-  adminId   String   // ID of the admin setting the availability
-  admin     User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
-  @@index([weekday, startTime, endTime], name: "availability_time_index") // Index for quick lookups
+model Availability {
+  id          String   @id @default(cuid())
+  date        DateTime // Specific date for the slot
+  timeSlot    String   // Time slot (e.g., '11:00', '12:00')
+  status      String   @default("available") // "available" or "booked"
+  adminId     String   // ID of the admin creating slots
+  admin       User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@unique([date, timeSlot]) // Ensure unique slots per date and time
+  @@index([date, status]) // Quick lookup by date and status
 }
 

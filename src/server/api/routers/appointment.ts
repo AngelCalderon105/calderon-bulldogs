@@ -4,7 +4,7 @@ import { prisma } from '~/server/db';
 import { TRPCError } from '@trpc/server';
 import formData from 'form-data';
 import Mailgun from 'mailgun.js';
-import { format } from 'date-fns';
+import { format, startOfDay, endOfDay } from 'date-fns';
 
 // Initialize the Mailgun client
 const mailgun = new Mailgun(formData);
@@ -27,12 +27,11 @@ export const appointmentRouter = createTRPCRouter({
         date: z.string(),
         startTime: z.string(),
         endTime: z.string().optional(),
-        userId: z.string().optional(),
-        puppyId: z.number().optional(),
+        puppyId: z.number().optional(), // Optional puppyId for appointments involving a puppy
       })
     )
     .mutation(async ({ input }) => {
-      const { customerName, customerEmail, customerPhoneNumber, appointmentType, date, startTime, endTime, userId, puppyId } = input;
+      const { customerName, customerEmail, customerPhoneNumber, appointmentType, date, startTime, endTime, puppyId } = input;
 
       if (!domain) {
         throw new Error('MAILGUN_DOMAIN is not set in environment variables.');
@@ -41,12 +40,12 @@ export const appointmentRouter = createTRPCRouter({
       const startDateTime = new Date(`${date}T${startTime}:00`);
       if (isNaN(startDateTime.getTime())) {
         console.error('Received Start Time:', input.startTime);
-        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid start time format. <- This is the error I cant seem to fix!' });
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid start time format.' });
       }
 
       let endDateTime = endTime ? new Date(`${date}T${endTime}:00`) : new Date(startDateTime);
       if (!endTime) {
-        endDateTime.setHours(endDateTime.getHours() + 1);
+        endDateTime.setHours(endDateTime.getHours() + 1); // Default to a 1-hour appointment if endTime is not provided
       }
 
       if (isNaN(endDateTime.getTime())) {
@@ -80,11 +79,11 @@ export const appointmentRouter = createTRPCRouter({
           date: new Date(date),
           startTime: startDateTime,
           endTime: endDateTime,
-          userId,
-          puppyId,
+          puppyId: puppyId ?? null, 
+          status: "PENDING", // Explicitly set puppyId to null if undefined
         },
       });
-
+      
       const customerEmailDetails = {
         from: `no-reply@${domain}`,
         to: customerEmail,
@@ -118,10 +117,10 @@ export const appointmentRouter = createTRPCRouter({
       };
 
       try {
-        await mg.messages.create(domain, customerEmailDetails);
+        //await mg.messages.create(domain, customerEmailDetails);
         console.log(`Confirmation email sent to ${customerEmail}`);
 
-        await mg.messages.create(domain, adminEmailDetails);
+        //await mg.messages.create(domain, adminEmailDetails);
         console.log('Admin notification email sent');
       } catch (error) {
         console.error('Failed to send email:', error);
@@ -143,18 +142,27 @@ export const appointmentRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { date } = input;
-      const startOfDay = new Date(date);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(startOfDay);
-      endOfDay.setHours(23, 59, 59, 999);
+      const start = startOfDay(new Date(date));
+      const end = endOfDay(new Date(date));
 
       return await prisma.appointment.findMany({
         where: {
           date: {
-            gte: startOfDay,
-            lte: endOfDay,
+            gte: start,
+            lte: end,
           },
         },
       });
     }),
+
+    cancelAppointment: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      await prisma.appointment.update({
+        where: { id: input.id },
+        data: { status: "CANCELED" },
+      });
+      return { success: true };
+    }),
+
 });
