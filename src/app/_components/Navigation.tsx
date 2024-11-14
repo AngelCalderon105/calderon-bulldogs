@@ -9,13 +9,13 @@ const Navigation: React.FC = () => {
     return (
         <div className="w-full sticky flex justify-between items-center p-4">
             <div className="flex flex-row items-center">
-                <Image src="/Vector.svg" alt="Logo" width={30} height={30} />
-                <p className="font-georgia font-bold text-2xl px-2">Calderon Bulldogs</p>
+                <Image src="/Vector.svg" alt="Logo" width={20} height={20} />
+                <p className="font-georgia font-bold text-[20] md:text-[26] lg-text-[32] px-2">Calderon Bulldogs</p>
             </div>
             
             {/* Hamburger icon for mobile */}
             <button 
-                className="block md:hidden text-gray-800 focus:outline-none" 
+                className="block lg:hidden text-gray-800 focus:outline-none" 
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <svg
@@ -79,7 +79,7 @@ const Navigation: React.FC = () => {
             </div>
 
             {/* Menu for desktop */}
-            <div className="hidden md:flex flex-row items-center space-x-8">
+            <div className="hidden lg:flex flex-row items-center space-x-8">
                 <ul className="flex space-x-8 items-center">
                     <li>
                         <Link href="">
