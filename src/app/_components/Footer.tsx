@@ -27,9 +27,9 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col md:flex-row justify-around items-center md:items-center sm:gap-x-16 lg:w-9/12">
+                <div className="flex flex-col md:justify-around md:flex-row md:items-center sm:gap-x-16 lg:w-9/12">
                     {/* Navigation Links */}
-                    <div className="flex mt-7">
+                    <div className="flex justify-around mt-7">
                         <div>
                             <h3 className="font-bold my-4 text-xl">Explore</h3>
                             <ul className="space-y-4 text-lg">
@@ -39,7 +39,7 @@ export default function Footer() {
                             </ul>
                         </div>
                         <div>
-                            <ul className="space-y-2 mt-14 ml-10 text-lg leading-loose">
+                            <ul className="space-y-2 mt-14 ml-10 text-lg leading-loose flex flex-col md:block">
                                 <li><a href="#" className="hover:text-blue-700">Gallery</a></li>
                                 <li><a href="#" className="hover:text-blue-700">Blog</a></li>
                                 <li><a href="#" className="hover:text-blue-700">About Us</a></li>
@@ -48,9 +48,11 @@ export default function Footer() {
                     </div>
 
                     {/* Contact Information */}
-                    <div className="mt-10">
-                        <h3 className="font-bold my-4 text-xl">Contact</h3>
+                    <div className="flex  justify-around mt-10">
+                        <div className="flex justify-around">
+                        
                         <ul className="space-y-4 text-lg">
+                            <h3 className="font-bold my-4 text-xl">Contact</h3>
                             <li className="flex items-center">
                                <PhoneIcon/>
                                 <a href="tel:+11234567890" className="hover:text-blue-700 underline ml-1.5"> +1 (714) 232 9787</a>
@@ -66,6 +68,10 @@ export default function Footer() {
                                 <span className="leading-4 ml-1.5"> Orange County, CA</span>
                             </li>
                         </ul>
+                        </div>
+                        <div>
+                            
+                        </div>
                     </div>
                 </div>
             </div>

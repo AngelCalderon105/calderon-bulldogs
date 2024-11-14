@@ -18,9 +18,7 @@ export default async function Home() {
    <div className="mx-6 sm:mx-10 md:mx-16 lg:mx-20 xl:mx-32 2xl:mx-40">
     <FaqView isAdmin={false}/>
    </div>
-    <EventView isAdmin={false}/>
-    <TestimonialView isAdmin={false} />
-    <ContactView isAdmin={false} />
+    
   <div className="m-2 mb-20 lg:mx-10">
   <Footer />
  </div>
