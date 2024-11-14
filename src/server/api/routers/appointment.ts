@@ -158,11 +158,11 @@ export const appointmentRouter = createTRPCRouter({
     cancelAppointment: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input }) => {
-      await prisma.appointment.update({
+      await prisma.appointment.delete({
         where: { id: input.id },
-        data: { status: "CANCELED" },
       });
       return { success: true };
     }),
+
 
 });
