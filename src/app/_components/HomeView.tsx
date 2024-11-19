@@ -1,9 +1,13 @@
 import Navigation from "./Navigation";
 
-const HomeView: React.FC = () => {
+interface HomeProps {
+    isAdmin: boolean
+  }
+
+const HomeView: React.FC<HomeProps> = ({isAdmin}) => {
     return (
         <div className="h-full md:h-screen px-8" style={{ background: "linear-gradient(160deg, #D6E5FF, #73A1F1)" }}>
-            <Navigation />
+            <Navigation isAdmin={isAdmin}/>
             <div className="flex flex-col lg:flex-row h-full items-center justify-center lg:justify-between">
                 
                 {/* Left Text Content */}

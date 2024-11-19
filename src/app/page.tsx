@@ -9,7 +9,7 @@ export default async function Home() {
 
   return (
     <>
-    <HomeView/>
+    <HomeView isAdmin={false}/>
     <PuppyManagement isAdmin={false} />
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "stud_gallery"/>
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "mother_gallery"/>

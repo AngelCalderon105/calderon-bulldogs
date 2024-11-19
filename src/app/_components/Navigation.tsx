@@ -2,10 +2,14 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import ContactView from "./ContactView";
 
-const Navigation: React.FC = () => {
+interface NavProps {
+    isAdmin: boolean
+  }
+
+const Navigation: React.FC<NavProps> = ({isAdmin}) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [activeItem, setActiveItem] = useState("Available Puppies");
 
     // Disable scrolling when the menu is open
     useEffect(() => {
@@ -52,65 +56,61 @@ const Navigation: React.FC = () => {
 
             {/* Mobile/Tablet Menu */}
             <div
-                className={`fixed inset-0 bg-blue-100 text-blue-900 flex flex-col items-center justify-center transition-transform transform z-50 ${
+                className={`fixed inset-0 bg-blue-100 text-blue-900 flex flex-col w-full items-center justify-center transition-transform transform z-50 ${
                     isOpen ? "translate-x-0" : "translate-x-full"
                 } md:hidden`}
             >
-                {/* Close Button */}
-                <button
-                    className="absolute top-4 right-4 text-blue-900"
-                    onClick={() => setIsOpen(false)}
-                >
-                    <svg
-                        className="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M6 18L18 6M6 6l12 12"
-                        ></path>
-                    </svg>
-                </button>
 
                 {/* Navigation Items */}
                 <div className="flex flex-col items-center space-y-6 w-full px-8">
-                    <div className="flex flex-row items-center mb-8">
-                        <Image src="/Vector.svg" alt="Logo" width={30} height={30} />
-                        <h1 className="text-2xl font-bold">Calderon Bulldogs</h1>
+                    <div className="flex flex-row items-center justify-between w-full mb-8">
+                        <div className="flex flex-row items-center">
+                            <Image src="/Vector.svg" alt="Logo" width={30} height={30} />
+                            <h1 className="font-georgia text-2xl font-bold px-4">Calderon Bulldogs</h1>
+                        </div>
+                         {/* Close Button */}
+                        <button
+                            className="text-secblue "
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <svg
+                                className="w-6 h-6"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                ></path>
+                            </svg>
+                        </button>
                     </div>
 
                     <ul className="space-y-4 w-full">
                         {["Available Puppies", "Stud Service", "Gallery", "Blog", "About"].map((item) => (
-                            <li key={item}>
+                            <li key={item} className="hover:bg-bgblue rounded-lg">
                                 <Link
                                     href="#"
-                                    onClick={() => setActiveItem(item)}
-                                    className={`flex items-center p-3 rounded-lg ${
-                                        activeItem === item
-                                            ? "bg-blue-300 text-blue-900"
-                                            : "text-blue-700"
-                                    }`}
+                                    className={`flex items-center text-center p-3 rounded-lg text-secblue }`}
                                 >
                                     <Image
                                         src="/Vector.svg"
                                         alt="Icon"
-                                        width={20}
-                                        height={20}
-                                        className="mr-3"
+                                        width={24}
+                                        height={24}
                                     />
-                                    <p className="text-lg font-medium">{item}</p>
+                                    <p className="text-lg font-medium font-sans px-3">{item}</p>
                                 </Link>
                             </li>
                         ))}
                     </ul>
 
-                    <Link href="#">
-                        <button className="mt-8 py-3 px-6 rounded-full bg-blue-900 text-white font-semibold">
+                    <Link href="#" className="w-full">
+                        <button className="mt-8 py-3 w-full rounded-full bg-secblue text-white font-semibold">
                             Contact
                         </button>
                     </Link>
@@ -121,12 +121,7 @@ const Navigation: React.FC = () => {
             <div className="hidden md:flex items-center space-x-8">
                 {["Available Puppies", "Stud Service", "Gallery", "Blog", "About"].map((item) => (
                     <Link key={item} href="#">
-                        <p
-                            className={`text-gray-700 font-medium hover:text-blue-600 ${
-                                activeItem === item ? "border-b-2 border-blue-600" : ""
-                            }`}
-                            onClick={() => setActiveItem(item)}
-                        >
+                        <p className={`text-gray-700 font-medium`}>
                             {item}
                         </p>
                     </Link>

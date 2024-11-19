@@ -24,6 +24,7 @@ export default {
 			secblue: 'var(--secondaryblue)',
 			buttonblue: 'var(--buttonblue)',
 			navColor: 'var(--navColor)',
+			bgblue: 'var(--backgroundBlue)',
 			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
