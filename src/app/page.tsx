@@ -18,8 +18,8 @@ export default async function Home() {
    
     <FaqView isAdmin={false}/>
     <EventView isAdmin={false}/>
-    <TestimonialView isAdmin={false} />
-    <ContactView isAdmin={false} />
+    {/* <TestimonialView isAdmin={false} /> */}
+    {/* <ContactView isAdmin={false} /> */}
     </>
   
     

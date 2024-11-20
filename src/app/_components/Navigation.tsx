@@ -91,7 +91,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                     </div>
 
                     <ul className="space-y-4 w-full">
-                        {["Available Puppies", "Stud Service", "Gallery", "Blog", "About"].map((item) => (
+                        {["Available Puppies", "Stud Service", "FAQ"].map((item) => (
                             <li key={item} className="hover:bg-bgblue rounded-lg">
                                 <Link
                                     href="#"
@@ -111,7 +111,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
                     <Link href="#" className="w-full">
                         <button className="mt-8 py-3 w-full rounded-full bg-secblue text-white font-semibold">
-                            Contact
+                            Contact Us
                         </button>
                     </Link>
                 </div>
@@ -119,7 +119,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
-                {["Available Puppies", "Stud Service", "Gallery", "Blog", "About"].map((item) => (
+                {["Available Puppies", "Stud Service", "FAQ"].map((item) => (
                     <Link key={item} href="#">
                         <p className={`text-gray-700 font-medium`}>
                             {item}
