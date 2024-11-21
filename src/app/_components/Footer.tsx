@@ -9,13 +9,13 @@ export default function Footer() {
         <footer className="text-dark_blue font-montserrat">
             <div className="lg:flex">
                 {/* Logo and Social Media */}
-                <div className="flex flex-col items-center lg:w-4/12 lg:mt-10">
-                    <h2 className="font-bold text-lg flex items-center">
+                <div className="flex flex-col lg:w-4/12 lg:mt-10 justify-center items-center lg:justify-start ">
+                    <h2 className="font-bold text-lg flex items-center lg:flex">
                         {/* Using the SVG as a React component */}
-                        <PawLogo className="mr-1 m-2" />
-                        <p className="text-3xl lg:text-2xl">Calderon Bulldogs</p>
+                        <PawLogo className="mr-1 " />
+                        <p className="text-3xl lg:text-3xl">Calderon Bulldogs</p>
                     </h2>
-                    <div className="flex space-x-4 mb-5 md:flex-col lg:flex-row">
+                    <div className="flex space-x-4 mb-5 md:flex-col lg:flex-row lg:">
                         <p className="mt-2 text-lg">Find us on social media:</p>
                         <div className=" flex items-center md:justify-center">
                         <a href="https://www.instagram.com/calderon_bulldogs/" aria-label="TikTok" className="text-dark_blue hover:text-blue-600 m-2">
