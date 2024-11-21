@@ -33,6 +33,8 @@ export default {
 			dark_blue: '#1E2D67',
 			secondary_grey: '#49454F',
   			background: 'hsl(var(--background))',
+			designred:'#D11243',
+			designblue:'#344EAD',
   			foreground: 'var(--foreground)',
 			secblue: 'var(--secondaryblue)',
 			buttonblue: 'var(--buttonblue)',

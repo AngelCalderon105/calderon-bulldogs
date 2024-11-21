@@ -1,16 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
@@ -20,8 +13,8 @@ model User {
   password            String
   createdAt           DateTime             @default(now()) @map("created_at")
   sessions            Session[]
-  passwordResetTokens PasswordResetToken[] 
-  blogPosts           BlogPost[] // One-to-many relationship with BlogPost
+  passwordResetTokens PasswordResetToken[]
+
   @@map("users")
 }
 
@@ -40,29 +33,22 @@ model Faqs {
 }
 
 model FileMetaData {
-  id         Int        @id @default(autoincrement())
-  s3Url      String     @unique
-  tags       String?   // Optional for main gallery, not needed for puppy gallery
-  puppy      Puppy?     @relation(fields: [puppyId], references: [id]) // Optional relation to Puppy
-  puppyId    Int?       // Optional foreign key to Puppy model
-  uploadDate DateTime   @default(now())
-
+  id         Int      @id @default(autoincrement())
+  s3Url      String   @unique
+  tags       String[]
+  uploadDate DateTime @default(now())
   fileType   String
-  } 
-
-enum ContactType {
-    GENERAL
-    STUD
-    PURCHASE
+  puppyId    Int?
+  puppy      Puppy?   @relation(fields: [puppyId], references: [id])
 }
 
 model ContactForm {
-    id          String   @id @default(cuid())
-    name       String   @db.VarChar(100)
-    email       String   @db.VarChar(100)
-    phone       String   @db.VarChar(30)
-    contactType  ContactType        
-    body        String   @db.VarChar(2000)
+  id          String      @id @default(cuid())
+  email       String      @db.VarChar(100)
+  phone       String      @db.VarChar(30)
+  body        String      @db.VarChar(2000)
+  contactType ContactType
+  name        String      @db.VarChar(100)
 }
 
 model PasswordResetToken {
@@ -71,59 +57,80 @@ model PasswordResetToken {
   token     String   @unique
   expiresAt DateTime
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("password_reset_token")
 }
+
+enum PuppyStatus {
+  Available
+  Reserved
+  Sold
+}
+enum PuppySex {
+  Male
+  Female
+  Non_Specified
+}
+
+enum PersonalityTrait {
+  calm
+  shy
+  happy
+  lazy
+  energetic
+  playful
+  curious
+  intelligent
+  friendly
+  protective
+}
+
+
 model Puppy {
-  id        Int        @id @default(autoincrement())
+  id        Int            @id @default(autoincrement())
   name      String
-  birthdate  DateTime    // Store the birthdate
+  birthdate DateTime
   color     String
-  status    String     // available, sold, reserved
+  status    PuppyStatus    @default(Available) 
+  sex    PuppySex     
   price     Float
-  gallery   FileMetaData[]  // relation to FileMetaData (multiple images in gallery)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  personality PersonalityTrait[]
+  description String
+  breed  String
+  dateAvailable DateTime 
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  gallery   FileMetaData[]
+  transactions Transaction[] 
 }
-
-enum Rating {
-  ONE
-  ONE_HALF
-  TWO
-  TWO_HALF
-  THREE
-  THREE_HALF
-  FOUR
-  FOUR_HALF
-  FIVE
-}
-
 
 model Event {
-  id             Int      @id @default(autoincrement())
-  name           String
-  date           DateTime  @default(now())
-  isEventActive  Boolean
-  showBanner     Boolean @default(false)
+  id            Int      @id @default(autoincrement())
+  name          String
+  date          DateTime @default(now())
+  isEventActive Boolean
+  showBanner    Boolean  @default(false)
 }
 
-model Testimonial {
-    id          String     @id @default(cuid())
-    name        String     
-    email       String
-    rating      Rating
-    comment     String
-    published   Boolean
-    photoUrl    String?
-    createdAt   DateTime   @default(now())
+model Transaction {
+  id               Int      @id @default(autoincrement())
+  paypalCustomerId String
+  transactionId    String
+  customerName     String
+  customerEmail    String
+  customerPhone    String
+  price            Float?   // Optional field
+  appointmentDate  DateTime? // Optional field
+  puppyId          Int?      // Optional field
+
+  puppy Puppy? @relation(fields: [puppyId], references: [id])
+
+  transactionTime DateTime @default(now())
 }
-model BlogPost {
-  id        String   @id @default(uuid())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  featured  Boolean  @default(false)
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
-  imageUrl  String? // Optional field to store the image URL
+
+
+enum ContactType {
+  GENERAL
+  STUD
+  PURCHASE
 }

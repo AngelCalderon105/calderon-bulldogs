@@ -33,17 +33,17 @@ export const s3Router = createTRPCRouter({
     .input(z.object({ fileName: z.string(), fileType: z.string(), folderName: z.string(), tags: z.string(), }))
 
     .mutation(async ({ input }) => {
-      const folder =  `${input.folderName}/${input.tags}/`
+      const folder =  `${input.folderName}/${input.tags}`
       const command = new PutObjectCommand({
         Bucket: bucketName,
-        Key: `${input.folderName}/${input.fileName}`,
+        Key: `${folder}/${input.fileName}`,
         // folder name input
         ContentType: input.fileType,
       });
 
       const presignedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
 
-      const key = `${input.folderName}/${input.fileName}`
+      const key = `${folder}/${input.fileName}`
 
       const s3Url = `https://${bucketName}.s3.${region}.amazonaws.com/${key}`;
 
@@ -51,7 +51,8 @@ export const s3Router = createTRPCRouter({
         data: {
           s3Url,             
           fileType: input.fileType, 
-          tags : input.tags
+          tags: Array.isArray(input.tags) ? input.tags : [input.tags],
+
         },
       });
 
@@ -81,6 +82,35 @@ export const s3Router = createTRPCRouter({
 
       return photos || [];
     }),
+    getLatestPhoto: publicProcedure
+    .input(z.object({ folder: z.string(), subfolder: z.string() }))
+    .query(async ({ input }) => {
+      const command = new ListObjectsCommand({
+        Bucket: bucketName,
+        Prefix: `${input.folder}/${input.subfolder}`,
+      });
+
+      const { Contents } = await s3.send(command);
+
+      if (!Contents || Contents.length === 0) {
+        return { photo: null }; // Explicitly return null if no photo
+      }
+
+      const latestPhoto = Contents.filter(item => item.Key && !item.Key.endsWith('/'))
+        .sort((a, b) => {
+          const aDate = a.LastModified ? new Date(a.LastModified) : new Date(0);
+          const bDate = b.LastModified ? new Date(b.LastModified) : new Date(0);
+          return bDate.getTime() - aDate.getTime(); // Sort descending by date
+        })[0]; 
+
+      if (!latestPhoto) {
+        return { photo: null };
+      }
+
+      const url = `https://${bucketName}.s3.${region}.amazonaws.com/${latestPhoto.Key}`;
+      return { photo: { url, key: latestPhoto.Key } };
+    }),
+
 
 
   deletePhoto: publicProcedure
