@@ -20,11 +20,11 @@ export default async function Home() {
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "our_clients_gallery"/>
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "our_clients_gallery"/> */}
     <StudServiceCard />
-    <ContactView isAdmin={false} />
       <div className="mx-6 sm:mx-10 md:mx-16 lg:mx-20 xl:mx-32 2xl:mx-40">
     <FaqView isAdmin={false}/>
    </div>
     <EventView isAdmin={false}/>
+    <ContactView isAdmin={false} />
     {/* <TestimonialView isAdmin={false} /> */}
     {/* <ContactView isAdmin={false} /> */}
 
