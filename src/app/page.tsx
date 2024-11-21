@@ -14,7 +14,6 @@ export default async function Home() {
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "mother_gallery"/>
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "previous_litters_gallery"/>
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "our_clients_gallery"/>
-   
     <FaqView isAdmin={false}/>
     <EventView isAdmin={false}/>
     <TestimonialView isAdmin={false} />

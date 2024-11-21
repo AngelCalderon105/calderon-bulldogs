@@ -36,7 +36,10 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "paypal.d.ts"
+    
   ],
   "exclude": ["node_modules"]
+  
 }

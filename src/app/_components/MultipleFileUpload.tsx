@@ -68,11 +68,11 @@ const MultipleFileUpload: React.FC<UploadProps> = ({ galleryType, puppyName }) =
         const file = files[i];
         if (!file) continue;
         let formattedTag ="";
-        // Format the single tag by converting to lowercase and replacing spaces with underscores
+        
         if (galleryType == "main_gallery"){
           formattedTag= (fileTags[i] || "").toLowerCase().replace(/\s+/g, "_") + "_gallery";
         }
-        // Format the single tag by converting to lowercase and replacing spaces with underscores
+       
         if (galleryType == "puppy_galleries"){
           formattedTag = (puppyName || "").toLowerCase().replace(/\s+/g, "_") + "_gallery";
         }

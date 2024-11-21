@@ -35,10 +35,10 @@ model Faqs {
 model FileMetaData {
   id         Int      @id @default(autoincrement())
   s3Url      String   @unique
+  tags       String[]
   uploadDate DateTime @default(now())
   fileType   String
   puppyId    Int?
-  tags       String[]
   puppy      Puppy?   @relation(fields: [puppyId], references: [id])
 }
 
@@ -61,16 +61,47 @@ model PasswordResetToken {
   @@map("password_reset_token")
 }
 
+enum PuppyStatus {
+  Available
+  Reserved
+  Sold
+}
+enum PuppySex {
+  Male
+  Female
+  Non_Specified
+}
+
+enum PersonalityTrait {
+  calm
+  shy
+  happy
+  lazy
+  energetic
+  playful
+  curious
+  intelligent
+  friendly
+  protective
+}
+
+
 model Puppy {
   id        Int            @id @default(autoincrement())
   name      String
   birthdate DateTime
   color     String
-  status    String
+  status    PuppyStatus    @default(Available) 
+  sex    PuppySex     
   price     Float
+  personality PersonalityTrait[]
+  description String
+  breed  String
+  dateAvailable DateTime 
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   gallery   FileMetaData[]
+  transactions Transaction[] 
 }
 
 model Event {
@@ -80,6 +111,23 @@ model Event {
   isEventActive Boolean
   showBanner    Boolean  @default(false)
 }
+
+model Transaction {
+  id               Int      @id @default(autoincrement())
+  paypalCustomerId String
+  transactionId    String
+  customerName     String
+  customerEmail    String
+  customerPhone    String
+  price            Float?   // Optional field
+  appointmentDate  DateTime? // Optional field
+  puppyId          Int?      // Optional field
+
+  puppy Puppy? @relation(fields: [puppyId], references: [id])
+
+  transactionTime DateTime @default(now())
+}
+
 
 enum ContactType {
   GENERAL
