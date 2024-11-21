@@ -6,7 +6,7 @@ import MailIcon from "../../../public/MailIcon.svg"
 import LocationIcon from "../../../public/LocationIcon.svg"
 export default function Footer() {
     return (
-        <footer className="text-dark_blue font-montserrat">
+        <footer className="text-dark_blue font-montserrat ">
             <div className="lg:flex">
                 {/* Logo and Social Media */}
                 <div className="flex flex-col lg:w-4/12 lg:mt-10 justify-center items-center lg:justify-start ">
