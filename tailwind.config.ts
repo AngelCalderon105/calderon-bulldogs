@@ -10,7 +10,13 @@ export default {
   			sans: ["var(--font-geist-sans)", ...fontFamily.sans],
 			  montserrat: ["Montserrat", ...fontFamily.sans], 
 			},
-  		borderRadius: {
+// 			sans: ['Montserrat', 'sans-serif'],
+// 			georgia: ['Georgia','serif'],
+//   		},
+		lineHeight: {
+			'montserrat': '1.33', // Adjust the line height as needed
+		  },
+		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
@@ -19,8 +25,12 @@ export default {
 			dark_blue: '#1E2D67',
 			secondary_grey: '#49454F',
   			background: 'hsl(var(--background))',
-  			foreground: 'hsl(var(--foreground))',
-  			card: {
+  			foreground: 'var(--foreground)',
+			secblue: 'var(--secondaryblue)',
+			buttonblue: 'var(--buttonblue)',
+			navColor: 'var(--navColor)',
+			bgblue: 'var(--backgroundBlue)',
+			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
   			},
@@ -29,7 +39,7 @@ export default {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
+  				DEFAULT: '(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {

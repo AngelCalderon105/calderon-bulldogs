@@ -3,8 +3,12 @@
 @tailwind utilities;
 @layer base {
   :root {
+    --secondaryblue: #133591;
+    --buttonblue:#2B2D42;
+    --navColor: #1E1E1E;
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: #1E2D67;
+    --backgroundBlue: #A7C4F8;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
