@@ -24,11 +24,11 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
     }, [isOpen]);
 
     return (
-        <div className="w-full sticky top-0 flex justify-between items-center px-4 py-2 z-50">
+        <div className="w-full top-0 flex justify-between px-2 py-2 z-50">
             {/* Logo and Title */}
             <div className="flex flex-row items-center">
                 <Image src="/Vector.svg" alt="Logo" width={30} height={30} />
-                <p className="font-georgia font-bold text-lg md:text-2xl lg:text-3xl px-3">
+                <p className="font-georgia font-bold text-md md:text-lg lg:text-xl px-2">
                     Calderon Bulldogs
                 </p>
             </div>
@@ -56,7 +56,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
             {/* Mobile/Tablet Menu */}
             <div
-                className={`fixed inset-0 bg-blue-100 text-blue-900 flex flex-col w-full items-center justify-center transition-transform transform z-50 ${
+                className={`fixed inset-0 bg-bgblue text-secblue flex flex-col w-full items-center justify-center transition-transform transform z-50 ${
                     isOpen ? "translate-x-0" : "translate-x-full"
                 } md:hidden`}
             >
@@ -66,7 +66,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                     <div className="flex flex-row items-center justify-between w-full mb-8">
                         <div className="flex flex-row items-center">
                             <Image src="/Vector.svg" alt="Logo" width={30} height={30} />
-                            <h1 className="font-georgia text-2xl font-bold px-4">Calderon Bulldogs</h1>
+                            <h1 className="font-georgia text-lg font-bold px-4">Calderon Bulldogs</h1>
                         </div>
                          {/* Close Button */}
                         <button
@@ -128,7 +128,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                 ))}
                 <Link href="#">
                     <button className="py-2 px-4 bg-blue-900 text-white rounded-full">
-                        Contact
+                        Contact Us
                     </button>
                 </Link>
             </div>
