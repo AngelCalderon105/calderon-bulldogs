@@ -21,6 +21,15 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+		fontSize: {
+			'custom-18': '18px',
+			'custom-16': '16px',
+			'custom-14': '14px', 
+			'custom-12': '12px',  // Custom font size with a key of 'custom-18' for 18px
+			'custom-24': '24px',  // Example for 24px font size
+			'custom-30': '30px',  // Example for 30px font size
+			// Add more custom sizes as needed
+		},
   		colors: {
 			dark_blue: '#1E2D67',
 			secondary_grey: '#49454F',
