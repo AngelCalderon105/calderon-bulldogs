@@ -58,31 +58,34 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
   };
 
   return (
-    <div className="flex flex-col md:items-center lg:flex-row bg-gradient-to-r from-[#F2F7FF] to-[#D2E1FB] p-8 shadow-lg relative space-y-6">
+    <div className="flex flex-col md:items-center lg:flex-row bg-gradient-to-r from-[#F2F7FF] to-[#D2E1FB] p-8 shadow-lg relative space-y-6 lg:justify-between xl:justify-around">
       {/* Left Section with Contact Info */}
       <div className="flex flex-col space-y-4 text-center lg:text-left w-full md:w-11/12 lg:w-1/3">
         <h2 className="text-2xl font-bold font-georgia md:text-3xl" style={{ color: "#1E2D67" }}>Contact Us</h2>
         <p className="text-sm text-[#1E1E1E] md:leading-6">
           Contact us directly or fill out our contact form. We look forward to connecting with you!
         </p>
-  <div className="space-y-3 md:space-y-0 md:grid md:gap-3 md:grid-cols-2 md:grid-rows-2 lg:flex-col justify-center w-full">
-    <div className="flex items-center bg-white justify-center md:justify-end lg:justify-starts text-secblue border-2 border-[#133591] rounded-full px-2 py-0.5 md:py-0 md:mx-3">
+  <div className=" space-y-3 md:space-y-0 md:grid md:gap-3 md:grid-cols-2 md:grid-rows-2 lg:flex-col justify-center w-full lg:flex">
+    <div className="flex items-center bg-white justify-center lg:justify-start text-secblue border-2 
+    border-[#133591] rounded-full px-2 py-0.5 md:py-0 md:mx-3 md:ml-16 lg:ml-0 lg:p-0.5 lg:w-9/12 lg:px-2 xl:justify-center xl:w-7/12">
     <Envelope className="mr-2" />
-    <span className="font-sans text-custom-14 font-medium text-left py-1.5 md:py-1">
+    <span className="font-sans text-custom-14 font-medium text-left py-1.5 md:py-1 ">
       <p>calderonbulldogs@gmail.com</p>
     </span>
   </div>
 
-  <div className="flex items-center bg-white justify-center md:w-1/2 text-secblue space-x-2 border-2 border-[#133591] rounded-full px-1 py-0.5 w-full md:mx-3">
+  <div className="flex items-center bg-white justify-center md:w-1/2 text-secblue space-x-2 border-2
+   border-[#133591] rounded-full px-1 py-0.5 w-full md:mx-3 lg:mx-0 xl:w-5/12">
     <Phone className="mx-1" />
-    <span className="font-sans text-custom-14 font-medium text-left py-1.5 md:py-1">
+    <span className="font-sans text-custom-14 font-medium text-left py-1.5 md:py-1 ">
       <p>(714)-232-9787</p>
     </span>
   </div>
 
-  <div className="flex items-center bg-white justify-center md:justify-center md:w-5/12 text-secblue space-x-2 border-2 border-[#133591] rounded-full px-1 py-0.5 w-full md:mx-3 md:col-span-2 md:justify-self-center">
+  <div className="flex items-center bg-white justify-center md:justify-center md:w-5/12 text-secblue space-x-2 border-2
+   border-[#133591] rounded-full px-1 py-0.5 w-full md:mx-3 md:col-span-2 md:justify-self-center lg:mx-0 lg:w-7/12 xl:w-6/12">
     <Instagram className="mx-1" />
-    <span className="font-sans text-custom-14 font-medium py-1.5 text-left ">
+    <span className="font-sans text-custom-14 font-medium py-1.5 text-left lg:p-1 ">
       @calderonbulldogs
     </span>
   </div>
@@ -112,7 +115,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
       </div>
 
       {/* Form Section */}
-      <div className="bg-white rounded-3xl p-6 shadow-md w-full md:w-11/12 ml-auto md:m-0 space-y-4 md:flex md:justify-center md:items-center">
+      <div className="bg-white rounded-3xl p-6 shadow-md w-full md:w-11/12 ml-auto md:m-0 space-y-4 md:flex md:justify-center md:items-center lg:w-6/12 xl:w-5/12 2xl:w-1/4">
         <div className="space-y-4 md:w-11/12 mt-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
             <input
@@ -128,7 +131,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
               placeholder="Last Name"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full md:max-w-[300px] placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
+              className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -137,14 +140,14 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
               placeholder="Phone Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full md:max-w-[300px] placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
+              className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
             />
             <input
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full md:max-w-[300px] placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
+              className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
             />
           </div>
           <div className="relative w-full">
