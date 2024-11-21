@@ -7,9 +7,12 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-			sans: ['Montserrat', 'sans-serif'],
-			georgia: ['Georgia','serif'],
-  		},
+  			sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+			  montserrat: ["Montserrat", ...fontFamily.sans], 
+			},
+// 			sans: ['Montserrat', 'sans-serif'],
+// 			georgia: ['Georgia','serif'],
+//   		},
 		lineHeight: {
 			'montserrat': '1.33', // Adjust the line height as needed
 		  },
@@ -28,11 +31,14 @@ export default {
 			// Add more custom sizes as needed
 		},
   		colors: {
+			dark_blue: '#1E2D67',
+			secondary_grey: '#49454F',
   			background: 'hsl(var(--background))',
   			foreground: 'var(--foreground)',
 			secblue: 'var(--secondaryblue)',
 			buttonblue: 'var(--buttonblue)',
 			navColor: 'var(--navColor)',
+			bgblue: 'var(--backgroundBlue)',
 			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
