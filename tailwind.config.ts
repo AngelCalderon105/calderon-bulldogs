@@ -28,7 +28,6 @@ export default {
 			'custom-12': '12px',  // Custom font size with a key of 'custom-18' for 18px
 			'custom-24': '24px',  // Example for 24px font size
 			'custom-30': '30px',  // Example for 30px font size
-			// Add more custom sizes as needed
 		},
   		colors: {
 			dark_blue: '#1E2D67',
