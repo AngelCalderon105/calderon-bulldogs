@@ -4,11 +4,12 @@ import TestimonialView from "./_components/TestimonialView"
 import ContactView from "./_components/ContactView"
 import PuppyManagement from "./_components/PuppyManagement";
 import EventView from "./_components/EventView";
+import HomeView from "./_components/HomeView";
 export default async function Home() {
 
   return (
     <>
-    <h1>Home</h1>
+    <HomeView isAdmin={false}/>
     <PuppyManagement isAdmin={false} />
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "stud_gallery"/>
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "mother_gallery"/>
@@ -17,8 +18,8 @@ export default async function Home() {
    
     <FaqView isAdmin={false}/>
     <EventView isAdmin={false}/>
-    <TestimonialView isAdmin={false} />
-    <ContactView isAdmin={false} />
+    {/* <TestimonialView isAdmin={false} /> */}
+    {/* <ContactView isAdmin={false} /> */}
     </>
   
     
