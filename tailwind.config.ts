@@ -6,6 +6,11 @@ export default {
     content: ["./src/**/*.tsx"],
   theme: {
   	extend: {
+		screens: {
+			'custom-range-368-767': { min: '368px', max: '767px' },
+			'custom-range-343-367': { min: '343px', max: '367px' },
+			'custom-range-300-307': { min: '300px', max: '307px' }, // Custom range for 476px to 767px
+		},
   		fontFamily: {
 			sans: ['Montserrat', 'sans-serif'],
 			georgia: ['Georgia','serif'],
