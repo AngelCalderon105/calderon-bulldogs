@@ -7,7 +7,7 @@ import FaqView from "~/app/_components/FaqView";
 import EventView from "~/app/_components/EventView";
 import AdminEmailUpdate from '~/app/_components/AdminEmailUpdate';
 import AdminPasswordChange from '~/app/_components/AdminPasswordChange';
-import ContactView from "public/ContactView";
+import ContactView from "~/app/_components/ContactView";
 import PuppyManagement from "~/app/_components/PuppyManagement";
 
 export default async function AdminDashboard() {

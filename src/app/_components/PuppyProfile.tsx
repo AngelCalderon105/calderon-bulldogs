@@ -89,19 +89,27 @@ interface PuppyType {
                 return `${diffInDays} day${diffInDays !== 1 ? "s" : ""} old`; // Less than 7 days
               } else if (diffInDays < 28) {
                 const weeks = Math.floor(diffInDays / 7);
-                return `${weeks} week${weeks !== 1 ? "s" : ""} old`; // 1 and 4 weeks
+                return `${weeks} week${weeks !== 1 ? "s" : ""} old`; // 1 to 4 weeks
               } else {
-                const months = Math.floor(diffInDays / 30);
+                const months = Math.floor(diffInDays / 30); // Approximate 1 month = 30 days
+                if (months === 0) {
+                  return `1 month old`; // Prevent "0 months old"
+                }
                 return `${months} month${months !== 1 ? "s" : ""} old`; // 1 month or more
               }
-            })()}
+            
+            })(
+
+            ) 
+            }
+                          
       
         
         </p>
             </span>
             <div className='flex justify-between  items-baseline flex-none'>
 
-            <div className=''>
+            <div className=' flex flex-wrap'>
             {puppy.personality.map((item)=>(
               <WhiteButton text = {item}/>
             ))

@@ -92,7 +92,7 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
       ) : (
         <h2 className="text-2xl font-semibold my-8">Featured Puppies</h2>
       )}
-      <div className="flex justify-center gap-12">
+      <div className="flex justify-center flex-wrap md:gap-12">
         {puppies?.map((puppy) => (
           <Link href={`/puppycatalog/${puppy.id}`} key={puppy.id}>
             <PuppyProfile

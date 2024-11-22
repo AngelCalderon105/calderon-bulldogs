@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ContactView from "./ContactView";
 
+
 interface NavProps {
     isAdmin: boolean
   }
@@ -24,11 +25,11 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
     }, [isOpen]);
 
     return (
-        <div className="w-full top-0 flex justify-between px-2 py-2 z-50">
+        <div className="w-full top-0 flex justify-between md:px-2 py-4 md:pb-0 md:pt-4 z-50">
             {/* Logo and Title */}
             <div className="flex flex-row items-center">
-                <Image src="/Vector.svg" alt="Logo" width={30} height={30} />
-                <p className="font-georgia font-bold text-md md:text-lg lg:text-xl px-2">
+                <Image src="/Vector.svg" alt="Logo" width={20} height={20} />
+                <p className="font-georgia font-bold text-lg md:text-lg lg:text-xl px-2">
                     Calderon Bulldogs
                 </p>
             </div>
@@ -56,7 +57,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
             {/* Mobile/Tablet Menu */}
             <div
-                className={`fixed inset-0 bg-bgblue text-secblue flex flex-col w-full items-center justify-center transition-transform transform z-50 ${
+                className={`fixed inset-0 pt-7 bg-bgblue text-secblue flex flex-col w-full items-center  transition-transform transform z-50 ${
                     isOpen ? "translate-x-0" : "translate-x-full"
                 } md:hidden`}
             >
@@ -88,6 +89,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                                 ></path>
                             </svg>
                         </button>
+                        
                     </div>
 
                     <ul className="space-y-4 w-full">
@@ -102,6 +104,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                                         alt="Icon"
                                         width={24}
                                         height={24}
+                                        
                                     />
                                     <p className="text-lg font-medium font-sans px-3">{item}</p>
                                 </Link>
@@ -110,9 +113,10 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                     </ul>
 
                     <Link href="#" className="w-full">
-                        <button className="mt-8 py-3 w-full rounded-full bg-secblue text-white font-semibold">
+                         <button className="mt-8 py-3 w-full rounded-full bg-secblue text-white font-semibold">
                             Contact Us
-                        </button>
+                        </button> 
+
                     </Link>
                 </div>
             </div>
@@ -127,7 +131,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                     </Link>
                 ))}
                 <Link href="#">
-                    <button className="py-2 px-4 bg-blue-900 text-white rounded-full">
+                    <button className="py-2 px-8 bg-blue-900 text-white rounded-full">
                         Contact Us
                     </button>
                 </Link>

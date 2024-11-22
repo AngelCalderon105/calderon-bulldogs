@@ -57,12 +57,31 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
     }
   };
 
-  return (
-    <div className="flex flex-col md:items-center lg:flex-row bg-gradient-to-r from-[#F2F7FF] to-[#D2E1FB] p-8 shadow-lg relative space-y-6 lg:justify-between xl:justify-around">
-      {/* Left Section with Contact Info */}
+  return ( 
+    <>
+    {isAdmin ? (
+      <>
+      <h2 className="text-2xl font-bold font-georgia md:text-3xl" style={{ color: "#1E2D67" }}>Customer Contact Forms </h2>
+      <div className="space-y-4 flex flex-row gap-5 m-4 bg-gradient-to-r from-[#F2F7FF] to-[#D2E1FB]">
+        {allForms?.map((form) => (
+          <div key={form.id} className=" flex flex-col gap-4  border-2 bg-white border-gray-200 rounded-lg px-8  py-8 m-4">
+            <p><strong>Name: </strong>{form.name}</p>
+            <p><strong>Email: </strong>{form.email}</p>
+            <p><strong>Phone: </strong>{form.phone}</p>
+            <p><strong>Contact Type: </strong>{form.contactType}</p>
+            <p><strong>Body: </strong>{form.body}</p>
+            <button onClick={() => handleDeleteForm(form.id)} className="bg-red-500 rounded-lg px-3 py-1 text-white">Delete</button>
+          </div>
+        ))}
+      </div>
+        </>
+    ) : (
+      <>
+      <div className="flex flex-col md:items-center lg:flex-row bg-gradient-to-r from-[#F2F7FF] to-[#D2E1FB] p-8 shadow-lg relative space-y-6 lg:justify-between xl:justify-around">
       <div className="flex flex-col space-y-4 text-center lg:text-left w-full md:w-11/12 lg:w-1/3">
         <h2 className="text-2xl font-bold font-georgia md:text-3xl" style={{ color: "#1E2D67" }}>Contact Us</h2>
-        <p className="text-sm text-[#1E1E1E] md:leading-6">
+      
+      <p className="text-sm text-[#1E1E1E] md:leading-6">
           Contact us directly or fill out our contact form. We look forward to connecting with you!
         </p>
   <div className=" space-y-3 md:space-y-0 md:grid md:gap-3 md:grid-cols-2 md:grid-rows-2 lg:flex-col justify-center w-full lg:flex">
@@ -90,32 +109,23 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
     </span>
   </div>
 </div>
-
-        {/* <div className="hidden sm:flex md:hidden sm:items-center bg-white justify-center text-secblue space-x-2 border border-[#133591] rounded-full px-4 py-0.4 w-[195px]">
-            <Instagram className="w-5 h-5" />
-            <span className="font-sans text-custom-14 font-medium leading-[30px] text-left">
-              {INSTAGRAM}
-            </span>
-          </div> */}
-
-        {/* Decorative Paw SVGs */}
-        {/* Decorative Paw SVGs for Desktop Only */}
       <div className="hidden lg:block relative pt-6">
         <img
           src="/assets/Vector (1).svg"
           alt="Paw Icon"
           className="absolute w-[70px] h-[70px] top-0 left-0"
-        />
+          />
         <img
           src="/assets/Vector.svg"
           alt="Paw Icon"
           className="absolute w-[70px] h-[70px] top-12 left-20"
-        />
+          />
+        
       </div>
       </div>
 
-      {/* Form Section */}
-      <div className="bg-white rounded-3xl p-6 shadow-md w-full md:w-11/12 ml-auto md:m-0 space-y-4 md:flex md:justify-center md:items-center lg:w-6/12 xl:w-5/12 2xl:w-1/4">
+  
+      <div className="bg-white rounded-3xl p-6 shadow-md w-full md:w-11/12 ml-auto md:m-0 space-y-4 md:flex md:justify-center md:items-center lg:w-6/12 xl:w-5/12 2xl:w-4/12">
         <div className="space-y-4 md:w-11/12 mt-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
             <input
@@ -125,14 +135,14 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
               onChange={(e) => setName(e.target.value)}
               className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
               required
-            />
+              />
             <input
               type="text"
               placeholder="Last Name"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
-            />
+              />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
@@ -141,23 +151,23 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
-            />
+              />
             <input
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="border border-[#133591] rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
-            />
+              />
           </div>
           <div className="relative w-full">
   <select
     className={`border border-[#133591] rounded-lg p-2 py-2.5 w-full text-sm appearance-none 
       ${selectValue === "" ? "text-[#4E76BB] text-opacity-80" : "text-gray-700"} 
       focus:border-blue-400`}
-    value={selectValue}
-    onChange={handleSelectChange}
-  >
+      value={selectValue}
+      onChange={handleSelectChange}
+      >
     <option value="" disabled>
       Topic
     </option>
@@ -174,35 +184,22 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
             value={body}
             onChange={(e) => setBody(e.target.value)}
             className="border border-[#133591] rounded-lg p-3 w-full text-xs md:text-base h-32 placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
-          />
+            />
           <div className="flex justify-center">
             <button
               onClick={handleSubmitForm}
               className="w-full md:w-[200px] bg-[#344EAD] text-white py-2 rounded-full hover:bg-blue-800"
-            >
+              >
               Submit
             </button>
           </div>
         </div>
       </div>
-
-
-      {isAdmin && (
-        <div className="space-y-4">
-          {allForms?.map((form) => (
-            <div key={form.id} className="border-2 border-gray-200 rounded-lg p-4">
-              <p><strong>Name: </strong>{form.name}</p>
-              <p><strong>Email: </strong>{form.email}</p>
-              <p><strong>Phone: </strong>{form.phone}</p>
-              <p><strong>Contact Type: </strong>{form.contactType}</p>
-              <p><strong>Body: </strong>{form.body}</p>
-              <button onClick={() => handleDeleteForm(form.id)} className="bg-red-500 rounded-lg px-3 py-1 text-white">Delete</button>
-            </div>
-          ))}
-        </div>
-      )}
+      
     </div>
-  );
+      </>)}
+              </>
+);
 };
 
 export default ContactView;

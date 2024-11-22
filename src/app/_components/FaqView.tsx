@@ -77,7 +77,7 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
   if (isError) return <p>Error fetching FAQs</p>;
 
   return (
-    <div className=" py-12 font-montserrat flex flex-col w-full ">
+    <div className=" py-12 font-montserrat flex flex-col w-full">
       <h1 className="py-8 font-bold text-center text-dark_blue text-2xl sm:text-4xl">FAQs</h1>
       {faqs.map((faq) => (
         <div key={faq.id} style={{ marginBottom: "20px" }}>
