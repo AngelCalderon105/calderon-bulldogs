@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { api } from "~/trpc/react";
-
+import FaqArrow from "../../../public/FaqArrow.svg";
 interface FaqProps {
   isAdmin: boolean;
 }
@@ -17,6 +17,7 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
   const [editingFaqId, setEditingFaqId] = useState<string | null>(null);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
+  const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null); // New state for dropdown
 
   // Update the local FAQ list when initialFaqs changes
   useEffect(() => {
@@ -24,6 +25,10 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
       setFaqs(initialFaqs);
     }
   }, [initialFaqs]);
+
+  const handleToggle = (faqId: string) => {
+    setExpandedFaqId(expandedFaqId === faqId ? null : faqId);
+  };
 
   const handleCreateFaq = async () => {
     try {
@@ -72,14 +77,22 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
   if (isError) return <p>Error fetching FAQs</p>;
 
   return (
-    <div className="mx-12 py-12">
-      <h1 className="py-8 font-bold">Frequently Asked Questions</h1>
+    <div className=" py-12 font-montserrat flex flex-col w-full">
+      <h1 className="py-8 font-bold text-center text-dark_blue text-2xl sm:text-4xl">FAQs</h1>
       {faqs.map((faq) => (
         <div key={faq.id} style={{ marginBottom: "20px" }}>
-          <hr />
-          {/* Flex container for question and action buttons */}
+          {/* Flex container for question, arrow indicator, and toggle button */}
           <div className="flex justify-between items-center py-4">
-            <h3 className="font-medium">{faq.question}</h3>
+            <div className="flex items-center justify-between w-full cursor-pointer" onClick={() => handleToggle(faq.id)}>
+              <h3 className="font-semibold text-dark_blue  text-lg sm:text-xl">{faq.question}</h3>
+              <span
+                className={`transform transition-transform ${
+                  expandedFaqId === faq.id ? "rotate-180" : "rotate-0"
+                }`}
+              >
+               <FaqArrow/>
+              </span>
+            </div>
             {isAdmin && (
               <div className="flex space-x-2">
                 <button
@@ -97,9 +110,14 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
               </div>
             )}
           </div>
-
+  
+          {/* Show the answer if the FAQ is expanded */}
+          {expandedFaqId === faq.id && (
+            <p className=" py-4 text-gray-700">{faq.answer}</p>
+          )}
+  
           {/* Show the edit form if this FAQ is being edited */}
-          {editingFaqId === faq.id ? (
+          {editingFaqId === faq.id && (
             <div className="mb-4">
               <label>
                 Question:
@@ -131,12 +149,13 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
                 Cancel
               </button>
             </div>
-          ) : (
-            <p className="italic py-4">{faq.answer}</p>
           )}
+  
+          {/* Render the <hr /> for every FAQ, including the last */}
+          <hr className="border-blue-500 opacity-30" />
         </div>
       ))}
-
+  
       {isAdmin && !editingFaqId && (
         <>
           <button
@@ -145,7 +164,7 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
           >
             {showForm ? "Cancel" : "Add new FAQ"}
           </button>
-
+  
           {showForm && (
             <div style={{ marginTop: "20px" }}>
               <div>
@@ -178,6 +197,7 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
       )}
     </div>
   );
+  
 };
 
 export default FaqView;

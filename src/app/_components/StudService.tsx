@@ -20,18 +20,18 @@ const StudServiceCard: React.FC = () => {
       {/* Content Section */}
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-center px-8 space-y-10 md:space-y-0 md:gap-40">
         {/* Left Section: Text Content */}
-        <div className="flex flex-col text-center space-y-4 max-w-[350px]">
-          <h2 className="text-2xl font-bold font-georgia text-[#1E2D67]">
+        <div className="flex flex-col text-center space-y-4 md:space-y-8 max-w-[350px] lg:max-w-[600px]">
+          <h2 className="text-2xl lg:text-3xl font-bold font-georgia text-[#1E2D67]">
             Stud Service
           </h2>
-          <p className="text-sm text-gray-700">
+          <p className="text-sm lg:text-lg text-gray-700">
             <strong className="font-semibold text-custom-14">Meet Kratos</strong>, our
             exceptional Mini Lilac Tri-color English bulldog. Lilac Bulldogs are
             a result of double gene dilution, evolving from black through the
             influence of chocolate and blue genes. Kratos is perfect for your
             breeding program—visually appealing, compact, and friendly.
           </p>
-          <button className="bg-[#1E2D67] text-white py-2 px-6 rounded-full text-sm hover:bg-blue-800 mx-auto md:mx-0 self-center max-w-[220px] ">
+          <button className="bg-[#1E2D67] text-white py-2 px-7 rounded-full text-sm hover:bg-blue-800 mx-auto md:mx-0 self-center max-w-[220px] ">
             Learn more about Kratos
           </button>
         </div>
@@ -41,7 +41,7 @@ const StudServiceCard: React.FC = () => {
           <img
             src="/assets/stud_service.png"
             alt="Kratos"
-            className="object-contain w-[250px] h-[250px]"
+            className="object-contain w-[250px] h-[250px] md:h-full md:w-10/12"
           />
 
           {/* Decorative Paw Prints */}
@@ -49,21 +49,21 @@ const StudServiceCard: React.FC = () => {
             <img
               src="/assets/Vector.svg"
               alt="Paw Print"
-              className="w-9 h-9 md:w-11 md:h-11"
+              className="w-9 h-9 md:w-11 md:h-11 lg:w-24 lg:h-24"
             />
           </div>
           <div className="absolute top-0">
             <img
               src="/assets/Vector (1).svg"
               alt="Paw Print"
-              className="w-7 h-7 md:w-7 md:h-7"
+              className="w-7 h-7 md:w-7 md:h-7 lg:w-16 lg:h-16"
             />
           </div>
           <div className="absolute bottom-0 -left-4">
             <img
               src="/assets/Vector (1).svg"
               alt="Paw Print"
-              className="w-12 h-12 md:w-12 md:h-12"
+              className="w-12 h-12 md:w-12 md:h-12 lg:w-16 lg:h-16"
             />
           </div>
         </div>
