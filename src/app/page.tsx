@@ -5,6 +5,7 @@ import ContactView from "./_components/ContactView"
 import PuppyManagement from "./_components/PuppyManagement";
 import EventView from "./_components/EventView";
 import StudServiceCard from "./_components/StudService";
+import HowItWorks from "./_components/Howitworks";
 import Footer from "./_components/Footer"
 import HomeView from "./_components/HomeView";
 export default async function Home() {
@@ -20,6 +21,8 @@ export default async function Home() {
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "our_clients_gallery"/>
     <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "our_clients_gallery"/> */}
     <StudServiceCard />
+    
+
       <div className="mx-6 sm:mx-10 md:mx-16 lg:mx-20 xl:mx-32 2xl:mx-40">
     <FaqView isAdmin={false}/>
    </div>
