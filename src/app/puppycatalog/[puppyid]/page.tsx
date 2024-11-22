@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { api } from "~/trpc/react";
 import GalleryView from "~/app/_components/GalleryView";
 import { PayPalScriptProvider, PayPalButtons, ReactPayPalScriptOptions } from "@paypal/react-paypal-js";
-
+import ParentsComponent from "~/app/_components/ParentsComponent"
 interface PuppyType {
   id: number;
   name: string;
@@ -67,6 +67,7 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
             galleryType="puppy_galleries"
             galleryName={(puppy.name || "").toLowerCase().replace(/\s+/g, "_") + "_gallery"}
           />
+          <ParentsComponent/>
   
           {/* Customer Information Form */}
           <form onSubmit={handleFormSubmit} style={{ marginTop: "20px" }}>

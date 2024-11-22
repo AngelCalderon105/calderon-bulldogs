@@ -1,5 +1,11 @@
+import Image from "next/image";
+import {StaticImageData} from "next/image";
+import CocoMother from "~/../public/cocoMother.webp"
+import KratosFather from "~/../public/kratosFather.jpg"
+import BirthdayCake from "~/../public/birthdayCake.svg"
+
 interface ParentProps {
-    coverImage: string;
+    coverImage: StaticImageData;
     name: string;
     breed: string;
     age: string;
@@ -10,13 +16,15 @@ interface ParentProps {
     return (
       <div className="parent-card flex flex-col items-center md:items-start w-full md:w-1/2 px-4">
         {/* Image Section */}
-        <div className="relative w-full rounded-md">
-          <img
-            src={parent.coverImage}
-            alt={`${parent.name}`}
-            className="object-fit"
-          />
-        </div>
+        
+        <Image
+      src={parent.coverImage}
+      alt={`${parent.name}`} 
+      className="h-60 md:h-96  object-center w-full rounded-lg object-cover "
+
+    />
+         
+        
   
         {/* Details Section */}
         <div className="flex flex-col mt-4 space-y-2 w-full">
@@ -31,7 +39,7 @@ interface ParentProps {
                 <strong>Breed:</strong> <span className="font-normal">{parent.breed}</span>
             </p>
             <p className="font-sans text-secblue flex items-center">
-                <img src="./ageIcon.svg" alt="Age Icon" className="w-5 h-5 mr-2" />
+                <img src="/birthdayCake.svg" alt="Age Icon" className="w-5 h-5 mr-2" />
                 <span>{parent.age} years old</span>
             </p>
             </div>
@@ -45,7 +53,7 @@ interface ParentProps {
   
   const ParentsView: React.FC = () => {
     const mother = {
-      coverImage: "./motherPlaceholder.png",
+      coverImage: CocoMother,
       name: "Maggie's Mother",
       breed: "Mini Bulldog",
       age: "2",
@@ -53,7 +61,7 @@ interface ParentProps {
     };
   
     const father = {
-      coverImage: "./fatherPlaceholder.png",
+      coverImage: KratosFather,
       name: "Maggie's Father",
       breed: "Mini Bulldog",
       age: "2",
