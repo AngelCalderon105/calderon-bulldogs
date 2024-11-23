@@ -15,7 +15,7 @@ const HomeView: React.FC<HomeProps> = ({isAdmin}) => {
                     <h1 className="font-georgia font-semibold  text-3xl md:text-[32px] xl:text-[48px] leading-tight">
                         Welcome to Calderon Bulldogs!
                     </h1>
-                    <p className=" py-6 font-sans text-secblue font-semibold text-[16px]  xl:text-[22px]">
+                    <p className=" py-6 font-sans text-blue_darker font-semibold text-[16px]  xl:text-[22px]">
                         From Our Family to Yours: Delivering Love, Trust, & Quality in Every Pup.
                     </p>
                     <button className=" font-bold py-2 px-10 md:py-3 md:px-20 rounded-full font-sans bg-gradient-to-r from-[#FFF5E3] to-[#F8CF91] text-buttonblue text-center  md:text-[16px] xl:text-[18px]">

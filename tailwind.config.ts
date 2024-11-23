@@ -39,7 +39,7 @@ export default {
 			designred:'#D11243',
 			designblue:'#344EAD',
   			foreground: 'var(--foreground)',
-			secblue: 'var(--secondaryblue)',
+			blue_darker: 'var(--color-blue-darker)',
 			buttonblue: 'var(--buttonblue)',
 			navColor: 'var(--navColor)',
 			bgblue: 'var(--backgroundBlue)',

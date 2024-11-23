@@ -2,8 +2,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import ContactView from "./ContactView";
-
 
 interface NavProps {
     isAdmin: boolean
@@ -57,7 +55,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
             {/* Mobile/Tablet Menu */}
             <div
-                className={`fixed inset-0 pt-7 bg-bgblue text-secblue flex flex-col w-full items-center  transition-transform transform z-50 ${
+                className={`fixed inset-0 pt-7 bg-bgblue text-blue_darker flex flex-col w-full items-center  transition-transform transform z-50 ${
                     isOpen ? "translate-x-0" : "translate-x-full"
                 } md:hidden`}
             >
@@ -71,7 +69,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                         </div>
                          {/* Close Button */}
                         <button
-                            className="text-secblue "
+                            className="text-blue_darker "
                             onClick={() => setIsOpen(false)}
                         >
                             <svg
@@ -97,7 +95,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                             <li key={item} className="hover:bg-bgblue rounded-lg">
                                 <Link
                                     href="#"
-                                    className={`flex items-center text-center p-3 rounded-lg text-secblue }`}
+                                    className={`flex items-center text-center p-3 rounded-lg text-blue_darker }`}
                                 >
                                     <Image
                                         src="/Vector.svg"
@@ -113,7 +111,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                     </ul>
 
                     <Link href="#" className="w-full">
-                         <button className="mt-8 py-3 w-full rounded-full bg-secblue text-white font-semibold">
+                         <button className="mt-8 py-3 w-full rounded-full bg-blue_darker text-white font-semibold">
                             Contact Us
                         </button> 
 

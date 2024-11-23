@@ -38,12 +38,12 @@ interface ParentProps {
             <p className="font-sans text-secblue">
                 <strong>Breed:</strong> <span className="font-normal">{parent.breed}</span>
             </p>
-            <p className="font-sans text-secblue flex items-center">
+            <p className="font-sans text-blue_darker flex items-center">
                 <img src="/birthdayCake.svg" alt="Age Icon" className="w-5 h-5 mr-2" />
                 <span>{parent.age} years old</span>
             </p>
             </div>
-          <p className="font-sans text-secblue">
+          <p className="font-sans text-blue_darker">
             <strong>Color Variation:</strong> <span className="font-normal">{parent.color}</span>
           </p>
         </div>
