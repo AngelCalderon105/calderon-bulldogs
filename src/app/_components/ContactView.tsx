@@ -7,6 +7,7 @@ import Envelope from "../../../public/EnvelopeSimple.svg";
 import Phone from "../../../public/Phone.svg";
 import Instagram from "../../../public/Instagram.svg";
 import Arrow from "../../../public/Arrow.svg"
+import Check from "../../../public/CheckCircle.svg";
 
 interface ContactProps {
   isAdmin: boolean;
@@ -23,6 +24,8 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
   const [contactType, setContactType] = useState<"GENERAL" | "STUD" | "PURCHASE">("GENERAL");
   const [selectValue, setSelectValue] = useState<string>(""); // For displaying "Topic" as the default placeholder
   const [body, setBody] = useState<string>("");
+  const [submitted, setSubmitted] = useState(false);
+
   const handleSubmitForm = async () => {
     try {
       await createFormMutation.mutateAsync({
@@ -32,7 +35,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
         contactType, // Only "GENERAL" | "STUD" | "PURCHASE" here
         body,
       });
-      alert("Form submitted successfully!");
+      setSubmitted(true);
     } catch (error) {
       console.error("Something went wrong while submitting form: " + error);
       alert("Uh oh! Something went wrong when submitting your form.");
@@ -124,8 +127,17 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
       </div>
       </div>
 
-  
+      
       <div className="bg-white rounded-3xl p-6 shadow-md w-full md:w-11/12 ml-auto md:m-0 space-y-4 md:flex md:justify-center md:items-center lg:w-6/12 xl:w-5/12 2xl:w-4/12">
+      {submitted ? (
+        //Thank you form
+      <div className="space-y-2 flex flex-col items-center justify-center">
+        <Check/>
+        <h1 className="font-georgia font-bold text-md md:text-lg">Thank You</h1>
+        <h2 className="font-georgia">Your form has been submitted.</h2>
+        
+      </div> ) 
+      : (
         <div className="space-y-4 md:w-11/12 mt-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
             <input
@@ -161,24 +173,24 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
               />
           </div>
           <div className="relative w-full">
-  <select
-    className={`border border-[#133591] rounded-lg p-2 py-2.5 w-full text-sm appearance-none 
-      ${selectValue === "" ? "text-[#4E76BB] text-opacity-80" : "text-gray-700"} 
-      focus:border-blue-400`}
-      value={selectValue}
-      onChange={handleSelectChange}
-      >
-    <option value="" disabled>
-      Topic
-    </option>
-    <option value="GENERAL" className="text-[#133591]">General</option>
-    <option value="STUD" className="text-[#133591]">Stud Service</option>
-    <option value="PURCHASE" className="text-[#133591]">Purchase Puppy</option>
-  </select>
-  <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-    <Arrow classname=""/>
-  </div>
-</div>
+          <select
+            className={`border border-[#133591] rounded-lg p-2 py-2.5 w-full text-sm appearance-none 
+              ${selectValue === "" ? "text-[#4E76BB] text-opacity-80" : "text-gray-700"} 
+              focus:border-blue-400`}
+              value={selectValue}
+              onChange={handleSelectChange}
+              >
+            <option value="" disabled>
+              Topic
+            </option>
+            <option value="GENERAL" className="text-[#133591]">General</option>
+            <option value="STUD" className="text-[#133591]">Stud Service</option>
+            <option value="PURCHASE" className="text-[#133591]">Purchase Puppy</option>
+          </select>
+          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+            <Arrow classname=""/>
+          </div>
+        </div>
           <textarea
             placeholder="Write message here"
             value={body}
@@ -193,10 +205,11 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
               Submit
             </button>
           </div>
-        </div>
+        </div>)}
       </div>
       
     </div>
+    
       </>)}
               </>
 );
