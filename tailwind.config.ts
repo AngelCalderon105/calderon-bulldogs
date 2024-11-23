@@ -13,11 +13,9 @@ export default {
 		},
   		fontFamily: {
   			sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-			  montserrat: ["Montserrat", ...fontFamily.sans], 
-			},
-// 			sans: ['Montserrat', 'sans-serif'],
-// 			georgia: ['Georgia','serif'],
-//   		},
+			montserrat: ["Montserrat", ...fontFamily.sans], 
+			georgia: ['Georgia','serif'],
+  		},
 		lineHeight: {
 			'montserrat': '1.33', // Adjust the line height as needed
 		  },

@@ -6,14 +6,13 @@ import MailIcon from "../../../public/MailIcon.svg"
 import LocationIcon from "../../../public/LocationIcon.svg"
 export default function Footer() {
     return (
-        <footer className="text-dark_blue font-montserrat ">
+        <footer className="text-dark_blue">
             <div className="lg:flex">
                 {/* Logo and Social Media */}
                 <div className="flex flex-col lg:w-4/12 lg:mt-10 justify-center items-center lg:justify-start ">
                     <h2 className="font-bold text-lg flex items-center lg:flex">
-                        {/* Using the SVG as a React component */}
                         <PawLogo className="mr-1 " />
-                        <p className="text-3xl lg:text-3xl">Calderon Bulldogs</p>
+                        <p className="text-3xl lg:text-3xl font-georgia">Calderon Bulldogs</p>
                     </h2>
                     <div className="flex space-x-4 mb-5 md:flex-col lg:flex-row lg:">
                         <p className="mt-2 text-lg">Find us on social media:</p>
