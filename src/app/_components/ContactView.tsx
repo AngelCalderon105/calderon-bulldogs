@@ -104,7 +104,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
     </span>
   </div>
 
-  <div className="flex items-center bg-white justify-center md:justify-center md:w-5/12 text-secblue space-x-2 border-2
+  <div className="flex items-center bg-white justify-center md:justify-center md:w-5/12 text-blue_darker space-x-2 border-2
    border-blue_darker rounded-full px-1 py-0.5 w-full md:mx-3 md:col-span-2 md:justify-self-center lg:mx-0 lg:w-7/12 xl:w-6/12">
     <Instagram className="mx-1" />
     <span className="font-sans text-custom-14 font-medium py-1.5 text-left lg:p-1 ">
@@ -195,12 +195,12 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
             placeholder="Write message here"
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            className="border border-blue_darker rounded-lg p-3 w-full text-xs md:text-base h-32 placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
+            className="border border-blue_darker rounded-lg p-3 w-full text-xs md:text-base h-32 placeholder-[#4E76BB] placeholder-opacity-80"
             />
           <div className="flex justify-center">
             <button
               onClick={handleSubmitForm}
-              className="w-full md:w-[200px] bg-[#344EAD] text-white py-2 rounded-full hover:bg-blue-800"
+              className="w-full md:w-[200px] bg-blue_dark text-white py-2 rounded-full hover:bg-blue-800"
               >
               Submit
             </button>

@@ -30,12 +30,12 @@ interface ParentProps {
         <div className="flex flex-col mt-4 space-y-2 w-full">
           {/* Name Section */}
           <div className="flex flex-row justify-between items-center">
-            <h1 className="text-secblue font-bold font-sans text-[20px] md:text-[22px] lg:text-[24px]">Name</h1>
-            <span className="font-sans text-secblue text-[16px] md:text-[18px] lg:text-[20px]">{parent.name}</span>
+            <h1 className="text-blue_darker font-bold font-sans text-[20px] md:text-[22px] lg:text-[24px]">Name</h1>
+            <span className="font-sans text-blue_darker text-[16px] md:text-[18px] lg:text-[20px]">{parent.name}</span>
           </div> 
   
           <div className="flex flex-row justify-between items-center">
-            <p className="font-sans text-secblue">
+            <p className="font-sans text-blue_darker">
                 <strong>Breed:</strong> <span className="font-normal">{parent.breed}</span>
             </p>
             <p className="font-sans text-blue_darker flex items-center">

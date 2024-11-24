@@ -34,7 +34,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
             {/* Hamburger Icon for Mobile/Tablet */}
             <button
-                className="block md:hidden text-gray-800 focus:outline-none"
+                className="block md:hidden text-black focus:outline-none"
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <svg
@@ -55,7 +55,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
             {/* Mobile/Tablet Menu */}
             <div
-                className={`fixed inset-0 pt-7 bg-bgblue text-blue_darker flex flex-col w-full items-center  transition-transform transform z-50 ${
+                className={`fixed inset-0 pt-7 bg-blue_soft text-blue_darker flex flex-col w-full items-center transition-transform transform z-50 ${
                     isOpen ? "translate-x-0" : "translate-x-full"
                 } md:hidden`}
             >
@@ -69,7 +69,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                         </div>
                          {/* Close Button */}
                         <button
-                            className="text-blue_darker "
+                            className="text-blue_darker"
                             onClick={() => setIsOpen(false)}
                         >
                             <svg
@@ -92,7 +92,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
                     <ul className="space-y-4 w-full">
                         {["Available Puppies", "Stud Service", "FAQ"].map((item) => (
-                            <li key={item} className="hover:bg-bgblue rounded-lg">
+                            <li key={item} className="hover:bg-blue_soft rounded-lg">
                                 <Link
                                     href="#"
                                     className={`flex items-center text-center p-3 rounded-lg text-blue_darker }`}
@@ -123,13 +123,13 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
             <div className="hidden md:flex items-center space-x-8">
                 {["Available Puppies", "Stud Service", "FAQ"].map((item) => (
                     <Link key={item} href="#">
-                        <p className={`text-gray-700 font-medium`}>
+                        <p className={`text-fray_dark font-medium`}>
                             {item}
                         </p>
                     </Link>
                 ))}
                 <Link href="#">
-                    <button className="py-2 px-8 bg-blue-900 text-white rounded-full">
+                    <button className="py-2 px-8 bg-primary text-white rounded-full">
                         Contact Us
                     </button>
                 </Link>
