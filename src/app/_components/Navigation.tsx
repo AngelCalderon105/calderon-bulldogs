@@ -123,13 +123,13 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
             <div className="hidden md:flex items-center space-x-8">
                 {["Available Puppies", "Stud Service", "FAQ"].map((item) => (
                     <Link key={item} href="#">
-                        <p className={`text-fray_dark font-medium`}>
+                        <p className={`text-gray_dark font-medium`}>
                             {item}
                         </p>
                     </Link>
                 ))}
                 <Link href="#">
-                    <button className="py-2 px-8 bg-primary text-white rounded-full">
+                    <button className="py-2 px-8 bg-blue_darker text-white rounded-full">
                         Contact Us
                     </button>
                 </Link>

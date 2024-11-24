@@ -200,7 +200,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
           <div className="flex justify-center">
             <button
               onClick={handleSubmitForm}
-              className="w-full md:w-[200px] bg-blue_dark text-white py-2 rounded-full hover:bg-blue-800"
+              className="w-full md:w-[200px] bg-blue_dark text-white py-2 rounded-full hover:bg-blue_darker"
               >
               Submit
             </button>
