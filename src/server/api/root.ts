@@ -11,7 +11,8 @@ import { eventRouter } from "./routers/event";
 import { blogRouter} from './routers/blog';
 import { transactionRouter } from "./routers/transaction";
 import { paypalRouter } from "./routers/create-order";
-
+import { availabilityRouter } from './routers/availability';
+import { appointmentRouter } from './routers/appointment';
 /**
  * This is the primary router for your server.
  *
@@ -29,6 +30,8 @@ export const appRouter = createTRPCRouter({
   blog : blogRouter,
   transaction :transactionRouter, 
   order : paypalRouter,
+  appointment:appointmentRouter,
+  availability:availabilityRouter
 });
 
 // export type definition of API

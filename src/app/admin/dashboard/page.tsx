@@ -9,6 +9,7 @@ import AdminEmailUpdate from '~/app/_components/AdminEmailUpdate';
 import AdminPasswordChange from '~/app/_components/AdminPasswordChange';
 import ContactView from "~/app/_components/ContactView";
 import PuppyManagement from "~/app/_components/PuppyManagement";
+import AvailabilityForm from "~/app/_components/AvailabilityForm";
 
 export default async function AdminDashboard() {
 
@@ -31,7 +32,7 @@ export default async function AdminDashboard() {
         <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "our_clients_gallery"/>
 
         <TestimonialView isAdmin={true} />
-
+        <AvailabilityForm />
         <PuppyManagement isAdmin={true} />
         <EventView isAdmin={true}/>
         <FaqView isAdmin={true}/>
