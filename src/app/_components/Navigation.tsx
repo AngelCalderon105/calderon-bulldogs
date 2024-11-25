@@ -26,7 +26,7 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
         <div className="w-full top-0 flex justify-between md:px-2 py-4 md:pb-0 md:pt-4 z-50">
             {/* Logo and Title */}
             <div className="flex flex-row items-center">
-                <Image src="/Vector.svg" alt="Logo" width={20} height={20} />
+                <Image src="/PawLogo.svg" alt="Logo" width={20} height={20} />
                 <p className="font-georgia font-bold text-lg md:text-lg lg:text-xl px-2">
                     Calderon Bulldogs
                 </p>

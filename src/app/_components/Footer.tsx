@@ -55,7 +55,7 @@ export default function Footer() {
                             <h3 className="font-bold my-4 text-xl">Contact</h3>
                             <li className="flex items-center">
                                <PhoneIcon/>
-                                <a href="tel:+11234567890" className="hover:text-blue-700 underline ml-1.5"> +1 (714) 232 9787</a>
+                                <a href="tel:+7142329787" className="hover:text-blue-700 underline ml-1.5"> +1 (714) 232 9787</a>
                             </li>
                             <li className="flex items-center">
                                 <MailIcon/>

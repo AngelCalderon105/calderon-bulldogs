@@ -4,7 +4,6 @@ import TestimonialView from "./_components/TestimonialView"
 import ContactView from "./_components/ContactView"
 import PuppyManagement from "./_components/PuppyManagement";
 import EventView from "./_components/EventView";
-import Footer from "./_components/Footer"
 export default async function Home() {
 
   return (
@@ -18,9 +17,6 @@ export default async function Home() {
    <div className="mx-6 sm:mx-10 md:mx-16 lg:mx-20 xl:mx-32 2xl:mx-40">
     <FaqView isAdmin={false}/>
    </div>
-    
-  <div className="m-2 mb-20 lg:mx-10">
- </div>
      </>
   );
 }
