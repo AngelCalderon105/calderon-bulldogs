@@ -5,6 +5,8 @@ import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
+import Navbar from "./_components/Navigation"
+import Footer from "./_components/Footer"
 export const metadata: Metadata = {
   title: "Calderon Bulldogs",
   description: "Made by Altitud",
@@ -16,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+      <Navbar isAdmin={false}/>
+        <TRPCReactProvider>{children}</TRPCReactProvider>+
+      <Footer/>
       </body>
     </html>
   );

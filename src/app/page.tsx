@@ -20,7 +20,6 @@ export default async function Home() {
    </div>
     
   <div className="m-2 mb-20 lg:mx-10">
-  <Footer />
  </div>
      </>
   );
