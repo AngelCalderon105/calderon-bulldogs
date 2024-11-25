@@ -18,7 +18,8 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
   const deleteFormMutation = api.contact.deleteForm.useMutation();
   const { data: allForms, refetch } = api.contact.listAllForms.useQuery();
 
-  const [name, setName] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [contactType, setContactType] = useState<"GENERAL" | "STUD" | "PURCHASE">("GENERAL");
@@ -26,10 +27,14 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
   const [body, setBody] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
 
+  function getFullName(firstName : string, lastName: string) {
+    return `${firstName} ${lastName}`;
+  }
+
   const handleSubmitForm = async () => {
     try {
       await createFormMutation.mutateAsync({
-        name,
+        name: getFullName(firstName, lastName),
         email,
         phone,
         contactType, // Only "GENERAL" | "STUD" | "PURCHASE" here
@@ -143,16 +148,16 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
             <input
               type="text"
               placeholder="First Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               className="border border-blue_darker rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
               required
               />
             <input
               type="text"
               placeholder="Last Name"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               className="border border-blue_darker rounded-lg p-2 py-2.5 text-sm w-full placeholder-[#4E76BB] placeholder-opacity-80 focus:border-blue-400"
               />
           </div>
