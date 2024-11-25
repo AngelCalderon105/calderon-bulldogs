@@ -55,7 +55,7 @@ interface PuppyType {
           <img
           src={photo.url}
           alt={`${puppy.name}'s latest photo`}
-          className="w-full rounded-lg rounded-b-none object-cover"
+          className="w-full rounded-lg rounded-b-none h-72 object-cover"
           />
         )}
         </div>

@@ -94,14 +94,23 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
       )}
       <div className="flex justify-center flex-wrap md:gap-12">
         {puppies?.map((puppy) => (
+          <>
+          <div className="w-3/12">
+
           <Link href={`/puppycatalog/${puppy.id}`} key={puppy.id}>
             <PuppyProfile
               key={puppy.id}
               puppy={puppy}
               isAdmin={isAdmin}
               onDelete={() => handleDelete(puppy.id)}
-            />
+              />
           </Link>
+          {isAdmin && (
+
+            <MultipleFileUpload galleryType="puppy_galleries" puppyName={puppy.name} />
+          )}
+              </div>
+          </>
         ))}
       </div>
       {isAdmin && (

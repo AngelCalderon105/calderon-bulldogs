@@ -36,6 +36,8 @@ export default {
 		},
   		colors: {
 			dark_blue: '#1E2D67',
+			light_blue: '#F2F7FF',
+			font_light_blue: '#4E76BB',
 			secondary_grey: '#49454F',
   			background: 'hsl(var(--background))',
 			designred:'#D11243',
