@@ -13,11 +13,9 @@ export default {
 		},
   		fontFamily: {
   			sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-			  montserrat: ["Montserrat", ...fontFamily.sans], 
-			},
-// 			sans: ['Montserrat', 'sans-serif'],
-// 			georgia: ['Georgia','serif'],
-//   		},
+			montserrat: ["Montserrat", ...fontFamily.sans], 
+			georgia: ['Georgia','serif'],
+  		},
 		lineHeight: {
 			'montserrat': '1.33', // Adjust the line height as needed
 		  },
@@ -35,16 +33,25 @@ export default {
 			'custom-30': '30px',  // Example for 30px font size
 		},
   		colors: {
-			dark_blue: '#1E2D67',
-			secondary_grey: '#49454F',
   			background: 'hsl(var(--background))',
 			designred:'#D11243',
-			designblue:'#344EAD',
+
   			foreground: 'var(--foreground)',
-			secblue: 'var(--secondaryblue)',
-			buttonblue: 'var(--buttonblue)',
+			blue_dark: 'var(--color-blue-dark)',
+			blue_darker: 'var(--color-blue-darker)',
+			blue_darkest: 'var(--color-blue-darkest)',
+			blue_primary: 'var(--color-blue-primary)',
+			blue_pale: 'var(--color-blue-pale)',
+			blue_soft: 'var(--color-blue-soft)',
+			blue_pastel: 'var(--color-blue-pastel)',
+			blue_light_md: 'var(--color-blue-lighter)',
+			blue_light_lg: 'var(--color-blue-lightest)',
+
+			gray_dark:'var(--color-gray-dark)',
+			gray_muted: 'var(--color-gray-muted)',
+
 			navColor: 'var(--navColor)',
-			bgblue: 'var(--backgroundBlue)',
+
 			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'

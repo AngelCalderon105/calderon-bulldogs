@@ -3,12 +3,35 @@
 @tailwind utilities;
 @layer base {
   :root {
-    --secondaryblue: #133591;
-    --buttonblue:#2B2D42;
+    --color-blue-primary: #1E2D67;
+    --color-blue-darker: #133591;
+    --color-blue-dark: #344AE8;
+    --color-blue-light: #4E76BB;
+    --color-blue-pale: #C2D7FB;
+    --color-blue-muted: #6D91CF;
+    --color-blue-soft: #A7C4F8;
+    --color-blue-deep: #314E9F;
+    --color-blue-pastel: #D6E5FF;
+    --color-blue-darkest: #2B2D42;
+    --color-blue-lighter: #73A1F1; 
+    --color-blue-lightest: #F7F9FF;
+
+    /* White Shades */
+    --color-white: #FFFFFF;
+    --color-white-off: #F8F8FF;
+
+    /* Other Colors */
+    --color-gray-dark: #1E1E1E;
+    --color-gray-muted: #49454F;
+    --color-error: #AC4F48;
+    --color-black: #000000;
+    --color-warning: #DE655F;
+    --color-red-muted: #A9454F;
+    --color-red-danger: #D11243;
+    
     --navColor: #1E1E1E;
     --background: 0 0% 100%;
     --foreground: #1E2D67;
-    --backgroundBlue: #A7C4F8;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;

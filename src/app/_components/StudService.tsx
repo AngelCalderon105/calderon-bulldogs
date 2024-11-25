@@ -2,7 +2,7 @@ import React from "react";
 
 const StudServiceCard: React.FC = () => {
   return (
-    <div className="relative bg-[#D6E5FF] rounded-lg overflow-hidden mx-auto py-20">
+    <div className="relative bg-blue_pastel rounded-lg overflow-hidden mx-auto py-20">
       {/* Top Wavy Background */}
       <div className="absolute top-0 left-0 w-full h-[150px]">
         <svg
@@ -21,17 +21,17 @@ const StudServiceCard: React.FC = () => {
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-center px-8 space-y-10 md:space-y-0 md:gap-40">
         {/* Left Section: Text Content */}
         <div className="flex flex-col text-center space-y-4 md:space-y-8 max-w-[350px] lg:max-w-[600px]">
-          <h2 className="text-2xl lg:text-3xl font-bold font-georgia text-[#1E2D67]">
+          <h2 className="text-2xl lg:text-3xl font-bold font-georgia text-blue_primary">
             Stud Service
           </h2>
-          <p className="text-sm lg:text-lg text-gray-700">
+          <p className="text-sm lg:text-lg text-gray_dark">
             <strong className="font-semibold text-custom-14">Meet Kratos</strong>, our
             exceptional Mini Lilac Tri-color English bulldog. Lilac Bulldogs are
             a result of double gene dilution, evolving from black through the
             influence of chocolate and blue genes. Kratos is perfect for your
             breeding program—visually appealing, compact, and friendly.
           </p>
-          <button className="bg-[#1E2D67] text-white py-2 px-7 rounded-full text-sm hover:bg-blue-800 mx-auto md:mx-0 self-center max-w-[220px] ">
+          <button className="bg-blue_primary text-white py-2 px-7 rounded-full text-sm hover:bg-blue_dark mx-auto md:mx-0 self-center max-w-[220px] ">
             Learn more about Kratos
           </button>
         </div>
