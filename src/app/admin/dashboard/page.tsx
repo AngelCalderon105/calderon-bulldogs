@@ -33,6 +33,8 @@ export default async function AdminDashboard() {
         <TestimonialView isAdmin={true} />
 
         <PuppyManagement isAdmin={true} />
+        <GalleryView isAdmin={true} galleryType = "puppy_galleries" galleryName = "maggie_gallery"/>
+
         <EventView isAdmin={true}/>
         <FaqView isAdmin={true}/>
         <AdminEmailUpdate />

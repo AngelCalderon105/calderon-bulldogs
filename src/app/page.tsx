@@ -5,10 +5,15 @@ import ContactView from "./_components/ContactView"
 import PuppyManagement from "./_components/PuppyManagement";
 import EventView from "./_components/EventView";
 import PuppyAttributes from "./_components/PuppyAttributes"
+import StudServiceCard from "./_components/StudService";
+import HowItWorks from "./_components/Howitworks";
+import Footer from "./_components/Footer"
+import HomeView from "./_components/HomeView";
 export default async function Home() {
 
   return (
     <>
+
      <h1>Home</h1>
     <div className=" md:grid md:grid-cols-3 md:grid-rows-3 auto-rows-min">
       <PuppyAttributes value="item-1" triggerText= "Vet Wellness Exam" contentText= "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam vero alias iusto quis expedita possimus eius a error aperiam quibusdam. Sunt fuga eum repellat harum adipisci nemo reprehenderit quasi illum?" icon= "/Health.svg"/>
@@ -24,4 +29,27 @@ export default async function Home() {
        </>  
 
 );
+  
+    <HomeView isAdmin={false}/>
+    <PuppyManagement isAdmin={false} />
+    {/* <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "stud_gallery"/>
+    <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "previous_litters_gallery"/>
+    <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "our_clients_gallery"/>
+    <GalleryView isAdmin={false} galleryType = "main_gallery" galleryName = "our_clients_gallery"/> */
+  }
+    <StudServiceCard /> 
+
+      <div className="mx-6 sm:mx-10 md:mx-16 lg:mx-20 xl:mx-32 2xl:mx-40">
+    <FaqView isAdmin={false}/>
+   </div>
+    <EventView isAdmin={false}/>
+    <ContactView isAdmin={false} />
+    {/* <TestimonialView isAdmin={false} /> */}
+    {/* <ContactView isAdmin={false} /> */}
+
+  <div className="m-2 mb-20 lg:mx-10">
+  <Footer />
+ </div>
+     </>
+  );
 }

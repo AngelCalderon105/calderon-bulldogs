@@ -6,18 +6,48 @@ export default {
     content: ["./src/**/*.tsx"],
   theme: {
   	extend: {
+		screens: {
+			'custom-range-368-767': { min: '368px', max: '767px' },
+			'custom-range-343-367': { min: '343px', max: '367px' },
+			'custom-range-300-307': { min: '300px', max: '307px' }, // Custom range for 476px to 767px
+		},
   		fontFamily: {
-  			sans: ["var(--font-geist-sans)", ...fontFamily.sans]
-  		},
-  		borderRadius: {
+  			sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+			  montserrat: ["Montserrat", ...fontFamily.sans], 
+			},
+// 			sans: ['Montserrat', 'sans-serif'],
+// 			georgia: ['Georgia','serif'],
+//   		},
+		lineHeight: {
+			'montserrat': '1.33', // Adjust the line height as needed
+		  },
+		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+		fontSize: {
+			'custom-18': '18px',
+			'custom-16': '16px',
+			'custom-14': '14px', 
+			'custom-12': '12px',  // Custom font size with a key of 'custom-18' for 18px
+			'custom-24': '24px',  // Example for 24px font size
+			'custom-30': '30px',  // Example for 30px font size
+		},
   		colors: {
+			dark_blue: '#1E2D67',
+			light_blue: '#F2F7FF',
+			font_light_blue: '#4E76BB',
+			secondary_grey: '#49454F',
   			background: 'hsl(var(--background))',
-  			foreground: 'hsl(var(--foreground))',
-  			card: {
+			designred:'#D11243',
+			designblue:'#344EAD',
+  			foreground: 'var(--foreground)',
+			secblue: 'var(--secondaryblue)',
+			buttonblue: 'var(--buttonblue)',
+			navColor: 'var(--navColor)',
+			bgblue: 'var(--backgroundBlue)',
+			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
   			},
@@ -26,7 +56,7 @@ export default {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
+  				DEFAULT: '(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {
