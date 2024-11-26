@@ -14,6 +14,7 @@ model User {
   createdAt           DateTime             @default(now()) @map("created_at")
   sessions            Session[]
   passwordResetTokens PasswordResetToken[]
+  availabilities      Availability[]
 
   @@map("users")
 }
@@ -102,6 +103,7 @@ model Puppy {
   updatedAt DateTime       @updatedAt
   gallery   FileMetaData[]
   transactions Transaction[] 
+  appointments Appointment[]
 }
 
 model Event {
@@ -134,3 +136,48 @@ enum ContactType {
   STUD
   PURCHASE
 }
+
+
+enum AppointmentStatus {
+  CONFIRMED
+  PENDING
+  CANCELED
+}
+
+// Add the Appointment model to your schema
+model Appointment {
+  id                     String   @id @default(cuid()) // Primary key, using UUID for unique ID
+  customerName           String
+  customerEmail          String   @db.VarChar(100)
+  customerPhoneNumber    String   @db.VarChar(30)
+  appointmentType        AppointmentType // Type of appointment (e.g., general, puppy, or stud)
+  date                   DateTime // Appointment date
+  startTime              DateTime // Start time of the appointment
+  endTime                DateTime // End time of the appointment
+  status                 AppointmentStatus @default(PENDING)
+  createdAt              DateTime @default(now()) // Record creation timestamp
+  puppyId                Int?     // Optional foreign key for puppy relation
+  puppy                  Puppy?   @relation(fields: [puppyId], references: [id], onDelete: SetNull)
+
+  @@index([date, startTime], name: "appointment_time_index") // Index for faster querying of appointments
+}
+
+// Add the AppointmentType enum to your schema
+enum AppointmentType {
+  GENERAL
+  PUPPY
+  STUD
+}
+
+model Availability {
+  id          String   @id @default(cuid())
+  date        DateTime // Specific date for the slot
+  timeSlot    String   // Time slot (e.g., '11:00', '12:00')
+  status      String   @default("available") // "available" or "booked"
+  adminId     String   // ID of the admin creating slots
+  admin       User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@unique([date, timeSlot]) // Ensure unique slots per date and time
+  @@index([date, status]) // Quick lookup by date and status
+}
+
