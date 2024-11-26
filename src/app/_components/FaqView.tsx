@@ -113,7 +113,7 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
   
           {/* Show the answer if the FAQ is expanded */}
           {expandedFaqId === faq.id && (
-            <p className=" py-4 text-gray-700">{faq.answer}</p>
+            <p className=" py-4 text-gray_muted">{faq.answer}</p>
           )}
   
           {/* Show the edit form if this FAQ is being edited */}
@@ -152,7 +152,7 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
           )}
   
           {/* Render the <hr /> for every FAQ, including the last */}
-          <hr className="border-blue-500 opacity-30" />
+          <hr className="border-blue_pale opacity-30" />
         </div>
       ))}
   

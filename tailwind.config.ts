@@ -22,12 +22,15 @@ export default {
   		},
   		fontFamily: {
   			sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-  			montserrat: ["Montserrat", ...fontFamily.sans]
+
+			montserrat: ["Montserrat", ...fontFamily.sans], 
+			georgia: ['Georgia','serif'],
   		},
-  		lineHeight: {
-  			montserrat: '1.33'
-  		},
-  		borderRadius: {
+		lineHeight: {
+			'montserrat': '1.33', // Adjust the line height as needed
+		  },
+		borderRadius: {
+
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
@@ -55,7 +58,26 @@ export default {
   			navColor: 'var(--navColor)',
   			bgblue: 'var(--backgroundBlue)',
 			accordionText: '#4B5563', 
-  			card: {
+  			background: 'hsl(var(--background))',
+			designred:'#D11243',
+
+  			foreground: 'var(--foreground)',
+			blue_dark: 'var(--color-blue-dark)',
+			blue_darker: 'var(--color-blue-darker)',
+			blue_darkest: 'var(--color-blue-darkest)',
+			blue_primary: 'var(--color-blue-primary)',
+			blue_pale: 'var(--color-blue-pale)',
+			blue_soft: 'var(--color-blue-soft)',
+			blue_pastel: 'var(--color-blue-pastel)',
+			blue_light_md: 'var(--color-blue-lighter)',
+			blue_light_lg: 'var(--color-blue-lightest)',
+
+			gray_dark:'var(--color-gray-dark)',
+			gray_muted: 'var(--color-gray-muted)',
+
+			navColor: 'var(--navColor)',
+
+			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
   			},
