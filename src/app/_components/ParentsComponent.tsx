@@ -30,20 +30,21 @@ interface ParentProps {
         <div className="flex flex-col mt-4 space-y-2 w-full">
           {/* Name Section */}
           <div className="flex flex-row justify-between items-center">
-            <h1 className="text-secblue font-bold font-sans text-[20px] md:text-[22px] lg:text-[24px]">Name</h1>
-            <span className="font-sans text-secblue text-[16px] md:text-[18px] lg:text-[20px]">{parent.name}</span>
+            <h1 className="text-blue_darker font-bold font-sans text-[20px] md:text-[22px] lg:text-[24px]">{parent.name == "Mother" ? "Coco" :"Kratos"} </h1>
+            <span className="font-sans text-blue_darker text-[16px] md:text-[18px] lg:text-[20px]">{parent.name}</span>
+
           </div> 
   
           <div className="flex flex-row justify-between items-center">
-            <p className="font-sans text-secblue">
+            <p className="font-sans text-blue_darker">
                 <strong>Breed:</strong> <span className="font-normal">{parent.breed}</span>
             </p>
-            <p className="font-sans text-secblue flex items-center">
+            <p className="font-sans text-blue_darker flex items-center">
                 <img src="/birthdayCake.svg" alt="Age Icon" className="w-5 h-5 mr-2" />
                 <span>{parent.age} years old</span>
             </p>
             </div>
-          <p className="font-sans text-secblue">
+          <p className="font-sans text-blue_darker">
             <strong>Color Variation:</strong> <span className="font-normal">{parent.color}</span>
           </p>
         </div>
@@ -54,7 +55,7 @@ interface ParentProps {
   const ParentsView: React.FC = () => {
     const mother = {
       coverImage: CocoMother,
-      name: "Maggie's Mother",
+      name: "Mother",
       breed: "Mini Bulldog",
       age: "2",
       color: "Lilac",
@@ -62,7 +63,7 @@ interface ParentProps {
   
     const father = {
       coverImage: KratosFather,
-      name: "Maggie's Father",
+      name: "Father",
       breed: "Mini Bulldog",
       age: "2",
       color: "Lilac",
