@@ -7,6 +7,7 @@ import WhiteButton from "~/app/_components/WhiteButton";
 import BlueButton from "~/app/_components/BlueButton";
 import { PayPalScriptProvider, PayPalButtons, ReactPayPalScriptOptions } from "@paypal/react-paypal-js";
 import ParentsComponent from "~/app/_components/ParentsComponent"
+import { PuppyAttributesGrid } from "~/app/_components/PuppyAttibutesGrid";
 import ProfileGallery from "~/app/_components/ProfileGallery";
 interface PuppyType {
   id: number;
@@ -112,12 +113,14 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
             </div>
             <p className="text-center">Cash payments accepted. Please contact us directly.</p>
           </div>
-          <div className="py-8 col-span-6">
+          </div>
+          <div className=" w-1/2">
             <p className="text-4xl font-bold py-4">About {puppy.name}</p>
             <p>{puppy.description}</p>
           
           </div>
-          </div>
+          <p className="text-4xl font-bold py-4">What to know about {puppy.name}</p>
+          <PuppyAttributesGrid />
           <HowItWorks />
           <ParentsComponent/>
   

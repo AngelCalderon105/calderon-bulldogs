@@ -29,6 +29,7 @@ export default async function Home() {
     <ContactView isAdmin={false} />
     {/* <TestimonialView isAdmin={false} /> */}
     {/* <ContactView isAdmin={false} /> */}
+    
 
   <div className="m-2 mb-20 lg:mx-10">
   <Footer />
