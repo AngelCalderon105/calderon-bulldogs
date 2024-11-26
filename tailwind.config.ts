@@ -45,6 +45,7 @@ export default {
   			light_blue: '#F2F7FF',
   			font_light_blue: '#4E76BB',
   			secondary_grey: '#49454F',
+			dark_grey: '#1E1E1E',
   			background: 'hsl(var(--background))',
   			designred: '#D11243',
   			designblue: '#344EAD',

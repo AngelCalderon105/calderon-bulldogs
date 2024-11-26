@@ -58,68 +58,105 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
 
   return (
     <PayPalScriptProvider options={initialOptions}>
-    <div className="mx-6 my-10">
+    <div className="m-5 lg:m-10">
       
       {puppy ? (
         <> 
-        <div className="grid  grid-cols-10 gap-x-9 grid-rows-3">
-        <div className="col-span-6 row-span-2  ">
+        <p className="md:hidden text-4xl font-bold col-span-4 text-center">Meet {puppy.name}!</p>
+        {/* Start of Main Grid */}
+        <div className="grid grid-cols-10 md:gap-x-2 xl:gap-x-20 ">
+        <div className="col-span-10  lg:col-span-6">
 
         <ProfileGallery
           galleryType="puppy_galleries"
           galleryName={(puppy.name || "").toLowerCase().replace(/\s+/g, "_") + "_gallery"}
           />
           </div>
-          <div className="flex flex-col gap-4 col-span-4 row-span-2 bg-light_blue rounded-xl p-7">
+          {/* Start o Side Grid */}
+          <div className="grid grid-cols-4 gap-4 col-span-10  lg:col-span-4 md:row-span-2 gap-y-6 md:gap-y-4 bg-light_blue rounded-xl p-7 md:text-sm lg:text-lg">
           
-              <p className="text-4xl font-bold">Meet {puppy.name}!</p>
-          <p>Birthdate: {new Date(puppy.birthdate).toLocaleDateString()}</p>
-              <div className=" flex flex-row gap-11 ">
-              <p className="">Personality</p>
-              <div>
+              <p className="text-4xl font-bold col-span-4 hidden md:block">Meet {puppy.name}!</p>
+              <div className="col-span-4 flex gap-6">
 
-              {puppy.personality.map((item)=>(
-                <WhiteButton text = {item}/>
-              ))
-            }
+              <div className="flex justify-start gap-3 text-lg items-center">
+                  <img src="/birthdayCake.svg" alt="" className="w-7 h-7 lg:h-10 lg:w-10" />
+            {(() => {
+              const birthDate = new Date(puppy.birthdate);
+              const today = new Date();
+              
+              const diffInDays = Math.floor((today.getTime() - birthDate.getTime()) / (1000 * 60 * 60 * 24));
+              
+              
+              if (diffInDays < 7) {
+                return `${diffInDays} day${diffInDays !== 1 ? "s" : ""} `; // Less than 7 days
+              } else if (diffInDays < 28) {
+                const weeks = Math.floor(diffInDays / 7);
+                return `${weeks} week${weeks !== 1 ? "s" : ""} `; // 1 to 4 weeks
+              } else {
+                const months = Math.floor(diffInDays / 30); // Approximate 1 month = 30 days
+                if (months === 0) {
+                  return `1 month old`; // Prevent "0 months old"
+                }
+                return `${months} month${months !== 1 ? "s" : ""} `; // 1 month or more
+              }
+              
+            })(
+              
+            ) 
+          }
+              </div>
+              <div className="flex justify-start gap-2 text-lg items-center" >
+                <img src="/sex.svg" alt="" className="w-7 h-7 lg:h-10 lg:w-10" />
+                <span>{puppy.sex}</span>
+              </div>
+                    </div>
+              <p className=" font-semibold text-dark_grey col-span-2">Personality</p>
+              <div className=" flex flex-row col-span-2">
+                  <div>
+
+                  {puppy.personality.map((item)=>(
+                    <WhiteButton text = {item} />
+                  ))
+                }
+                </div>
             </div>
-            </div>
-                <p>Breed: {puppy.breed}</p>
-            <p>Color Variation: {puppy.color}</p>
-            <p>Date Available: {new Date(puppy.dateAvailable).toLocaleDateString()}</p>
-            <div className="bg-white p-6 ">
+            <p className="col-span-2 font-semibold text-dark_grey ">Breed: </p>
+            <p  className="col-span-2"> {puppy.breed}</p>
+            <p className="col-span-2 font-semibold text-dark_grey">Color Variation:</p>
+            <p className="col-span-2 ">{puppy.color}</p>
+            <p className="col-span-2 font-semibold text-dark_grey">Date Available:</p>
+            <p className="col-span-2"> {new Date(puppy.dateAvailable).toLocaleDateString()}</p>
+            <div className="bg-white p-6 col-span-4 ">
               <h1 className="font-bold text-font_light_blue">Pricing Details</h1>
-              <p className=" text-secondary_grey">Purchase: ${puppy.price}</p>
-              <p  className=" text-secondary_grey">Reserve: $500</p>
+              <div className=" flex justify-between  font-semibold">
+              <p className=" text-secondary_grey ">Purchase:</p>
+              <p className=" text-dark_blue">${puppy.price}</p>
+              </div>  
+              <div className=" flex justify-between  font-semibold">
+              <p className=" text-secondary_grey">Reserve: </p>
+              <p className=" text-dark_blue">$500</p>
+              </div>  
 
             </div>
-            <div className="grid grid-cols-2 rows-2 gap-8 py-4  text-center  md:text-[16px] xl:text-[18px]">
-              <div className="  place-self-center w-full ">
-              <button className=" font-bold py-2  md:py-3 w-full rounded-full font-sans text-secondary_grey border-2 border-solid  bg-white">
-                        Reserve Puppy
-                    </button>
-
-              </div>
-              <div className=" place-self-center w-full ">
-              <button className=" font-bold py-2  md:py-3 w-full rounded-full font-sans text-white bg-designblue">
-                        Meet & Greet
-                    </button>
-              </div>
-              <div className="col-span-2"> 
-              <button className=" font-bold py-2  md:py-3 w-full rounded-full font-sans bg-gradient-to-r from-[#FFF5E3] to-[#F8CF91] text-buttonblue">
-                        Purchase Puppy
-                    </button>
-              </div>
-            </div>
-            <p className="text-center">Cash payments accepted. Please contact us directly.</p>
+           
+              <button className="text-sm col-span-2 font-bold py-2  md:py-3 w-full rounded-full font-sans text-secondary_grey border-2 border-solid  bg-white">
+                  Reserve Puppy
+              </button>
+              <button className=" text-sm col-span-2 font-bold py-2  md:py-3 w-full rounded-full font-sans text-white bg-designblue">
+                  Meet & Greet
+              </button>
+              <button className=" col-span-4 font-bold py-2  md:py-3 w-full rounded-full font-sans bg-gradient-to-r from-[#FFF5E3] to-[#F8CF91] text-buttonblue">
+                  Purchase Puppy
+               </button>
+            <p className="text-center col-span-4">Cash payments accepted. Please contact us directly.</p>
           </div>
-          </div>
-          <div className=" w-1/2">
+          <div className="col-span-10 md:col-span-4 lg:col-span-6 py-4">
             <p className="text-4xl font-bold py-4">About {puppy.name}</p>
             <p>{puppy.description}</p>
           
           </div>
-          <p className="text-4xl font-bold py-4">What to know about {puppy.name}</p>
+          </div>
+          <p className="text-3xl font-bold py-4 mt-10 lg:mt-20 mb-6 ">What to know about {puppy.name}</p>
           <PuppyAttributesGrid />
           <HowItWorks />
           <ParentsComponent/>

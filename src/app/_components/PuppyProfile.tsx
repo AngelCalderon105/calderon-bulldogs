@@ -119,8 +119,8 @@ interface PuppyType {
           </div>
   
         {isAdmin && onDelete && (
-          <button onClick={onDelete} className="bg-red-500 text-white px-2 py-1 rounded">
-            Remove
+          <button onClick={onDelete} className="bg-red-500 text-white px-2  mt-5 py-1 rounded">
+            Delete Puppy
           </button>
         )}
         </div>

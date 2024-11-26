@@ -32,12 +32,12 @@ export default function PuppyAttributes({
               <img
                 src={icon}
                 alt={`${triggerText} icon`}
-                className="h-6 w-6"
+                className="h-10 w-10"
               />
             ) : (
               icon
             )}
-            <span className="text-start text-2xl w-80 md:w-52 lg:w-72 xl:w-96">
+            <span className="text-start text-xl lg:text-2xl w-full md:w-52 lg:w-72 xl:w-full">
               {triggerText}
             </span>
           </div>

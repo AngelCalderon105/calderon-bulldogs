@@ -30,7 +30,7 @@ interface ParentProps {
         <div className="flex flex-col mt-4 space-y-2 w-full">
           {/* Name Section */}
           <div className="flex flex-row justify-between items-center">
-            <h1 className="text-secblue font-bold font-sans text-[20px] md:text-[22px] lg:text-[24px]">Name</h1>
+            <h1 className="text-secblue font-bold font-sans text-[20px] md:text-[22px] lg:text-[24px]">{parent.name == "Mother" ? "Coco" :"Kratos"} </h1>
             <span className="font-sans text-secblue text-[16px] md:text-[18px] lg:text-[20px]">{parent.name}</span>
           </div> 
   
@@ -54,7 +54,7 @@ interface ParentProps {
   const ParentsView: React.FC = () => {
     const mother = {
       coverImage: CocoMother,
-      name: "Maggie's Mother",
+      name: "Mother",
       breed: "Mini Bulldog",
       age: "2",
       color: "Lilac",
@@ -62,7 +62,7 @@ interface ParentProps {
   
     const father = {
       coverImage: KratosFather,
-      name: "Maggie's Father",
+      name: "Father",
       breed: "Mini Bulldog",
       age: "2",
       color: "Lilac",

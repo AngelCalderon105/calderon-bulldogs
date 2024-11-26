@@ -3,10 +3,10 @@ import React from "react";
 const HowItWorks: React.FC = () => {
   return (
     <div className="bg-[#F7F9FF] py-16 px-8">
-      <div className="mx-auto flex flex-col md:flex-row items-center justify-center gap-0 lg:gap-40">
+      <div className="mx-auto flex flex-col md:flex-row items-center justify-center  gap-0 lg:gap-40">
         {/* Left Section: Steps */}
         <div className="relative flex flex-col space-y-12 max-w-[425px]">
-          <h2 className="text-3xl font-georgia font-bold text-[#1E2D67]">How It Works</h2>
+          <h2 className="text-4xl font-georgia font-bold text-[#1E2D67]">How It Works</h2>
 
           {/* Dotted Line */}
           <div className="absolute top-[69px] left-[5px] h-400px max-[367px]:h-[320px] md:h-[295px] custom-range-368-767:h-[270px] max-[340px]:h-350px custom-range-343-367:h-[320px] custom-range-300-307:h-[380px] custom-range-300-307:left-[1px]">

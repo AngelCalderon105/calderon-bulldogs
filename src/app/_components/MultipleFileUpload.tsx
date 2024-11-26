@@ -101,7 +101,7 @@ const MultipleFileUpload: React.FC<UploadProps> = ({ galleryType, puppyName }) =
 
   return (
     <div className="p-6 rounded-lg shadow-md">
-      <h2 className="text-md font-semibold mb-4">Upload files</h2>
+      <h2 className="text-md font-semibold mb-4">Upload Pictures</h2>
       <input
         type="file"
         multiple
