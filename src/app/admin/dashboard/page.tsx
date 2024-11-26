@@ -24,20 +24,23 @@ export default async function AdminDashboard() {
       <div>
         <h1>Admin Dashboard</h1>
         <p>Welcome, {session?.user?.email}</p>
-        <MultipleFileUpload galleryType = "main_gallery"/>
-        <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "previous_litters_gallery"/>
-        <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "stud_gallery"/>
-        <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "mother_gallery"/>
-        <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "our_clients_gallery"/>
 
-        <TestimonialView isAdmin={true} />
 
         <PuppyManagement isAdmin={true} />
+
+
         <EventView isAdmin={true}/>
         <FaqView isAdmin={true}/>
+        <ContactView isAdmin={true}/>
+       
         <AdminEmailUpdate />
         <AdminPasswordChange />
-        <ContactView isAdmin={true}/>
+        {/*<MultipleFileUpload galleryType = "main_gallery"/>
+       <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "previous_litters_gallery"/>
+       <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "stud_gallery"/>
+       <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "mother_gallery"/>
+       <TestimonialView isAdmin={true} />
+       <GalleryView isAdmin={true} galleryType = "main_gallery" galleryName = "our_clients_gallery"/> */}
       </div>
   );
 }

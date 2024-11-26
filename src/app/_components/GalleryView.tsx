@@ -64,7 +64,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
       </div> :  null} 
       <Splide
         options={{
-          perPage: 3,
+          perPage: 1,
           gap: "1rem",
           pagination: true,
           arrows: true,

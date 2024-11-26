@@ -2,6 +2,7 @@ import {
   S3Client,
   PutObjectCommand,
   ListObjectsCommand,
+  DeleteObjectsCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -112,11 +113,10 @@ export const s3Router = createTRPCRouter({
     }),
 
 
-
   deletePhoto: publicProcedure
     .input(
       z.object({
-        key: z.string(), // The S3 object key for file deletion
+        key: z.string(), 
       }),
     )
     .mutation(async ({ input }) => {
@@ -151,4 +151,66 @@ export const s3Router = createTRPCRouter({
 
       return { success: true };
     }),
+    deleteAllPuppyPhotos: publicProcedure
+    .input(
+      z.object({
+        folder: z.string(), // The S3 folder/prefix to delete (e.g., "puppy_galleries/puppy_name_gallery")
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { folder } = input;
+
+      // Step 1: List all objects in the folder
+      const listCommand = new ListObjectsCommand({
+        Bucket: bucketName,
+        Prefix: folder, // Prefix to match all objects in the folder
+      });
+
+      const { Contents } = await s3.send(listCommand);
+
+      if (!Contents || Contents.length === 0) {
+        return { success: true, message: "No images found to delete." };
+      }
+
+      // Extract the keys of all objects to delete
+      const keysToDelete = Contents.map((item) => ({ Key: item.Key! }));
+
+      // Step 2: Delete all objects in the folder
+      const deleteCommand = new DeleteObjectsCommand({
+        Bucket: bucketName,
+        Delete: {
+          Objects: keysToDelete,
+        },
+      });
+
+      try {
+        await s3.send(deleteCommand);
+      } catch (error) {
+        console.error("Error deleting S3 objects:", error);
+        return { success: false, message: "Failed to delete S3 objects." };
+      }
+
+      // Step 3: Delete metadata for these files from the database
+      try {
+        await db.fileMetaData.deleteMany({
+          where: {
+            s3Url: {
+              in: keysToDelete.map(
+                (key) =>
+                  `https://${bucketName}.s3.${region}.amazonaws.com/${key.Key}`
+              ),
+            },
+          },
+        });
+      } catch (error) {
+        console.error("Error deleting metadata from database:", error);
+        return {
+          success: false,
+          message: "Failed to delete file metadata from the database.",
+        };
+      }
+
+      return { success: true, message: "Gallery and metadata deleted successfully." };
+    }),
 });
+    

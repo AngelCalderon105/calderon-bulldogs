@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { api } from "~/trpc/react";
 import Link from "next/link";
 import PuppyProfile from "./PuppyProfile";
+import GalleryView from "./GalleryView"
 import MultipleFileUpload from "./MultipleFileUpload";
 
 interface PuppyManagement {
@@ -20,11 +21,11 @@ const personalityOptions = [
   "intelligent",
   "friendly",
   "protective",
-  
-] as const; 
+] as const;
 
 export default function PuppyManagement({ isAdmin }: PuppyManagement) {
   const [showForm, setShowForm] = useState(false);
+  const [editingPuppyId, setEditingPuppyId] = useState<number | null>(null);
   const [puppy, setPuppy] = useState({
     name: "",
     birthdate: "",
@@ -33,14 +34,15 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
     price: 0,
     breed: "",
     sex: "Non_Specified" as "Male" | "Female",
-    personality: [] as typeof personalityOptions[number][], 
+    personality: [] as typeof personalityOptions[number][],
     description: "",
   });
-  
 
   const { data: puppies, isLoading, error } = api.puppyProfile.listPuppies.useQuery();
   const createPuppyMutation = api.puppyProfile.createPuppy.useMutation();
+  const updatePuppyMutation = api.puppyProfile.updatePuppy.useMutation();
   const deletePuppyMutation = api.puppyProfile.deletePuppy.useMutation();
+  const deletePuppyGalleryMutation = api.s3.deleteAllPuppyPhotos.useMutation();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading puppy profiles.</div>;
@@ -52,38 +54,63 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
     }));
   };
 
-  const handlePersonalityChange = (trait: "calm" | "shy" | "happy" | "lazy" | "energetic" | "playful" | "curious" | "intelligent" | "friendly" | "protective") => {
-  setPuppy((prevPuppy) => {
-    const newTraits = prevPuppy.personality.includes(trait)
-      ? prevPuppy.personality.filter((t) => t !== trait) // Remove the trait if it exists
-      : [...prevPuppy.personality, trait]; // Add the trait if it doesn't exist
-    return { ...prevPuppy, personality: newTraits };
-  });
-};
+  const handlePersonalityChange = (trait: typeof personalityOptions[number]) => {
+    setPuppy((prevPuppy) => {
+      const newTraits = prevPuppy.personality.includes(trait)
+        ? prevPuppy.personality.filter((t) => t !== trait)
+        : [...prevPuppy.personality, trait];
+      return { ...prevPuppy, personality: newTraits };
+    });
+  };
 
+  const handleEdit = (puppyToEdit: any) => {
+    setEditingPuppyId(puppyToEdit.id);
+    setPuppy({
+      ...puppyToEdit,
+      birthdate: puppyToEdit.birthdate
+        ? new Date(puppyToEdit.birthdate).toISOString().split("T")[0]
+        : "", // Fallback to an empty string if null/undefined
+      dateAvailable: puppyToEdit.dateAvailable
+        ? new Date(puppyToEdit.dateAvailable).toISOString().split("T")[0]
+        : "", // Fallback to an empty string if null/undefined
+    });
+    setShowForm(true);
+  };
+  
 
-  const handleDelete = async (id: number) => {
-    if (confirm("Are you sure you want to remove this puppy profile?")) {
+  const handleDeletePuppy = async (id: number, puppyName : string) => {
+    if (confirm("Are you sure you want to delete this puppy and its images?")) {
+      const formattedTag = "puppy_galleries/" + (puppyName || "").toLowerCase().replace(/\s+/g, "_") + "_gallery";
       try {
+        await deletePuppyGalleryMutation.mutateAsync({ folder: formattedTag });
+  
         await deletePuppyMutation.mutateAsync({ id });
-        alert("Puppy profile deleted.");
+  
+        alert("Puppy and gallery deleted successfully!");
       } catch (error) {
-        console.error("Error deleting puppy profile:", error);
-        alert("Failed to delete puppy profile.");
+        console.error("Error deleting puppy or gallery:", error);
+        alert("Failed to delete puppy and/or gallery.");
       }
     }
   };
+  
 
   const handlePuppyFormSubmit = async () => {
     try {
-      await createPuppyMutation.mutateAsync(puppy);
-      alert("Puppy profile successfully created!");
+      if (editingPuppyId) {
+        await updatePuppyMutation.mutateAsync({ id: editingPuppyId, ...puppy });
+        alert("Puppy profile successfully updated!");
+      } else {
+        await createPuppyMutation.mutateAsync(puppy);
+        alert("Puppy profile successfully created!");
+      }
+      setEditingPuppyId(null);
+      setShowForm(false);
     } catch (error) {
-      console.error("Error creating puppy profile:", error);
-      alert("Failed to create puppy profile.");
+      console.error("Error saving puppy profile:", error);
+      alert("Failed to save puppy profile.");
     }
   };
-
 
   return (
     <div className="mx-8">
@@ -94,22 +121,38 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
       )}
       <div className="flex justify-center flex-wrap md:gap-12">
         {puppies?.map((puppy) => (
-          <Link href={`/puppycatalog/${puppy.id}`} key={puppy.id}>
-            <PuppyProfile
-              key={puppy.id}
-              puppy={puppy}
-              isAdmin={isAdmin}
-              onDelete={() => handleDelete(puppy.id)}
-            />
-          </Link>
+          <div className="w-3/12" key={puppy.id}>
+            <Link href={`/puppycatalog/${puppy.id}`}>
+              <PuppyProfile
+                puppy={puppy}
+                isAdmin={isAdmin}
+                onDelete={() => handleDeletePuppy(puppy.id, puppy.name)}
+              />
+            </Link>
+            {isAdmin && (
+              <>
+                <button
+                  className="mt-2 p-2 bg-green-500 text-white rounded "
+                  onClick={() => handleEdit(puppy)}
+                >
+                  Edit Puppy Info
+                </button>
+                <GalleryView isAdmin={true} galleryType = "puppy_galleries" galleryName ={ `${puppy.name.toLowerCase().replace(/\s+/g, "_")}_gallery`}/>
+                <MultipleFileUpload galleryType="puppy_galleries" puppyName={puppy.name} />
+              </>
+            )}
+          </div>
         ))}
       </div>
       {isAdmin && (
         <button
           className="mt-4 p-4 bg-blue-600 text-white rounded"
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            setShowForm(!showForm);
+            if (!showForm) setEditingPuppyId(null);
+          }}
         >
-          {showForm ? "Cancel" : "Add Puppy"}
+          {showForm ? "Cancel" : editingPuppyId ? "Edit Puppy" : "Add Puppy"}
         </button>
       )}
       {showForm && (
@@ -209,7 +252,7 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
           </label>
           <MultipleFileUpload galleryType="puppy_galleries" puppyName={puppy.name} />
           <button className="p-2 bg-green-600 text-white rounded" onClick={handlePuppyFormSubmit}>
-            Submit
+            {editingPuppyId ? "Update Puppy" : "Submit"}
           </button>
         </div>
       )}

@@ -98,18 +98,19 @@ export const puppyProfileRouter = createTRPCRouter({
     }),
 
   updatePuppy: publicProcedure
-    .input(
-      z.object({
-        id: z.number(),
-        name: z.string().optional(),
-        birthdate: z.string().optional(),
-        color: z.string().optional(),
-        price: z.number().optional(),
-        breed: z.string().optional(),
-        personality: z
-          .array(
-            z.enum([
-              "calm",
+  .input(
+    z.object({
+      id: z.number(),
+      name: z.string().optional(),
+      birthdate: z.string().optional(),
+      dateAvailable: z.string().optional(),
+      color: z.string().optional(),
+      price: z.number().optional(),
+      breed: z.string().optional(),
+      personality: z
+        .array(
+          z.enum([
+            "calm",
             "shy",
             "happy",
             "lazy",
@@ -119,19 +120,30 @@ export const puppyProfileRouter = createTRPCRouter({
             "intelligent",
             "friendly",
             "protective",
-            ])
-          )
-          .optional(),
-        description: z.string().optional(),
-      })
-    )
-    .mutation(async ({ input }) => {
-      const { id, ...updateData } = input;
-      const updatedPuppy = await db.puppy.update({
-        where: { id },
-        data: updateData,
-      });
+          ])
+        )
+        .optional(),
+      description: z.string().optional(),
+    })
+  )
+  .mutation(async ({ input }) => {
+    const { id, birthdate, dateAvailable, ...updateData } = input;
 
-      return updatedPuppy;
-    }),
+      if (birthdate) {
+        birthdate: new Date(birthdate)
+      }
+      if (dateAvailable) {
+        dateAvailable: new Date(dateAvailable)
+      }
+  
+
+    // Perform the update
+    const updatedPuppy = await db.puppy.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return updatedPuppy;
+  }),
+
 });
