@@ -93,8 +93,8 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
           Contact us directly or fill out our contact form. We look forward to connecting with you!
         </p>
   <div className=" space-y-3 md:space-y-0 md:grid md:gap-3 md:grid-cols-2 md:grid-rows-2 lg:flex-col justify-center w-full lg:flex">
-    <a href="mailto:calderonbulldogs@gmail.com" className="flex items-center bg-white justify-center lg:justify-start text-blue_darker border-2 
-    border-blue_darker rounded-full px-2 py-0.5 md:py-0 md:mx-3 md:ml-16 lg:ml-0 lg:p-0.5 lg:w-9/12 lg:px-2 xl:justify-center xl:w-7/12">
+    <a href="mailto:calderonbulldogs@gmail.com" className="flex items-center bg-white justify-center lg:justify-start text-blue_darker space-x-2 border-2 
+    border-blue_darker rounded-full px-1 py-0.5 w-full md:w/2">
     <Envelope className="mr-2" />
     <span className="font-sans text-custom-14 font-medium text-left py-1.5 md:py-1 ">
       <p>calderonbulldogs@gmail.com</p>
@@ -102,7 +102,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
   </a>
 
   <a href="tel:+17142329787" className="flex items-center bg-white justify-center md:w-1/2 text-blue_darker space-x-2 border-2
-   border-blue_darker rounded-full px-1 py-0.5 w-full md:mx-3 lg:mx-0 xl:w-5/12">
+   border-blue_darker rounded-full px-1 py-0.5 w-full">
     <Phone className="mx-1" />
     <span className="font-sans text-custom-14 font-medium text-left py-1.5 md:py-1 ">
       <p>(714)-232-9787</p>
@@ -110,7 +110,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
   </a>
 
   <a href="https://www.instagram.com/calderon_bulldogs/" className="flex items-center bg-white justify-center md:justify-center md:w-5/12 text-blue_darker space-x-2 border-2
-   border-blue_darker rounded-full px-1 py-0.5 w-full md:mx-3 md:col-span-2 md:justify-self-center lg:mx-0 lg:w-7/12 xl:w-6/12" target="_blank" rel="noopener noreferrer">
+   border-blue_darker rounded-full px-1 py-0.5 w-full " target="_blank" rel="noopener noreferrer">
     <Instagram className="mx-1" />
     <span className="font-sans text-custom-14 font-medium py-1.5 text-left lg:p-1 ">
       @calderonbulldogs
