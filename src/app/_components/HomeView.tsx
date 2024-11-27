@@ -6,9 +6,8 @@ interface HomeProps {
 
 const HomeView: React.FC<HomeProps> = ({isAdmin}) => {
     return (
-        <div className="px-5 lg:px-14" style={{ background: "linear-gradient(160deg, #D6E5FF, #73A1F1)" }}>
-            <Navigation isAdmin={isAdmin}/>
-            <div className="flex flex-col md:flex-row lg:top-0 gap-8 mt-4 justify-center md:justify-start px-4 ">
+        <div className="px-5 lg:px-14 bg-gradient-to-br from-[#D6E5FF] via-[#DFEBFF] to-[#73A1F1]">
+            <div className="flex flex-col md:flex-row lg:top-0 gap-8 justify-center md:justify-start px-4 ">
                 
                 {/* Left Text Content */}
                 <div className="flex flex-col justify-center self-center items-center md:items-start  md:justify-start text-center md:text-left md:w-[50%] ">
