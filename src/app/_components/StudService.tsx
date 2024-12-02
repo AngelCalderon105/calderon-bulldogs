@@ -2,7 +2,7 @@ import React from "react";
 
 const StudServiceCard: React.FC = () => {
   return (
-    <div className="relative bg-blue_pastel rounded-lg overflow-hidden mx-auto py-20">
+    <div className="relative bg-blue_pastel overflow-hidden mx-auto py-20 border-none outline-none">
       {/* Top Wavy Background */}
       <div className="absolute top-0 left-0 w-full h-[150px]">
         <svg
@@ -12,7 +12,12 @@ const StudServiceCard: React.FC = () => {
         >
           <path
             d="M0,100 C50,200 150,0 250,100 C350,200 450,0 500,100 L500,0 L0,0 Z"
-            className="fill-[white]"
+            className="fill-[white] md:block hidden"
+          ></path>
+
+          <path
+            d="M0,100 C250,0 250,0 500,100 L500,0 L0,0 Z"
+            className="fill-[white] md:hidden"
           ></path>
         </svg>
       </div>
@@ -70,7 +75,7 @@ const StudServiceCard: React.FC = () => {
       </div>
 
       {/* Bottom Wavy Background */}
-      <div className="absolute bottom-[-80px] left-0 w-full h-[150px]">
+      <div className="absolute bottom-[-80px] left-0 w-full md:h-[150px] h-[120px]">
         <svg
           viewBox="0 0 500 500"
           preserveAspectRatio="none"
@@ -78,7 +83,12 @@ const StudServiceCard: React.FC = () => {
         >
           <path
             d="M0,100 C50,200 150,0 250,100 C350,200 450,0 500,100 L500,500 L0,500 Z"
-            className="fill-[white]"
+            className="fill-[white] md:block hidden"
+          ></path>
+
+          <path
+            d="M0,100 C250,0 250,0 500,100 L500,200 L0,200 Z"
+            className="fill-[white] md:hidden"
           ></path>
         </svg>
       </div>
