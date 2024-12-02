@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Contact from "./ContactView";
 
 interface NavProps {
     isAdmin: boolean
@@ -9,6 +10,13 @@ interface NavProps {
 
 const Navigation: React.FC<NavProps> = ({isAdmin}) => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const menuItems = [
+        { name: "Available Puppies", path: "#available_puppies" },
+        { name: "Stud Service", path: "#stud_service" },
+        { name: "FAQ", path: "#faq" },
+    ];
+            
 
     // Disable scrolling when the menu is open
     useEffect(() => {
@@ -90,12 +98,13 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                         
                     </div>
 
-                    <ul className="space-y-4 w-full">
-                        {["Available Puppies", "Stud Service", "FAQ"].map((item) => (
-                            <li key={item} className="hover:bg-blue_soft rounded-lg">
+                   <ul className="space-y-4 w-full">
+                        {menuItems.map((item) => (
+                            <li key={item.name} className="hover:bg-blue_soft rounded-lg">
                                 <Link
-                                    href="#"
+                                    href={item.path}
                                     className={`flex items-center text-center p-3 rounded-lg text-blue_darker }`}
+                                    onClick={() => setIsOpen(false)}
                                 >
                                     <Image
                                         src="/Vector.svg"
@@ -104,13 +113,13 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
                                         height={24}
                                         
                                     />
-                                    <p className="text-lg font-medium font-sans px-3">{item}</p>
+                                    <p className="text-lg font-medium font-sans px-3">{item.name}</p>
                                 </Link>
                             </li>
                         ))}
                     </ul>
 
-                    <Link href="#" className="w-full">
+                    <Link href="#contact" className="w-full" onClick={() => setIsOpen(false)}>
                          <button className="mt-8 py-3 w-full rounded-full bg-blue_darker text-white font-semibold">
                             Contact Us
                         </button> 
@@ -121,14 +130,26 @@ const Navigation: React.FC<NavProps> = ({isAdmin}) => {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
-                {["Available Puppies", "Stud Service", "FAQ"].map((item) => (
-                    <Link key={item} href="#">
-                        <p className={`text-gray_dark font-medium`}>
-                            {item}
-                        </p>
-                    </Link>
-                ))}
-                <Link href="#">
+                <Link href="#available_puppies">
+                    <p className={`text-gray_dark font-medium`}>
+                        Available Puppies
+                    </p>
+                </Link>
+                
+                <Link href="#stud_service">
+                <p className={`text-gray_dark font-medium`}>
+                        Stud Service
+                    </p>
+                </Link>
+
+                <Link href="#faq">
+                <p className={`text-gray_dark font-medium`}>
+                        FAQs
+                    </p>
+                </Link>
+            
+
+                <Link href="#contact">
                     <button className="py-2 px-8 bg-blue_darker text-white rounded-full">
                         Contact Us
                     </button>
