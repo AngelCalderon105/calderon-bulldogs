@@ -57,7 +57,7 @@ export default function ResetPasswordPage() {
             placeholder="Enter your new password"
             onChange={(e) => setNewPassword(e.target.value)}
             required={true}
-            error={error || undefined}
+            error={error ?? undefined}
           />
           <button
             type="submit"

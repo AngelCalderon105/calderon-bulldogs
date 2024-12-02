@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
             placeholder="Enter your email"
             onChange={(e) => setEmail(e.target.value)}
             required={true}
-            error={error || undefined}
+            error={error ?? undefined}
           />
           <button
             type="submit"

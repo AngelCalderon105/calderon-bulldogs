@@ -5,10 +5,10 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { randomUUID } from 'crypto';
 
 // S3 client initialization
-const region = process.env.AWS_REGION as string | undefined;
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string | undefined;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY as string | undefined;
-const bucketName = process.env.AWS_S3_BUCKET_NAME as string | undefined;
+const region = process.env.AWS_REGION!;
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID!;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY!;
+const bucketName = process.env.AWS_S3_BUCKET_NAME!;
 
 if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
   throw new Error("AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_S3_BUCKET_NAME must be set");
@@ -67,8 +67,8 @@ export const blogRouter = createTRPCRouter({
         data: {
           title: input.title,
           content: input.content,
-          featured: input.featured || false,
-          imageUrl: imageUrl || undefined, 
+          featured: input.featured ?? false,
+          imageUrl: imageUrl ?? undefined, 
           authorId: userId,
         },
       });

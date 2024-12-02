@@ -3,8 +3,8 @@ import { z } from "zod";
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import paypal from "@paypal/checkout-server-sdk";
 
-const clientId = process.env.PAYPAL_CLIENT_ID || "";
-const clientSecret = process.env.PAYPAL_CLIENT_SECRET || "";
+const clientId = process.env.PAYPAL_CLIENT_ID ?? "";
+const clientSecret = process.env.PAYPAL_CLIENT_SECRET ?? "";
 const environment = new paypal.core.LiveEnvironment(clientId, clientSecret);
 const client = new paypal.core.PayPalHttpClient(environment);
 
@@ -18,7 +18,7 @@ export const paypalRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       // Create a new PayPal order
-      let request = new paypal.orders.OrdersCreateRequest();
+      const request = new paypal.orders.OrdersCreateRequest();
       request.requestBody({
         intent: "CAPTURE",
         purchase_units: [
@@ -66,7 +66,7 @@ export const paypalRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       // Capture the PayPal order
-      let request = new paypal.orders.OrdersCaptureRequest(input.orderId);
+      const request = new paypal.orders.OrdersCaptureRequest(input.orderId);
       request.requestBody({});
 
       try {

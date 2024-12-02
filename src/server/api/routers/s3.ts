@@ -10,10 +10,10 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { db } from "~/server/db";
 
-const region = process.env.AWS_REGION as string | undefined;
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string | undefined;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY as string | undefined;
-const bucketName = process.env.AWS_S3_BUCKET_NAME as string | undefined;
+const region = process.env.AWS_REGION!;
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID!;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY! ;
+const bucketName = process.env.AWS_S3_BUCKET_NAME! ;
 
 if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
   throw new Error(
@@ -81,7 +81,7 @@ export const s3Router = createTRPCRouter({
       });
 
 
-      return photos || [];
+      return photos ?? [];
     }),
     getLatestPhoto: publicProcedure
     .input(z.object({ folder: z.string(), subfolder: z.string() }))

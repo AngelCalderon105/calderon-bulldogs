@@ -15,6 +15,7 @@ model User {
   sessions            Session[]
   passwordResetTokens PasswordResetToken[]
   availabilities      Availability[]
+  blogPosts BlogPost[]  // Relation to BlogPost model
 
   @@map("users")
 }
@@ -209,3 +210,15 @@ model Testimonial {
 }
 
 
+model BlogPost {
+  id        String   @id @default(uuid()) // Unique identifier for each post
+  title     String   // Title of the blog post
+  content   String   // Content of the blog post
+  featured  Boolean  @default(false) // Whether the post is featured or not
+  imageUrl  String?  // Optional URL for the featured image
+  createdAt DateTime @default(now()) // Timestamp when the post was created
+  updatedAt DateTime @updatedAt // Automatically updates on modification
+
+  authorId  String // Foreign key referencing the User model
+  author    User   @relation(fields: [authorId], references: [id]) // Relation to the User model
+}

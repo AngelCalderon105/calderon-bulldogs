@@ -36,24 +36,13 @@ export default function Checkout({ params }: PuppyPurchaseProps) {
   const { data: puppy, isLoading, error } = api.puppyProfile.getPuppyById.useQuery({ id: puppyId });
   
   const puppyPrice = reservationMode ? 500 : puppy?.price;
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading puppy data.</div>;
-  const formattedName = (puppy?.name || "").toLowerCase().replace(/\s+/g, "_") + "_gallery";
+  const formattedName = (puppy?.name ?? "").toLowerCase().replace(/\s+/g, "_") + "_gallery";
   
   
   const { data: photoData, isLoading: isPhotoLoading, error: photoError} = api.s3.getLatestPhoto.useQuery(
     { folder: "puppy_galleries", subfolder: formattedName },
     { enabled: !!formattedName } 
   );
-
-
-  // Safely access the photo
-  const photo = photoData?.photo;
- const createTransactionMutation = api.transaction.createTransaction.useMutation();
- const createReservationMutation = api.transaction.createReservation.useMutation();
-      const createOrderMutation = api.order.createOrder.useMutation();
-      const updatePuppyStatus = api.puppyProfile.updatePuppyStatus.useMutation();
-
   const [showAppointment, setShowAppointment] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [personalInfoData, setPersonalInfoData] = useState<PersonalInfoData>({
@@ -64,7 +53,18 @@ export default function Checkout({ params }: PuppyPurchaseProps) {
   });
   const [appointmentData, setAppointmentData] = useState<AppointmentData | null>(null);
   const [orderCompleted, setOrderCompleted] = useState(false);
+  
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading puppy data.</div>;
 
+  // Safely access the photo
+  const photo = photoData?.photo;
+ const createTransactionMutation = api.transaction.createTransaction.useMutation();
+ const createReservationMutation = api.transaction.createReservation.useMutation();
+      const createOrderMutation = api.order.createOrder.useMutation();
+      const updatePuppyStatus = api.puppyProfile.updatePuppyStatus.useMutation();
+
+ 
   // Error handling state
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -184,7 +184,7 @@ export default function Checkout({ params }: PuppyPurchaseProps) {
       {orderCompleted ? (
         <SuccessPage
           orderSummary={{
-            imageUrl: photo?.url || "Photo Not Available",
+            imageUrl: photo?.url ?? "Photo Not Available",
             name: puppy?.name,
             gender: puppy?.sex,
             age: "4 months old",
@@ -252,7 +252,7 @@ export default function Checkout({ params }: PuppyPurchaseProps) {
 
           {isPhotoLoading ? (
             <div className=" w-full bg-gray-200 animate-pulse rounded-lg" />
-          ) : photoError || !photo ? (
+          ) : photoError ?? !photo ? (
             <div className="w-full bg-gray-100 flex items-center justify-center text-gray-600 rounded-lg">
               No photo available
             </div>

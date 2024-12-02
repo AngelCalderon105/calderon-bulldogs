@@ -47,7 +47,7 @@ interface PuppyType {
 
         {isLoading ? (
           <div className=" w-full bg-gray-200 animate-pulse rounded-lg" />
-        ) : error || !photo ? (
+        ) : error ?? !photo ? (
           <div className="w-full bg-gray-100 flex items-center justify-center text-gray-600 rounded-lg">
             No photo available
           </div>
@@ -111,7 +111,7 @@ interface PuppyType {
 
             <div className=' flex '>
             {puppy.personality.map((item)=>(
-              <WhiteButton text = {item}/>
+              <WhiteButton text = {item} key={item}/>
             ))
           }
             </div>

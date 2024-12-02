@@ -173,7 +173,7 @@ const BlogAdminPage: React.FC = () => {
           </div>
           <div>
             <label className="block mb-1">Upload Image (optional)</label>
-            <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
+            <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] ?? null)} />
           </div>
           <button type="submit" className="p-2 bg-blue-600 text-white rounded" disabled={loading}>
             {loading ? 'Creating Post...' : 'Create Post'}

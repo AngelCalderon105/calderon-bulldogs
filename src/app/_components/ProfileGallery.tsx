@@ -25,7 +25,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
       try {
         await deletePhotoMutation.mutateAsync({ key });
         alert("Photo deleted successfully!");
-        refetch();
+        await refetch();
       } catch (error) {
         console.error("Error deleting photo:", error);
         alert("Failed to delete photo.");
@@ -58,7 +58,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
           drag: "free",
         }}
         ref={mainCarouselRef}
-        onMove={(splide) => setCurrentIndex(splide.index)}
+        onMove={(splide : any) => setCurrentIndex(splide.index)}
         className="mb-4"
       >
         {photos.map((photo, index) => (

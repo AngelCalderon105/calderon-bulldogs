@@ -26,9 +26,9 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({ onSelectAppoint
   const validAvailableDates = availableDates.filter((date) => date >= todayString);
 
   // Fetch available times for the selected date
-  const selectedDateString = selectedDate?.toISOString().split("T")[0] || null;
+  const selectedDateString = selectedDate?.toISOString().split("T")[0] ?? null!;
   const { data: timeslotData } = api.availability.getAvailabilityByDate.useQuery(
-    { date: selectedDateString || "" },
+    { date: selectedDateString ?? "" },
     { enabled: !!selectedDateString }
   );
 
@@ -37,12 +37,12 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({ onSelectAppoint
     ? timeslotData.filter((slot) => slot.status === "available").map((slot) => slot.timeSlot)
     : [];
 
-  const morningSlots = timeslots.filter((time) => parseInt((time?.split(":")[0] || "0")) < 12);
+  const morningSlots = timeslots.filter((time) => parseInt((time?.split(":")[0] ?? "0")) < 12);
   const afternoonSlots = timeslots.filter((time) => {
-    const hour = parseInt((time?.split(":")[0] || "0"));
+    const hour = parseInt((time?.split(":")[0] ?? "0"));
     return hour >= 12 && hour < 17;
   });
-  const eveningSlots = timeslots.filter((time) => parseInt((time?.split(":")[0] || "0")) >= 17);
+  const eveningSlots = timeslots.filter((time) => parseInt((time?.split(":")[0] ?? "0")) >= 17);
 
   const handleDateChange = (date: Date | undefined) => {
     setSelectedDate(date);

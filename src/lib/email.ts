@@ -5,11 +5,11 @@ import Mailgun from 'mailgun.js';
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
   username: 'api',
-  key: process.env.MAILGUN_API_KEY || '',  // Ensure this is your Mailgun API key
+  key: process.env.MAILGUN_API_KEY ?? '',  // Ensure this is your Mailgun API key
 });
 
 // Check if the domain exists in your environment variables
-const domain = process.env.MAILGUN_DOMAIN || '';
+const domain = process.env.MAILGUN_DOMAIN ?? '';
 
 export const sendResetEmail = async (email: string, token: string) => {
   if (!domain) {

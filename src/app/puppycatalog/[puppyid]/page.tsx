@@ -107,7 +107,7 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
                   <div>
 
                   {puppy.personality.map((item)=>(
-                    <WhiteButton text = {item} />
+                    <WhiteButton text = {item} key={item}/>
                   ))
                 }
                 </div>

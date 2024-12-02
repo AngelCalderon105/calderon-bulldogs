@@ -42,7 +42,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
       });
       setSubmitted(true);
     } catch (error) {
-      console.error("Something went wrong while submitting form: " + error);
+      console.error("Something went wrong while submitting form: ", error);
       alert("Uh oh! Something went wrong when submitting your form.");
     }
   };
@@ -60,7 +60,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
       await refetch();
       alert(`Form ${formId} deleted successfully.`);
     } catch (error) {
-      console.error("Something went wrong while deleting form: " + error);
+      console.error("Something went wrong while deleting form: ", error);
       alert("Uh oh! Something went wrong when deleting the form.");
     }
   };

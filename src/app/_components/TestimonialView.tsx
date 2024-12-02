@@ -276,7 +276,7 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
       {!isAdmin && (
         <div>
           <div className="wrap flex gap-1">
-            {allTestimonials?.map((testimonial) => {
+            {allTestimonials?.map((testimonial : any) => {
               return testimonial.published ? (
                 <div
                   key={testimonial.id}

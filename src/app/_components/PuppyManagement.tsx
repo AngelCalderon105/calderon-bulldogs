@@ -192,9 +192,9 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
         
         {puppies?.map((puppy) => (
           
-          <SplideSlide >
+          <SplideSlide key={puppy.id}>
 
-          <div className="" key={puppy.id}>
+          <div className="" >
             <Link href={`/puppycatalog/${puppy.id}`}>
               <PuppyProfile
                 puppy={puppy}

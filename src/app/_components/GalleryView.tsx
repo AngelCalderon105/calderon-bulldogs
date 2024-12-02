@@ -26,7 +26,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
       try {
         await deletePhotoMutation.mutateAsync({ key });
         alert("Photo deleted successfully!");
-        refetch();
+        await refetch();
       } catch (error) {
         console.error("Error deleting photo:", error);
         alert("Failed to delete photo.");

@@ -47,7 +47,8 @@ export const availabilityRouter = createTRPCRouter({
         // Format day to day name in UTC
         const dayName = format(day, "EEEE") as "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
 
-        if (daysOff && daysOff.includes(dayName)) continue;
+        if (daysOff?.includes(dayName)) continue;
+
 
         const slots = generateHourlySlots(day, startTime, endTime, adminId);
         allSlots.push(...slots);
