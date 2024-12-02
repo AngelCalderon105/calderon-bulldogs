@@ -9,7 +9,7 @@ export default function WhiteButton({text}: PropInterface) {
   return (
 
 
-    <span className='bg-white rounded-2xl px-6 py-2 mr-2 text-sm text-blue-dark shadow-md'>
+    <span className='bg-white rounded-2xl px-4 md:px-6 py-2 mr-2 text-sm text-blue-dark shadow-md'>
 
         {text}
         </span>

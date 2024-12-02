@@ -5,10 +5,10 @@ import GalleryView from "~/app/_components/GalleryView";
 import HowItWorks from "~/app/_components/Howitworks";
 import WhiteButton from "~/app/_components/WhiteButton";
 import BlueButton from "~/app/_components/BlueButton";
-import { PayPalScriptProvider, PayPalButtons, ReactPayPalScriptOptions } from "@paypal/react-paypal-js";
 import ParentsComponent from "~/app/_components/ParentsComponent"
 import { PuppyAttributesGrid } from "~/app/_components/PuppyAttibutesGrid";
 import ProfileGallery from "~/app/_components/ProfileGallery";
+import Link from "next/link";
 interface PuppyType {
   id: number;
   name: string;
@@ -27,37 +27,29 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
   const { data: puppy, isLoading, error } = api.puppyProfile.getPuppyById.useQuery({ id: puppyId });
 
     // State to manage payment status messages
-    const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
     const [customerName, setCustomerName] = useState("");
     const [customerEmail, setCustomerEmail] = useState("");
     const [customerPhone, setCustomerPhone] = useState("");
   
-    // tRPC mutation for creating a transaction
-    const createTransactionMutation = api.transaction.createTransaction.useMutation();
-    const createOrderMutation = api.order.createOrder.useMutation();
-    const updatePuppyStatus = api.puppyProfile.updatePuppyStatus.useMutation();
 
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading puppy data.</div>;
 
-  const initialOptions: ReactPayPalScriptOptions = {
-    clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
-    currency: "USD",
-  };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!customerName || !customerEmail || !customerPhone) {
-      setPaymentStatus("Please fill in all fields.");
-      return;
-    }
-    setPaymentStatus(null); // Clear any previous messages
-  };
+
+  // const handleFormSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!customerName || !customerEmail || !customerPhone) {
+  //     setPaymentStatus("Please fill in all fields.");
+  //     return;
+  //   }
+  //   setPaymentStatus(null); // Clear any previous messages
+  // };
 
 
   return (
-    <PayPalScriptProvider options={initialOptions}>
+  
     <div className="m-5 lg:m-10">
       
       {puppy ? (
@@ -138,16 +130,35 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
               </div>  
 
             </div>
-           
-              <button className="text-sm col-span-2 font-bold py-2  md:py-3 w-full rounded-full font-sans text-secondary_grey border-2 border-solid  bg-white">
+              {puppy.status == "Available" ?
+              <>
+              {/* <Link href={`/puppycatalog/${puppy.id}/reserve`} className="col-span-2 ">
+              <button className="text-sm font-bold py-2  md:py-3 w-full rounded-full font-sans text-secondary_grey border-2 border-solid  bg-white">
                   Reserve Puppy
               </button>
+              </Link>
               <button className=" text-sm col-span-2 font-bold py-2  md:py-3 w-full rounded-full font-sans text-white bg-designblue">
                   Meet & Greet
-              </button>
-              <button className=" col-span-4 font-bold py-2  md:py-3 w-full rounded-full font-sans bg-gradient-to-r from-[#FFF5E3] to-[#F8CF91] text-buttonblue">
+              </button> */}
+              <Link href={`/puppycatalog/${puppy.id}/purchase`} className="col-span-4 ">
+              <button className=" font-bold py-2  md:py-3 w-full rounded-full font-sans bg-gradient-to-r from-[#FFF5E3] to-[#F8CF91] text-buttonblue">
                   Purchase Puppy
                </button>
+              </Link>
+              </>
+              :
+              <>
+              <button disabled className="text-sm col-span-2 font-bold py-2  border-2 border-solid  border-gray-400 md:py-3 w-full rounded-full font-sans bg-gray-300">
+                  Reserve Puppy
+              </button>
+              <button disabled className="bg-gray-300 text-sm col-span-2 font-bold py-2  border-2 border-solid  border-gray-400 md:py-3 w-full rounded-full font-sans ">
+                  Meet & Greet
+              </button>
+              <button disabled className=" col-span-4 font-bold py-2  md:py-3 w-full rounded-full border-2 border-solid  border-gray-400 font-sans bg-gray-300 text-buttonblue">
+                  Purchase Puppy
+               </button>
+              </>
+              }
             <p className="text-center col-span-4">Cash payments accepted. Please contact us directly.</p>
           </div>
           <div className="col-span-10 md:col-span-4 lg:col-span-6 py-4">
@@ -162,7 +173,7 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
           <ParentsComponent/>
   
           {/* Customer Information Form */}
-          <form onSubmit={handleFormSubmit} style={{ marginTop: "20px" }}>
+          {/* <form onSubmit={handleFormSubmit} style={{ marginTop: "20px" }}>
             <h2>Enter Your Information</h2>
             <label>
               Name:
@@ -197,66 +208,17 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
             <button type="submit" className="p-2 bg-blue-600 text-white rounded">
               Confirm Information
             </button>
-          </form>
+          </form> */}
   
-          {/* Payment Status Message */}
-          {paymentStatus && (
-            <div style={{ marginTop: "20px", color: paymentStatus.includes("successful") ? "green" : "red" }}>
-              {paymentStatus}
-            </div>
-          )}
+         
   
           {/* PayPal Buttons for Checkout */}
-          {customerName && customerEmail && customerPhone && (
-            <div style={{ marginTop: "20px" }}>
-              <h2>Purchase this puppy</h2>
-              <PayPalButtons
-                createOrder={async () => {
-                  try {
-                    // Create the order in the backend
-                    const data = await createOrderMutation.mutateAsync({
-                      amount: puppy.price, // Pass the amount
-                    });
-                    return data.id; // Return PayPal order ID
-                  } catch (error) {
-                    console.error("Error creating order:", error);
-                    setPaymentStatus("Error creating order. Please try again.");
-                    throw error;
-                  }
-                }}
-                onApprove={async (data, actions) => {
-                  try {
-                    setPaymentStatus("Payment successfulThank you for your purchase.");
-                    await createTransactionMutation.mutateAsync({
-                      paypalCustomerId: data.payerID || "", 
-                      transactionId: data.orderID || "", 
-                      customerName,
-                      customerEmail,
-                      customerPhone,
-                      puppyId: puppy.id,
-                      price: puppy.price,
-                    });
-                    await updatePuppyStatus.mutateAsync({
-                      id: puppy.id, 
-                      status: "Sold", 
-                    });
-                  } catch (error) {
-                    console.error("Error saving transaction:", error);
-                    setPaymentStatus("Payment successful, but there was an issue saving the transaction.");
-                  }
-                }}
-                onError={() => {
-                  setPaymentStatus("Payment failed. Please try again or contact support.");
-                }}
-              />
-            </div>
-          )}
+         
         </>
       ) : (
         <p>Puppy data not available.</p>
       )}
     </div>
-  </PayPalScriptProvider>
   
   );
 }

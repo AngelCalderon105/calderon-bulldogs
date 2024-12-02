@@ -62,7 +62,7 @@ export default function Home() {
           />
         
          <button type="button" onClick={ handleForgotPassword } className="text-blue-500 hover:underline">Forgot Password?</button>
-          <button type="submit" className="bg-gray-500 text-white p-2 rounded justify-center items-center"> Sign In</button>
+          <button type="submit" className="bg-blue_dark text-white p-2 rounded justify-center items-center"> Sign In</button>
         </form>
       </div>
     </main>

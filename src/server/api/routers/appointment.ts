@@ -10,7 +10,7 @@ import { format, startOfDay, endOfDay } from 'date-fns';
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
   username: 'api',
-  key: process.env.MAILGUN_API_KEY || '', // Ensure this is your Mailgun API key
+  key: process.env.MAILGUN_API_KEY || '',
 });
 
 // Check if the domain exists in your environment variables
@@ -69,6 +69,11 @@ export const appointmentRouter = createTRPCRouter({
       if (overlappingAppointment) {
         throw new TRPCError({ code: 'CONFLICT', message: 'This time slot is already booked.' });
       }
+      const formattedDetails = `Appointment on ${format(
+        startDateTime,
+        'MMMM do, yyyy'
+      )} from ${format(startDateTime, 'h:mm a')} to ${format(endDateTime, 'h:mm a')}`;
+
 
       const newAppointment = await prisma.appointment.create({
         data: {
@@ -80,14 +85,15 @@ export const appointmentRouter = createTRPCRouter({
           startTime: startDateTime,
           endTime: endDateTime,
           puppyId: puppyId ?? null, 
-          status: "PENDING", // Explicitly set puppyId to null if undefined
+          status: "PENDING",
+          formattedDetails, // Explicitly set puppyId to null if undefined
         },
       });
       
       const customerEmailDetails = {
         from: `no-reply@${domain}`,
         to: customerEmail,
-        subject: 'Appointment Confirmation',
+        subject: 'Calderon Bulldogs Appointment Confirmation',
         text: `Dear ${customerName}, your appointment has been confirmed for ${startDateTime.toDateString()} from ${startTime} to ${format(
           endDateTime,
           'h:mm a'
@@ -96,15 +102,17 @@ export const appointmentRouter = createTRPCRouter({
                <p>Your appointment has been confirmed with the following details:</p>
                <ul>
                  <li>Date: ${startDateTime.toDateString()}</li>
-                 <li>Time: ${startTime} - ${format(endDateTime, 'h:mm a')}</li>
-                 <li>Type: ${appointmentType}</li>
+                 <li>Time: ${format(startDateTime, 'h:mm a')} - ${format(endDateTime, 'h:mm a')}</li>
+                 
                </ul>
-               <p>Thank you for scheduling your appointment!</p>`,
+               <p>Thank you for scheduling your appointment!</p>
+               <p>- Calderon Bulldogs</p>
+               `,
       };
 
       const adminEmailDetails = {
         from: `no-reply@${domain}`,
-        to: 'dabidcalderon45@gmail.com', // Hardcoded admin email
+        to: 'angelcalderon105@gmail.com', // Hardcoded admin email
         subject: 'New Appointment Scheduled',
         text: `New appointment scheduled by ${customerName}. Contact: ${customerPhoneNumber}.`,
         html: `<h2>New Appointment Scheduled</h2>
@@ -112,15 +120,15 @@ export const appointmentRouter = createTRPCRouter({
                <p>Contact: ${customerPhoneNumber}</p>
                <p>Email: ${customerEmail}</p>
                <p>Date: ${startDateTime.toDateString()}</p>
-               <p>Time: ${startTime} - ${format(endDateTime, 'h:mm a')}</p>
+                 <li>Time: ${format(startDateTime, 'h:mm a')} - ${format(endDateTime, 'h:mm a')}</li>
                <p>Type: ${appointmentType}</p>`,
       };
 
       try {
-        //await mg.messages.create(domain, customerEmailDetails);
+        await mg.messages.create(domain, customerEmailDetails);
         console.log(`Confirmation email sent to ${customerEmail}`);
 
-        //await mg.messages.create(domain, adminEmailDetails);
+        await mg.messages.create(domain, adminEmailDetails);
         console.log('Admin notification email sent');
       } catch (error) {
         console.error('Failed to send email:', error);

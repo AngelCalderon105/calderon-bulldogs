@@ -109,7 +109,7 @@ interface PuppyType {
             </span>
             <div className='flex justify-between  items-baseline flex-none'>
 
-            <div className=' flex flex-wrap'>
+            <div className=' flex '>
             {puppy.personality.map((item)=>(
               <WhiteButton text = {item}/>
             ))

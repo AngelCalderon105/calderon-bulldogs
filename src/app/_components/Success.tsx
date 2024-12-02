@@ -6,14 +6,12 @@ import { useRouter } from "next/navigation";
 interface SuccessPageProps {
   orderSummary: {
     imageUrl: string;
-    name: string;
-    gender: string;
-    age: string;
-    total: number;
-    date: string;
-    time: string;
-    cardDetails: string;
-    cardAddress: string;
+    name: string | undefined;
+    gender: string | undefined;
+    age: string | undefined;
+    total: number | undefined;
+    date : string;
+ 
   };
   contactInfo: {
     phone: string;
@@ -66,18 +64,18 @@ const SuccessPage: React.FC<SuccessPageProps> = ({ orderSummary, contactInfo }) 
             </div>
             <div className="flex justify-between items-center">
               <p className="font-semibold">Order Total</p>
-              <p className="text-xl font-bold">${orderSummary.total.toFixed(2)}</p>
+              <p className="text-xl font-bold">${orderSummary.total}.00</p>
             </div>
             <div>
               <p className="font-semibold">Pick Up Details</p>
               <p>
-                {orderSummary.date} {orderSummary.time}
+                {orderSummary.date} 
               </p>
             </div>
             <div>
               <p className="font-semibold">Payment Details</p>
-              <p>{orderSummary.cardDetails}</p>
-              <p>{orderSummary.cardAddress}</p>
+              {/* <p>{orderSummary.cardDetails}</p>
+              <p>{orderSummary.cardAddress}</p> */}
             </div>
           </div>
 

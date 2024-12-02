@@ -105,6 +105,7 @@ export const puppyProfileRouter = createTRPCRouter({
       birthdate: z.string().optional(),
       dateAvailable: z.string().optional(),
       color: z.string().optional(),
+      status: z.enum(["Available", "Reserved", "Sold"]),
       price: z.number().optional(),
       breed: z.string().optional(),
       personality: z
