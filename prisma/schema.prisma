@@ -184,3 +184,28 @@ model Availability {
   @@index([date, status]) // Quick lookup by date and status
 }
 
+enum Rating {
+  ONE
+  ONE_HALF
+  TWO
+  TWO_HALF
+  THREE
+  THREE_HALF
+  FOUR
+  FOUR_HALF
+  FIVE
+}
+
+
+model Testimonial {
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  rating     Rating
+  comment    String
+  photoUrl   String?
+  createdAt  DateTime @default(now())
+  published  Boolean
+}
+
+
