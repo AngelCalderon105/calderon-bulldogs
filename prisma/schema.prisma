@@ -99,6 +99,7 @@ model Puppy {
   description String
   breed  String
   dateAvailable DateTime 
+  reservedUntil      DateTime?
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   gallery   FileMetaData[]
@@ -116,14 +117,15 @@ model Event {
 
 model Transaction {
   id               Int      @id @default(autoincrement())
-  paypalCustomerId String
   transactionId    String
   customerName     String
   customerEmail    String
   customerPhone    String
-  price            Float?   // Optional field
-  appointmentDate  DateTime? // Optional field
-  puppyId          Int?      // Optional field
+  paymentType      String 
+  price            Float? 
+  reservedUntil      DateTime?
+  appointmentDate  DateTime?
+  puppyId          Int?     
 
   puppy Puppy? @relation(fields: [puppyId], references: [id])
 
@@ -154,6 +156,7 @@ model Appointment {
   date                   DateTime // Appointment date
   startTime              DateTime // Start time of the appointment
   endTime                DateTime // End time of the appointment
+  formattedDetails    String 
   status                 AppointmentStatus @default(PENDING)
   createdAt              DateTime @default(now()) // Record creation timestamp
   puppyId                Int?     // Optional foreign key for puppy relation

@@ -20,6 +20,7 @@ export default async function AdminDashboard() {
     redirect("/admin/login");
     return null; // Stop further execution if redirecting
   }
+  console.log("Session:", session);
 
   return (
       <div>

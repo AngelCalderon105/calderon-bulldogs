@@ -21,10 +21,16 @@ declare module "next-auth" {
   }
 }
 
+
+
 // Define the NextAuth options
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
+    maxAge: 60 * 60 * 24, 
+  },
+  jwt: {
+    maxAge: 60 * 60 * 24, 
   },
   pages: {
     signIn: "admin/login",

@@ -58,10 +58,6 @@ export default {
   			navColor: 'var(--navColor)',
   			bgblue: 'var(--backgroundBlue)',
 			accordionText: '#4B5563', 
-  			background: 'hsl(var(--background))',
-			designred:'#D11243',
-
-  			foreground: 'var(--foreground)',
 			blue_dark: 'var(--color-blue-dark)',
 			blue_darker: 'var(--color-blue-darker)',
 			blue_darkest: 'var(--color-blue-darkest)',
@@ -75,7 +71,6 @@ export default {
 			gray_dark:'var(--color-gray-dark)',
 			gray_muted: 'var(--color-gray-muted)',
 
-			navColor: 'var(--navColor)',
 
 			card: {
   				DEFAULT: 'hsl(var(--card))',

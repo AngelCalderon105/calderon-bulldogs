@@ -5,14 +5,15 @@ import paypal from "@paypal/checkout-server-sdk";
 
 const clientId = process.env.PAYPAL_CLIENT_ID || "";
 const clientSecret = process.env.PAYPAL_CLIENT_SECRET || "";
-const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
+const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret); // Use SandboxEnvironment for testing
 const client = new paypal.core.PayPalHttpClient(environment);
 
 export const paypalRouter = createTRPCRouter({
   createOrder: publicProcedure
     .input(
       z.object({
-        amount: z.number(), // Amount to be paid
+        amount: z.number(),
+        puppyName: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -24,8 +25,25 @@ export const paypalRouter = createTRPCRouter({
           {
             amount: {
               currency_code: "USD",
-              value: input.amount, 
+              value: input.amount,
+              breakdown: {
+                item_total: {
+                  currency_code: "USD",
+                  value: input.amount,
+                },
+              },
             },
+            items: [
+              {
+                name: input.puppyName, 
+                description: `Purchase of puppy: ${input.puppyName}`, 
+                unit_amount: {
+                  currency_code: "USD",
+                  value: input.amount,
+                },
+                quantity: "1",
+              },
+            ],
           },
         ],
       });
@@ -38,6 +56,25 @@ export const paypalRouter = createTRPCRouter({
       } catch (error) {
         console.error("Error creating PayPal order:", error);
         throw new Error("Error creating PayPal order");
+      }
+    }),
+    captureOrder: publicProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      // Capture the PayPal order
+      let request = new paypal.orders.OrdersCaptureRequest(input.orderId);
+      request.requestBody({});
+
+      try {
+        const response = await client.execute(request);
+        return response.result; // Return the capture result
+      } catch (error) {
+        console.error("Error capturing PayPal order:", error);
+        throw new Error("Error capturing PayPal order");
       }
     }),
 });

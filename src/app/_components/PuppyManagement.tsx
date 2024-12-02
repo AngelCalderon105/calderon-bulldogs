@@ -5,6 +5,9 @@ import Link from "next/link";
 import PuppyProfile from "./PuppyProfile";
 import GalleryView from "./GalleryView"
 import MultipleFileUpload from "./MultipleFileUpload";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/splide/dist/css/splide.min.css";
+
 
 interface PuppyManagement {
   isAdmin: boolean;
@@ -30,6 +33,7 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
     name: "",
     birthdate: "",
     dateAvailable: "",
+    status:"Available" as "Available" | "Sold" | "Reserved",
     color: "",
     price: 0,
     breed: "",
@@ -119,22 +123,43 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
       ) : (
         <h2 className="text-2xl font-semibold my-8">Featured Puppies</h2>
       )}
-      <div className="flex justify-center flex-wrap md:gap-12">
+
+      <div className="">
+        <Splide
+        options={{
+          perPage: 3,
+          gap: "1rem",
+          pagination: false,
+          arrows: true,
+          drag: "free",
+
+          breakpoints: {
+           
+            768: {
+              perPage: 1,
+              padding: { right: '20%' }
+            },
+           
+          },
+        }}
+      >
         {puppies?.map((puppy) => (
-          <div className="w-3/12" key={puppy.id}>
+         <SplideSlide >
+
+          <div className="" key={puppy.id}>
             <Link href={`/puppycatalog/${puppy.id}`}>
               <PuppyProfile
                 puppy={puppy}
                 isAdmin={isAdmin}
                 onDelete={() => handleDeletePuppy(puppy.id, puppy.name)}
-              />
+                />
             </Link>
             {isAdmin && (
               <>
                 <button
                   className="mt-2 p-2 bg-green-500 text-white rounded "
                   onClick={() => handleEdit(puppy)}
-                >
+                  >
                   Edit Puppy Info
                 </button>
                 <GalleryView isAdmin={true} galleryType = "puppy_galleries" galleryName ={ `${puppy.name.toLowerCase().replace(/\s+/g, "_")}_gallery`}/>
@@ -142,7 +167,9 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
               </>
             )}
           </div>
+            </SplideSlide>
         ))}
+        </Splide>
       </div>
       {isAdmin && (
         <button
@@ -192,6 +219,21 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
               onChange={(e) => handleInputChange("color", e.target.value)}
               className="block border rounded p-2 my-2"
             />
+          </label>
+          
+          <label>
+          Status:<br/>
+          Current Status : <strong>{puppy.status}</strong>
+            <select
+              value={puppy.status}
+              onChange={(e) => handleInputChange("status", e.target.value)}
+              className="block border rounded p-2 my-2"
+            >
+              <option value={puppy.status}>Select Status</option>
+              <option value="Available">Available </option>
+              <option value="Reserved">Reserved</option>
+              <option value="Sold">Sold</option>
+            </select>
           </label>
           <label>
             Price:
