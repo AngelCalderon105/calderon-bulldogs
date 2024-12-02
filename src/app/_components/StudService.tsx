@@ -37,7 +37,8 @@ const StudServiceCard: React.FC = () => {
             breeding program—visually appealing, compact, and friendly.
           </p>
           <button className="bg-blue_primary text-white py-2 px-7 rounded-full text-sm hover:bg-blue_dark mx-auto md:mx-0 self-center max-w-[220px] ">
-            Learn more about Kratos
+            
+            Contact Us for More Info
           </button>
         </div>
 

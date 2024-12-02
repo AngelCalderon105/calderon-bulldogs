@@ -92,27 +92,27 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
       <p className="text-sm text-[#1E1E1E] md:leading-6">
           Contact us directly or fill out our contact form. We look forward to connecting with you!
         </p>
-  <div className=" space-y-3 md:space-y-0 md:grid md:gap-3 md:grid-cols-2 md:grid-rows-2 lg:flex-col justify-center w-full lg:flex">
-    <a href="mailto:calderonbulldogs@gmail.com" className="flex items-center bg-white justify-center lg:justify-start text-blue_darker space-x-2 border-2 
-    border-blue_darker rounded-full px-1 py-0.5 w-full md:w/2">
+  <div className="flex flex-col items-center space-y-3 md:space-y-0 md:grid md:gap-3 md:grid-cols-2 lg:flex-col lg:items-start justify-center w-full lg:flex">
+    <a href="mailto:calderonbulldogs@gmail.com" className="flex items-center bg-white justify-center  text-blue_darker md:place-self-end lg:place-self-auto border-2 
+    border-blue_darker rounded-full py-1 max-w-fit px-6">
     <Envelope className="mr-2" />
-    <span className="font-sans text-custom-14 font-medium text-left py-1.5 md:py-1 ">
+    <span className="font-sans text-custom-14 font-medium text-left py-1.5  ">
       <p>calderonbulldogs@gmail.com</p>
     </span>
   </a>
 
-  <a href="tel:+17142329787" className="flex items-center bg-white justify-center md:w-1/2 text-blue_darker space-x-2 border-2
-   border-blue_darker rounded-full px-1 py-0.5 w-full">
+  <a href="tel:+17142329787" className="flex items-center bg-white justify-center  text-blue_darker space-x-2 border-2
+   border-blue_darker rounded-full px-6 py-2 max-w-fit">
     <Phone className="mx-1" />
-    <span className="font-sans text-custom-14 font-medium text-left py-1.5 md:py-1 ">
+    <span className="font-sans text-custom-14 font-medium text-left py-0.5 ">
       <p>(714)-232-9787</p>
     </span>
   </a>
 
-  <a href="https://www.instagram.com/calderon_bulldogs/" className="flex items-center bg-white justify-center md:justify-center md:w-5/12 text-blue_darker space-x-2 border-2
-   border-blue_darker rounded-full px-1 py-0.5 w-full " target="_blank" rel="noopener noreferrer">
+  <a href="https://www.instagram.com/calderon_bulldogs/" className=" flex items-center md:col-span-2 md:place-self-center lg:place-self-auto bg-white justify-center md:justify-center text-blue_darker space-x-2 border-2
+   border-blue_darker rounded-full px-6 py-1 max-w-fit " target="_blank" rel="noopener noreferrer">
     <Instagram className="mx-1" />
-    <span className="font-sans text-custom-14 font-medium py-1.5 text-left lg:p-1 ">
+    <span className="font-sans text-custom-14 font-medium py-1 text-left lg:p-1 ">
       @calderonbulldogs
     </span>
   </a>
@@ -136,7 +136,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
       <div className="bg-white rounded-3xl p-6 shadow-md w-full md:w-11/12 ml-auto md:m-0 space-y-4 md:flex md:justify-center md:items-center lg:w-6/12 xl:w-5/12 2xl:w-4/12">
       {submitted ? (
         //Thank you form
-        <div className="space-y-4 md:w-11/12 mt-5">
+        <div className="space-y-4 lg:h-96 md:w-11/12 mt-5 lg:flex lg:justify-center">
         <div className="space-y-2 flex flex-col items-center justify-center">
           <Check/>
           <h1 className="font-georgia font-bold text-lg">Thank You</h1>

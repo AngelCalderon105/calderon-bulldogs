@@ -37,13 +37,13 @@ export default function Footer() {
                                 <li><a href="#stud_service" className="hover:text-blue_dark">Stud Service</a></li>
                             </ul>
                         </div>
-                        {/* <div>
+                         <div>
                             <ul className="space-y-2 mt-14 ml-10 text-lg leading-loose flex flex-col md:block">
-                                <li><a href="#" className="hover:text-blue_dark">Gallery</a></li>
-                                <li><a href="#" className="hover:text-blue_dark">Blog</a></li>
-                                <li><a href="#" className="hover:text-blue_dark">About Us</a></li>
+                                <li><a href="#faq" className="hover:text-blue_dark">FAQ</a></li>
+                                <li><a href="#contact" className="hover:text-blue_dark">Contact Us</a></li>
+                               
                             </ul>
-                        </div> */}
+                        </div> 
                     </div>
 
                     {/* Contact Information */}

@@ -19,7 +19,10 @@ const HomeView: React.FC<HomeProps> = ({isAdmin}) => {
                         From Our Family to Yours: Delivering Love, Trust, & Quality in Every Pup.
                     </p>
                     <button className=" font-bold py-2 px-10 md:py-3 md:px-20 rounded-full font-sans bg-gradient-to-r from-[#FFF5E3] to-[#F8CF91] text-blue_darkest text-center  md:text-[16px] xl:text-[18px]">
+                        <a href="#contact ">
+
                         Get In Touch
+                        </a>
                     </button>
                 </div>
 

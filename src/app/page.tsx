@@ -34,7 +34,7 @@ export default async function Home() {
         <ContactView isAdmin={false} />
       </div>
 
-  <div className="m-2 mb-20 lg:mx-10">
+  <div className="m-2 my-20 lg:mt-10 lg:mb-20 lg:mx-10">
   <Footer />
  </div>
      </>
