@@ -7,7 +7,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
   title: "Calderon Bulldogs",
-  description: "Made by Altitud",
+  description: "From Our Family to Yours: Delivering Love, Trust, & Quality in Every Pup.",
 };
 
 export default function RootLayout({
