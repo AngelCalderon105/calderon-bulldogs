@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import { useSearchParams } from "next/navigation"; 
+import { useState, FormEvent, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { api } from "~/trpc/react"; 
-import CustomInputField from "../../_components/InputField"; 
+import { api } from "~/trpc/react";
+import CustomInputField from "../../_components/InputField";
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const [newPassword, setNewPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const searchParams = useSearchParams(); 
-  const token = searchParams.get('token'); // Capture token from URL
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token"); // Capture token from URL
 
   const resetPassword = api.auth.resetPassword.useMutation();
 
@@ -33,7 +33,7 @@ export default function ResetPasswordPage() {
       setSuccess(true);
       setTimeout(() => {
         router.push("/admin/login");
-      }, 3000); 
+      }, 3000);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -72,3 +72,10 @@ export default function ResetPasswordPage() {
   );
 }
 
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
+  );
+}
