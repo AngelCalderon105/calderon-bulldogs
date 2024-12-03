@@ -1,4 +1,3 @@
-// src/app/auth/reset-password/page.tsx
 "use client";
 
 import { useState, FormEvent } from "react";

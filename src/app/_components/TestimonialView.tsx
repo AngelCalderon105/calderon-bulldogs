@@ -169,31 +169,31 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
     };
   };
 
-  const handleDeleteTestimonial: (
+  const handleDeleteTestimonial = (
     testimonialId: string,
     photoKey: string | null,
-  ) => React.MouseEventHandler<HTMLButtonElement> = (
-    testimonialId,
-    photoUrl,
-  ) => {
-    return async (e) => {
-      try {
-        if (photoUrl != null && photoUrl != "") {
-          await deletePhotoMutation.mutateAsync({
-            key: photoUrl.split("amazonaws.com/")[1] as string,
-          });
+  ): React.MouseEventHandler<HTMLButtonElement> => {
+    return (e) => {
+      (async () => {
+        try {
+          if (photoKey != null && photoKey !== "") {
+            await deletePhotoMutation.mutateAsync({
+              key: photoKey.split("amazonaws.com/")[1] as string,
+            });
+          }
+          await deleteTestimonialMutation.mutateAsync({ id: testimonialId });
+          setDeleteTestimonialConfirmation(false);
+          await refetch();
+          alert("Testimonial deleted successfully.");
+        } catch (err) {
+          console.error("Something went wrong while deleting testimonial.");
         }
-        await deleteTestimonialMutation.mutateAsync({ id: testimonialId });
-        setDeleteTestimonialConfirmation(false);
-        await refetch();
-        alert("Testimonial deleted successfully.");
-      } catch (err) {
-        console.error("Something went wrong while deleting testimonial.");
-      }
+      })();
     };
   };
+  
 
-  const handleInitiateEdit: (
+  const handleInitiateEdit = (
     id: string,
     name: string,
     email: string,
@@ -209,30 +209,25 @@ export default function TestimonialView({ isAdmin }: TestimonialViewProps) {
       | "FIVE",
     comment: string,
     photoUrl: string | null,
-  ) => React.MouseEventHandler<HTMLButtonElement> = (
-    id,
-    name,
-    email,
-    rating,
-    comment,
-    photoUrl,
-  ) => {
-    return async (e) => {
-      let newRating = getKeyFromValue(ratingValues, rating) as RatingValue;
-
-      setWantToDelete(false)
-
-      setSelectedId(id);
-      setSelectedName(name);
-      setSelectedEmail(email);
-      setSelectedRatingNumber(newRating);
-      setSelectedComment(comment);
-      setSelectedPhotoUrl(photoUrl == null ? "" : photoUrl);
-
-      setEditorOpen(true);
+  ): React.MouseEventHandler<HTMLButtonElement> => {
+    return (e) => {
+      (async () => {
+        let newRating = getKeyFromValue(ratingValues, rating) as RatingValue;
+  
+        setWantToDelete(false);
+  
+        setSelectedId(id);
+        setSelectedName(name);
+        setSelectedEmail(email);
+        setSelectedRatingNumber(newRating);
+        setSelectedComment(comment);
+        setSelectedPhotoUrl(photoUrl == null ? "" : photoUrl);
+  
+        setEditorOpen(true);
+      })();
     };
   };
-
+  
   const handleSaveEditChanges = async () => {
     try {
       

@@ -31,6 +31,7 @@ interface PuppyPurchaseProps {
   params: { puppyid: string; type: string }; // Dynamic route params
 }
 export default function Checkout({ params }: PuppyPurchaseProps) {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const puppyId = parseInt(params.puppyid, 10);
   const reservationMode = params.type === "reserve"; 
   const { data: puppy, isLoading, error } = api.puppyProfile.getPuppyById.useQuery({ id: puppyId });
@@ -66,7 +67,6 @@ export default function Checkout({ params }: PuppyPurchaseProps) {
 
  
   // Error handling state
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Define both mutations for booking a slot and creating an appointment
   const { mutateAsync: bookSlot } = api.availability.bookSlot.useMutation();

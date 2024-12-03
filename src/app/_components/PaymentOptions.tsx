@@ -14,6 +14,8 @@ interface PaymentOptionsProps {
 }
 
 const PaymentOptions: React.FC<PaymentOptionsProps> = ({ title, description, onPaymentSuccess, puppyid, puppyPrice }:PaymentOptionsProps) => {
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
       const { data: puppy, isLoading, error } = api.puppyProfile.getPuppyById.useQuery({ id: puppyid });
       const createTransactionMutation = api.transaction.createTransaction.useMutation();
       const createOrderMutation = api.order.createOrder.useMutation();
@@ -33,8 +35,6 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({ title, description, onP
     clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
     currency: "USD",
   };
-  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
-  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   
 
 

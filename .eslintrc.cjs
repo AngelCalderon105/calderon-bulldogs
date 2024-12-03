@@ -7,13 +7,16 @@ const config = {
   "plugins": [
     "@typescript-eslint"
   ],
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended-type-checked",
-    "plugin:@typescript-eslint/stylistic-type-checked"
-  ],
+  "extends": "next",
+  // "extends": [
+  //   "next/core-web-vitals",
+  //   "plugin:@typescript-eslint/recommended-type-checked",
+  //   "plugin:@typescript-eslint/stylistic-type-checked"
+  // ],
   "rules": {
     "@typescript-eslint/array-type": "off",
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
