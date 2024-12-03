@@ -93,7 +93,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
             {photo.url.endsWith(".mp4") || photo.url.endsWith(".webm") ? (
               <img
                 src={
-                 "/default-video-thumbnail.jpg"
+                 "/default-video-thumbnail.png"
                 } /* Optional thumbnail for videos */
                 alt={`Thumbnail ${index + 1}`}
                 className="w-full h-full object-cover"

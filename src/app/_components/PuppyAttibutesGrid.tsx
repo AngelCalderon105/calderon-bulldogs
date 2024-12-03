@@ -23,7 +23,7 @@ const puppyData = [
   {
     value: "item-4",
     triggerText: "Puppy Starter Kit",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "Comes with 1 week supply of food.",
     icon: "/Bone.svg",
   },
   {
