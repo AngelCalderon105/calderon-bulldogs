@@ -36,25 +36,25 @@ const puppyData = [
     value: "item-6",
     triggerText: "AKC Registered",
     contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    icon: "/Certificate.svg",
+    icon: "/certificate.svg",
   },
   {
     value: "item-7",
     triggerText: "3 Rounds of DA2PP Vaccination",
     contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    icon: "/syringe.svg",
+    icon: "/Syringe.svg",
   },
   {
     value: "item-8",
     triggerText: "Gene Family Tree Certificate",
     contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    icon: "/tree.svg",
+    icon: "/Tree.svg",
   },
   {
     value: "item-9",
     triggerText: "2 Deworming Treatments",
     contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    icon: "/dog.svg",
+    icon: "/Dog.svg",
   },
 ];
 

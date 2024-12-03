@@ -143,7 +143,7 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
       },
       1024: {
         perPage: 2,
-        gap: "2rem",
+        gap: "1rem",
     
         padding: { right: '10%' }
     },
@@ -176,7 +176,7 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
   return (
     <div className="xl:flex xl:justify-center">
 
-    <div className="ml-4 md:ml-8 lg:mx-4 2xl:mx-20  mt-10 mb-14 xl:max-w-7xl">
+    <div className="ml-4 md:ml-8 lg:mx-4 2xl:mx-20  mt-10 mb-14 ">
       {isAdmin ? (
         <h2 className="text-md font-semibold font-georgia my-8">Puppy Management</h2>
       ) : (

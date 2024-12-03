@@ -98,7 +98,7 @@ export default function PuppyPurchase({ params }: PuppyPurchaseProps) {
           }
               </div>
               <div className="flex justify-start gap-2 text-lg items-center" >
-                <img src="/sex.svg" alt="" className="w-7 h-7 lg:h-10 lg:w-10" />
+                <img src="/Sex.svg" alt="" className="w-7 h-7 lg:h-10 lg:w-10" />
                 <span>{puppy.sex}</span>
               </div>
                     </div>
