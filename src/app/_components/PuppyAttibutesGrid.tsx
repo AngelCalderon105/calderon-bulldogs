@@ -5,19 +5,19 @@ const puppyData = [
   {
     value: "item-1",
     triggerText: "Vet Wellness Exam",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "Routine check-up to assess overall health.",
     icon: "/Health.svg",
   },
   {
     value: "item-2",
     triggerText: "Dry Food Trained",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "Eats dry food comfortably.",
     icon: "/Food.svg",
   },
   {
     value: "item-3",
     triggerText: "Potty Trained",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "Trained to use designated potty area.",
     icon: "/Paw.svg",
   },
   {
@@ -29,31 +29,31 @@ const puppyData = [
   {
     value: "item-5",
     triggerText: "Drinks Tap Water",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "Trained to drink plain tap water as their daily hydration source.",
     icon: "/Water.svg",
   },
   {
     value: "item-6",
     triggerText: "AKC Registered",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "Registered with the American Kennel Club, confirming purebred status and standards.",
     icon: "/certificate.svg",
   },
   {
     value: "item-7",
     triggerText: "3 Rounds of DA2PP Vaccination",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "Vaccinated against major diseases like distemper, adenovirus, parainfluenza, and parvovirus for strong immunity.",
     icon: "/Syringe.svg",
   },
   {
     value: "item-8",
     triggerText: "Gene Family Tree Certificate",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "A detailed lineage certificate showing the puppy’s purebred family history.",
     icon: "/Tree.svg",
   },
   {
     value: "item-9",
     triggerText: "2 Deworming Treatments",
-    contentText: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    contentText: "Protected from common intestinal parasites to ensure healthy growth.",
     icon: "/Dog.svg",
   },
 ];

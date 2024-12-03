@@ -124,7 +124,7 @@ export default function PuppyManagement({ isAdmin }: PuppyManagement) {
     pagination: false,
     arrows: false,
 
-    autoplay: false,
+    autoplay: true,
     interval: 3000,
     pauseOnHover: true,
 

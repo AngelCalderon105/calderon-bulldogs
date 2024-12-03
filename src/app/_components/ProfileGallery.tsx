@@ -81,7 +81,7 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
       </Splide>
 
       {/* Thumbnails */}
-      <div className="thumbnails flex flex-wrap flex-none   mt-4 lg:mt-8 ">
+      <div className="thumbnails flex flex-wrap flex-none  gap-x-2 mt-4 lg:mt-8 ">
         {photos.map((photo, index) => (
           <div
             key={index}
