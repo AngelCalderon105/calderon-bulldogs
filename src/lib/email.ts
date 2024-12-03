@@ -17,7 +17,7 @@ export const sendResetEmail = async (email: string, token: string) => {
   }
 
   // Reset password URL (replace localhost with your domain in production)
-  const resetUrl = `http://localhost:3000/auth/reset-password?token=${token}`;
+  const resetUrl = `https://www.calderonbulldogs.com/auth/forgot-password?token=${token}`;
 
   const messageData = {
     from: `no-reply@${domain}`, // Ensure this is a valid email using your Mailgun domain
