@@ -84,33 +84,55 @@ export const s3Router = createTRPCRouter({
       return photos ?? [];
     }),
     getLatestPhoto: publicProcedure
-    .input(z.object({ folder: z.string(), subfolder: z.string() }))
+    .input(
+      z.object({
+        folder: z.string(),
+        subfolder: z.string(),
+      })
+    )
     .query(async ({ input }) => {
       const command = new ListObjectsCommand({
         Bucket: bucketName,
         Prefix: `${input.folder}/${input.subfolder}`,
       });
-
+  
       const { Contents } = await s3.send(command);
-
+  
       if (!Contents || Contents.length === 0) {
         return { photo: null }; // Explicitly return null if no photo
       }
-
-      const latestPhoto = Contents.filter(item => item.Key && !item.Key.endsWith('/'))
+  
+      // Define an array of video file extensions to exclude
+      const videoExtensions: string[] = ['.mp4', '.avi', '.mov', '.mkv', '.wmv'];
+  
+      // Filter out folders and video files
+      const latestPhoto = Contents.filter((item) => {
+        if (!item.Key) return false; // Skip if Key is undefined
+        const lowerCaseKey = item.Key.toLowerCase();
+        return (
+          !lowerCaseKey.endsWith('/') && // Skip folders
+          !videoExtensions.some((ext) => lowerCaseKey.endsWith(ext)) // Skip video files
+        );
+      })
         .sort((a, b) => {
-          const aDate = a.LastModified ? new Date(a.LastModified) : new Date(0);
-          const bDate = b.LastModified ? new Date(b.LastModified) : new Date(0);
-          return bDate.getTime() - aDate.getTime(); // Sort descending by date
-        })[0]; 
-
+          const aDate = a.LastModified ? new Date(a.LastModified).getTime() : 0;
+          const bDate = b.LastModified ? new Date(b.LastModified).getTime() : 0;
+          return bDate - aDate; // Sort descending by date
+        })[0];
+  
       if (!latestPhoto) {
         return { photo: null };
       }
-
+  
       const url = `https://${bucketName}.s3.${region}.amazonaws.com/${latestPhoto.Key}`;
-      return { photo: { url, key: latestPhoto.Key } };
+      return {
+        photo: {
+          url,
+          key: latestPhoto.Key,
+        },
+      };
     }),
+  
 
 
   deletePhoto: publicProcedure
