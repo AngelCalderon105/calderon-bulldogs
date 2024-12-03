@@ -112,7 +112,7 @@ export const appointmentRouter = createTRPCRouter({
 
       const adminEmailDetails = {
         from: `no-reply@${domain}`,
-        to: 'angelcalderon105@gmail.com', // Hardcoded admin email
+        to: 'angelcalderon30@gmail.com', // Hardcoded admin email
         subject: 'New Appointment Scheduled',
         text: `New appointment scheduled by ${customerName}. Contact: ${customerPhoneNumber}.`,
         html: `<h2>New Appointment Scheduled</h2>
