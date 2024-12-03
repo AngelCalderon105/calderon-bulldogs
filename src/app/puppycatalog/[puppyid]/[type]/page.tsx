@@ -6,6 +6,7 @@ import PaymentOptions from "~/app/_components/PaymentOptions";
 import { api } from "~/trpc/react";
 import SuccessPage from "~/app/_components/Success";
 import { format } from 'date-fns';
+import Link from "next/link";
 
 interface PersonalInfoData {
   firstName: string;
@@ -308,9 +309,10 @@ export default function Checkout({ params }: PuppyPurchaseProps) {
           <div className="text-sm text-gray-600">
             <p>
               Have any questions?{" "}
-              <a href="/contact-us" className="text-blue-600 hover:underline">
+              <Link href="/#contact" className="text-blue-600 hover:underline">
                 Contact Us
-              </a>
+              </Link>   
+                            
             </p>
           </div>
         </div>
