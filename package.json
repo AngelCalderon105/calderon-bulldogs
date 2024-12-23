@@ -33,6 +33,7 @@
     "@trpc/client": "^11.0.0-rc.446",
     "@trpc/react-query": "^11.0.0-rc.446",
     "@trpc/server": "^11.0.0-rc.446",
+    "@vercel/analytics": "^1.4.1",
     "aws-sdk": "^2.1679.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
