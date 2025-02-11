@@ -9,15 +9,18 @@ interface GalleryProps {
   galleryType: string;
 }
 
-const ProfileGallery: React.FC<GalleryProps> = ({galleryType, galleryName }) => {
- 
-// Fetch photos based on the selected tag
-const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
-  { folder: galleryType || "", 
-    subfolder: galleryName || ""
-  }, // Pass selected tag or empty string
-
-);
+const ProfileGallery: React.FC<GalleryProps> = ({
+  galleryType,
+  galleryName,
+}) => {
+  // Fetch photos based on the selected tag
+  const {
+    data: photos,
+    isLoading,
+    refetch,
+  } = api.s3.listPhotos.useQuery(
+    { folder: galleryType || "", subfolder: galleryName || "" }, // Pass selected tag or empty string
+  );
   const deletePhotoMutation = api.s3.deletePhoto.useMutation();
 
   const handleDelete = async (key: string) => {
@@ -33,7 +36,6 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
     }
   };
 
-  
   const [currentIndex, setCurrentIndex] = useState(0);
   const mainCarouselRef = useRef<any>(null);
 
@@ -46,10 +48,8 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
   }
 
   return (
-    <div className="py-6 lg:p-6 rounded-lg shadow-md ">
-      {galleryName == "Main Gallery" ? <div className="mb-4">
-
-      </div> :  null} 
+    <div className="rounded-lg py-6 shadow-md lg:p-6">
+      {galleryName == "Main Gallery" ? <div className="mb-4"></div> : null}
       <Splide
         options={{
           type: "fade",
@@ -58,34 +58,36 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
           drag: "free",
         }}
         ref={mainCarouselRef}
-        onMove={(splide : any) => setCurrentIndex(splide.index)}
+        onMove={(splide: any) => setCurrentIndex(splide.index)}
         className="mb-4"
       >
         {photos.map((photo, index) => (
           <SplideSlide key={index}>
-            {photo.url.endsWith(".mp4") || photo.url.endsWith(".webm") ? (
-              <video
-                controls
-                src={photo.url}
-                className=" h-full border-2 border-solid w-full rounded-lg object-contain"
-              />
-            ) : (
-              <img
-                src={photo.url}
-                alt={`Photo ${index + 1}`}
-                className=" h-full border-2 border-solid w-full rounded-lg object-contain"
-              />
-            )}
+            <div className="border-sold flex h-96 w-full items-center justify-center rounded-lg border-2">
+              {photo.url.endsWith(".mp4") || photo.url.endsWith(".webm") ? (
+                <video
+                  controls
+                  src={photo.url}
+                  className="h-full w-full object-contain"
+                />
+              ) : (
+                <img
+                  src={photo.url}
+                  alt={`Photo ${index + 1}`}
+                  className="h-full w-full object-contain"
+                />
+              )}
+            </div>
           </SplideSlide>
         ))}
       </Splide>
 
       {/* Thumbnails */}
-      <div className="thumbnails flex flex-wrap flex-none  gap-x-2 mt-4 lg:mt-8 ">
+      <div className="thumbnails mt-4 flex flex-none flex-wrap gap-x-2 lg:mt-8">
         {photos.map((photo, index) => (
           <div
             key={index}
-            className={`thumbnail w-16 h-16 lg:w-24 lg:h-24 overflow-hidden rounded-lg cursor-pointer ${
+            className={`thumbnail h-16 w-16 cursor-pointer overflow-hidden rounded-lg lg:h-24 lg:w-24 ${
               currentIndex === index ? "border-2 border-blue-500" : "border"
             }`}
             onClick={() => mainCarouselRef.current?.go(index)}
@@ -93,23 +95,21 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
             {photo.url.endsWith(".mp4") || photo.url.endsWith(".webm") ? (
               <img
                 src={
-                 "/default-video-thumbnail.png"
+                  "/default-video-thumbnail.png"
                 } /* Optional thumbnail for videos */
                 alt={`Thumbnail ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             ) : (
               <img
                 src={photo.url}
                 alt={`Thumbnail ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             )}
           </div>
         ))}
-      
       </div>
-
     </div>
   );
 };

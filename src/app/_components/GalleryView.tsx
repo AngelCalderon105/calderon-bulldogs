@@ -5,20 +5,24 @@ import { api } from "~/trpc/react";
 import "@splidejs/splide/dist/css/splide.min.css";
 
 interface GalleryProps {
-  isAdmin: boolean,
+  isAdmin: boolean;
   galleryName: string;
   galleryType: string;
 }
 
-const Gallery: React.FC<GalleryProps> = ({ isAdmin,galleryType, galleryName }) => {
- 
-// Fetch photos based on the selected tag
-const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
-  { folder: galleryType || "", 
-    subfolder: galleryName || ""
-  }, // Pass selected tag or empty string
-
-);
+const Gallery: React.FC<GalleryProps> = ({
+  isAdmin,
+  galleryType,
+  galleryName,
+}) => {
+  // Fetch photos based on the selected tag
+  const {
+    data: photos,
+    isLoading,
+    refetch,
+  } = api.s3.listPhotos.useQuery(
+    { folder: galleryType || "", subfolder: galleryName || "" }, // Pass selected tag or empty string
+  );
   const deletePhotoMutation = api.s3.deletePhoto.useMutation();
 
   const handleDelete = async (key: string) => {
@@ -34,8 +38,6 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
     }
   };
 
-  
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -45,10 +47,11 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
   }
 
   return (
-    <div className="p-6 rounded-lg shadow-md">
-      <h2 className="text-md font-semibold mb-4">{galleryName}</h2>
-      {galleryName == "Main Gallery" ? <div className="mb-4">
-        {/* <label htmlFor="tagSelect" className="mr-2">Filter by Tag:</label>
+    <div className="rounded-lg p-6 shadow-md">
+      <h2 className="text-md mb-4 font-semibold">{galleryName}</h2>
+      {galleryName == "Main Gallery" ? (
+        <div className="mb-4">
+          {/* <label htmlFor="tagSelect" className="mr-2">Filter by Tag:</label>
         <select
           id="tagSelect"
           className="border px-2 py-1"
@@ -61,7 +64,8 @@ const { data: photos, isLoading, refetch } = api.s3.listPhotos.useQuery(
           <option value="stud">Stud</option>
           
         </select> */}
-      </div> :  null} 
+        </div>
+      ) : null}
       <Splide
         options={{
           perPage: 1,
