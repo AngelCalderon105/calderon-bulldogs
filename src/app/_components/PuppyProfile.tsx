@@ -4,7 +4,7 @@ import GalleryView from "~/app/_components/GalleryView";
 import WhiteButton from "./WhiteButton";
 import BlueButton from "./BlueButton";
 import { api } from "~/trpc/react";
-
+//Puppy Type
 interface PuppyType {
   id: number;
   name: string;
