@@ -11,7 +11,7 @@ import HomeView from "./_components/HomeView";
 export default async function Home() {
   return (
     <>
-      <div id="home">
+      <div id="home" className="">
         <HomeView isAdmin={false} />
       </div>
 

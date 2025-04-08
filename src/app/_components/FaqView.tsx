@@ -2,41 +2,46 @@
 import React, { useState, useEffect } from "react";
 import { api } from "~/trpc/react";
 import FaqArrow from "../../../public/FaqArrow.svg";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "../../components/ui/accordion";
+
 interface FaqProps {
   isAdmin: boolean;
 }
 
 const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
-  const { data: initialFaqs, isLoading, isError } = api.faqs.listAllFaqs.useQuery();
+  const {
+    data: initialFaqs,
+    isLoading,
+    isError,
+  } = api.faqs.listAllFaqs.useQuery();
   const createFaqMutation = api.faqs.createNewFaq.useMutation();
   const deleteFaqMutation = api.faqs.deleteFaq.useMutation();
   const editFaqMutation = api.faqs.updateFaq.useMutation();
-  
+
   const [faqs, setFaqs] = useState(initialFaqs || []);
   const [showForm, setShowForm] = useState(false);
   const [editingFaqId, setEditingFaqId] = useState<string | null>(null);
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null); // New state for dropdown
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
 
-  // Update the local FAQ list when initialFaqs changes
   useEffect(() => {
     if (initialFaqs) {
       setFaqs(initialFaqs);
     }
   }, [initialFaqs]);
 
-  const handleToggle = (faqId: string) => {
-    setExpandedFaqId(expandedFaqId === faqId ? null : faqId);
-  };
-
   const handleCreateFaq = async () => {
     try {
       const newFaq = await createFaqMutation.mutateAsync({ question, answer });
-      setFaqs([...faqs, newFaq]); // Add the new FAQ to the existing list
-      setQuestion(''); // Clear the input fields after successful submission
-      setAnswer('');
-      setShowForm(false); // Hide the form after submission
+      setFaqs([...faqs, newFaq]);
+      setQuestion("");
+      setAnswer("");
+      setShowForm(false);
     } catch (error) {
       console.error("Error creating FAQ:", error);
     }
@@ -45,7 +50,7 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
   const handleFaqDeletion = async (faqId: string) => {
     try {
       await deleteFaqMutation.mutateAsync({ id: faqId });
-      setFaqs(faqs.filter((faq) => faq.id !== faqId)); // Remove the deleted FAQ from the list
+      setFaqs(faqs.filter((faq) => faq.id !== faqId));
     } catch (error) {
       console.error("Error deleting FAQ:", error);
     }
@@ -56,115 +61,119 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
       await editFaqMutation.mutateAsync({ id: faqId, question, answer });
       setFaqs(
         faqs.map((faq) =>
-          faq.id === faqId ? { ...faq, question, answer } : faq
-        )
-      ); // Update the FAQ in the list
-      setEditingFaqId(null); // Exit editing mode after update
-      setQuestion('');
-      setAnswer('');
+          faq.id === faqId ? { ...faq, question, answer } : faq,
+        ),
+      );
+      setEditingFaqId(null);
+      setQuestion("");
+      setAnswer("");
     } catch (error) {
       console.error("Error updating FAQ:", error);
     }
   };
 
-  const handleEditClick = (faqId: string, currentQuestion: string, currentAnswer: string) => {
-    setEditingFaqId(faqId); // Set the ID of the FAQ being edited
-    setQuestion(currentQuestion); // Pre-fill the question in the form
-    setAnswer(currentAnswer); // Pre-fill the answer in the form
+  const handleEditClick = (
+    faqId: string,
+    currentQuestion: string,
+    currentAnswer: string,
+  ) => {
+    setEditingFaqId(faqId);
+    setQuestion(currentQuestion);
+    setAnswer(currentAnswer);
   };
 
   if (isLoading) return <p>Loading FAQs...</p>;
   if (isError) return <p>Error fetching FAQs</p>;
 
   return (
-    <div className=" py-12 font-montserrat flex flex-col w-full">
-      <h1 className="py-8 font-bold text-center text-dark_blue text-2xl sm:text-4xl">FAQs</h1>
-      {faqs.map((faq) => (
-        <div key={faq.id} style={{ marginBottom: "20px" }}>
-          {/* Flex container for question, arrow indicator, and toggle button */}
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center justify-between w-full cursor-pointer" onClick={() => handleToggle(faq.id)}>
-              <h3 className="font-semibold text-dark_blue  text-lg sm:text-xl">{faq.question}</h3>
-              <span
-                className={`transform transition-transform ${
-                  expandedFaqId === faq.id ? "rotate-180" : "rotate-0"
-                }`}
-              >
-               <FaqArrow/>
-              </span>
-            </div>
-            {isAdmin && (
-              <div className="flex space-x-2">
+    <div className="flex w-full flex-col py-12 font-montserrat">
+      <h1 className="py-8 text-center text-2xl font-bold text-dark_blue sm:text-4xl">
+        FAQs
+      </h1>
+      <Accordion type="single" collapsible>
+        {faqs.map((faq) => (
+          <AccordionItem
+            key={faq.id}
+            value={faq.id}
+            className="m-3 text-gray-600 md:mx-3"
+          >
+            <AccordionTrigger className="[&>svg]:h-6 [&>svg]:w-6">
+              <div className="flex w-full items-center justify-between">
+                <h3 className="text-left text-lg font-semibold text-dark_blue sm:text-xl">
+                  {faq.question}
+                </h3>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="gray_muted py-4 text-lg">
+              {faq.answer}
+              {isAdmin && (
+                <div className="mt-4 flex space-x-2">
+                  <button
+                    className="rounded bg-gray-600 p-2 text-white"
+                    onClick={() =>
+                      handleEditClick(faq.id, faq.question, faq.answer)
+                    }
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="rounded bg-red-600 p-2 text-white"
+                    onClick={() => handleFaqDeletion(faq.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </AccordionContent>
+
+            {editingFaqId === faq.id && (
+              <div className="mb-4 mt-2">
+                <label>
+                  Question:
+                  <input
+                    type="text"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    className="my-2 block w-full rounded border p-2"
+                  />
+                </label>
+                <label>
+                  Answer:
+                  <textarea
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                    className="my-2 block w-full rounded border p-2"
+                  />
+                </label>
                 <button
-                  className="p-2 bg-gray-600 text-white rounded"
-                  onClick={() => handleEditClick(faq.id, faq.question, faq.answer)}
+                  className="rounded bg-green-600 p-2 text-white"
+                  onClick={() => handleFaqUpdation(faq.id)}
                 >
-                  Edit
+                  Save
                 </button>
                 <button
-                  className="p-2 bg-red-600 text-white rounded"
-                  onClick={() => handleFaqDeletion(faq.id)}
+                  className="ml-2 rounded bg-gray-400 p-2 text-white"
+                  onClick={() => setEditingFaqId(null)}
                 >
-                  Delete
+                  Cancel
                 </button>
               </div>
             )}
-          </div>
-  
-          {/* Show the answer if the FAQ is expanded */}
-          {expandedFaqId === faq.id && (
-            <p className=" py-4 text-gray_muted">{faq.answer}</p>
-          )}
-  
-          {/* Show the edit form if this FAQ is being edited */}
-          {editingFaqId === faq.id && (
-            <div className="mb-4">
-              <label>
-                Question:
-                <input
-                  type="text"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  className="block border rounded p-2 my-2"
-                />
-              </label>
-              <label>
-                Answer:
-                <textarea
-                  value={answer}
-                  onChange={(e) => setAnswer(e.target.value)}
-                  className="block border rounded p-2 my-2"
-                />
-              </label>
-              <button
-                className="p-2 bg-green-600 text-white rounded"
-                onClick={() => handleFaqUpdation(faq.id)}
-              >
-                Save
-              </button>
-              <button
-                className="p-2 bg-gray-400 text-white rounded ml-2"
-                onClick={() => setEditingFaqId(null)} // Cancel editing
-              >
-                Cancel
-              </button>
-            </div>
-          )}
-  
-          {/* Render the <hr /> for every FAQ, including the last */}
-          <hr className="border-blue_pale opacity-30" />
-        </div>
-      ))}
-  
+
+            <hr className="mt-4 border-blue_pale opacity-30" />
+          </AccordionItem>
+        ))}
+      </Accordion>
+
       {isAdmin && !editingFaqId && (
         <>
           <button
-            className="mt-4 p-4 bg-blue-600 text-white rounded"
+            className="mt-4 rounded bg-blue-600 p-4 text-white"
             onClick={() => setShowForm(!showForm)}
           >
             {showForm ? "Cancel" : "Add new FAQ"}
           </button>
-  
+
           {showForm && (
             <div style={{ marginTop: "20px" }}>
               <div>
@@ -174,7 +183,7 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
                     type="text"
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
-                    className="block border rounded p-2 my-2"
+                    className="my-2 block w-full rounded border p-2"
                   />
                 </label>
               </div>
@@ -184,11 +193,14 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
                   <textarea
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
-                    className="block border rounded p-2 my-2"
+                    className="my-2 block w-full rounded border p-2"
                   />
                 </label>
               </div>
-              <button className="p-2 bg-green-600 text-white rounded" onClick={handleCreateFaq}>
+              <button
+                className="rounded bg-green-600 p-2 text-white"
+                onClick={handleCreateFaq}
+              >
                 Submit
               </button>
             </div>
@@ -197,7 +209,6 @@ const FaqView: React.FC<FaqProps> = ({ isAdmin }) => {
       )}
     </div>
   );
-  
 };
 
 export default FaqView;
