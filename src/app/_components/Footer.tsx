@@ -18,10 +18,10 @@ export default function Footer() {
                         <p className="mt-2 text-lg">Find us on social media:</p>
                         <div className=" flex items-center md:justify-center">
                         <a href="https://www.instagram.com/calderon_bulldogs/" aria-label="TikTok" className="text-blue_darker hover:text-blue_primary m-2">
-                           <InstaLogo classname = "mx-2"/>
+                           <InstaLogo className = "mx-2"/>
                            </a>
                             <a href="https://www.tiktok.com/@calderonbulldogs" aria-label="TikTok" className="text-blue_darker hover:text-blue_primary m-2">
-                               <TiktokLogo classname=""/>
+                               <TiktokLogo className=""/>
                             </a>
                         </div>
                     </div>
