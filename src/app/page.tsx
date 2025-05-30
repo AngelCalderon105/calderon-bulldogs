@@ -14,11 +14,11 @@ export default async function Home() {
       <div id="home" className="">
         <HomeView isAdmin={false} />
       </div>
-      <EventView isAdmin={false} />
-
-      <div id="available_puppies" className="mt-5">
-        {/* <PuppyManagement isAdmin={false} /> */}
+      <div id="available_puppies">
+        <EventView isAdmin={false} />
       </div>
+
+      <div className="mt-5">{/* <PuppyManagement isAdmin={false} /> */}</div>
 
       <div id="stud_service">
         <StudServiceCard />

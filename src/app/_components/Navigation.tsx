@@ -12,7 +12,7 @@ const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
-    { name: "Available Puppies", path: "#stud_service" },
+    { name: "Available Puppies", path: "#available_puppies" },
     { name: "Stud Service", path: "#stud_service" },
     { name: "FAQ", path: "#faq" },
   ];
