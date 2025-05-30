@@ -7,39 +7,43 @@ interface EventProps {
 }
 
 const EventView: React.FC<EventProps> = ({ isAdmin }) => {
-  const { data: eventData, isLoading, isError } = api.event.getEventData.useQuery();
+  const {
+    data: eventData,
+    isLoading,
+    isError,
+  } = api.event.getEventData.useQuery();
   const updateEventDateMutation = api.event.setEventDate.useMutation();
 
-  const [date, setDate] = useState<string>(""); 
-  const [localIsEventActive, setLocalIsEventActive] = useState<boolean>(false); 
+  const [date, setDate] = useState<string>("");
+  const [localIsEventActive, setLocalIsEventActive] = useState<boolean>(false);
   const [timeRemaining, setTimeRemaining] = useState<string>("");
-  const [showBanner, setShowBanner] = useState<boolean>(false); 
+  const [showBanner, setShowBanner] = useState<boolean>(false);
 
-  // Convert the date to UTC and format it for consistency
+  const [parsedTime, setParsedTime] = useState({
+    days: "00",
+    hours: "00",
+    minutes: "00",
+  });
+
   const getFormattedDate = (dateString: Date | string) => {
     const utcDate = new Date(dateString);
-    return utcDate.toISOString().split("T")[0]; 
+    return utcDate.toISOString().split("T")[0];
   };
 
-  //Load event data from server
   useEffect(() => {
     if (eventData) {
-      console.log("Fetched event data:", eventData); 
-
       if (eventData.date) {
         const formattedDate = getFormattedDate(eventData.date);
-        setDate(formattedDate || ""); 
+        setDate(formattedDate || "");
       } else {
-        setDate(""); 
+        setDate("");
       }
 
-      setLocalIsEventActive(eventData.isEventActive ?? false); 
-      setShowBanner(eventData.showBanner ?? false); 
-      console.log("Banner state set to:", eventData.showBanner); 
+      setLocalIsEventActive(eventData.isEventActive ?? false);
+      setShowBanner(eventData.showBanner ?? false);
     }
   }, [eventData]);
 
-  // Effect to calculate time remaining if event is active
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
@@ -51,19 +55,28 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
 
         if (timeDiff > 0) {
           const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+          const hours = Math.floor(
+            (timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+          );
+          const minutes = Math.floor(
+            (timeDiff % (1000 * 60 * 60)) / (1000 * 60),
+          );
           const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
           setTimeRemaining(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+          setParsedTime({
+            days: String(days).padStart(2, "0"),
+            hours: String(hours).padStart(2, "0"),
+            minutes: String(minutes).padStart(2, "0"),
+          });
         } else {
           alert("Date set for countdown has already passed!");
           setTimeRemaining("");
-          clearInterval(interval); // Clear the timer once the time has passed
+          clearInterval(interval);
         }
       }, 1000);
     }
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [localIsEventActive, date]);
 
   const handleSubmit = async () => {
@@ -72,9 +85,8 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
       return;
     }
 
-    const updatedDate = new Date(date); 
+    const updatedDate = new Date(date);
 
-    // Check if the date is in the past before updating
     if (updatedDate < new Date()) {
       alert("Cannot set a countdown for a past date.");
       return;
@@ -83,13 +95,12 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
     try {
       await updateEventDateMutation.mutateAsync({
         name: "Event Countdown",
-        date: updatedDate, 
+        date: updatedDate,
         isEventActive: !localIsEventActive,
-        showBanner: showBanner, 
+        showBanner: showBanner,
       });
       setLocalIsEventActive(!localIsEventActive);
-      console.log("Event updated successfully");
-      alert("Event updated successfully!"); 
+      alert("Event updated successfully!");
     } catch (error) {
       console.error("Error updating event:", error);
     }
@@ -102,21 +113,14 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
     }
 
     try {
-      console.log("Before call: showBanner value is", show);
-
       await updateEventDateMutation.mutateAsync({
-        date: new Date(date), 
+        date: new Date(date),
         name: "Event Countdown",
-        isEventActive: localIsEventActive, 
-        showBanner: show, // Set the banner visibility
+        isEventActive: localIsEventActive,
+        showBanner: show,
       });
 
-      console.log("After mutation call, updating state");
-
-      // Update local state
       setShowBanner(show);
-
-      console.log("Banner updated successfully");
       alert("Banner visibility updated!");
     } catch (error) {
       console.error("Error updating banner visibility:", error);
@@ -127,26 +131,65 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
   if (isError) return <p>Error fetching event data</p>;
 
   return (
-    <div className="mx-12">
-      {/* Display the banner if showBanner is true or event is active */}
+    <div className="bg-[#F2F7FF] pb-2">
       {(showBanner || localIsEventActive) && (
-        <div className="w-full h-96 py-12 bg-gray-100 flex flex-col justify-center items-center">
-          <h1>New Litter Coming Soon!</h1>
-          {/* Only show the timer if the event is active and timeRemaining exists */}
-          {localIsEventActive && timeRemaining && <p className="text-xl">{timeRemaining}</p>}
+        <div className="flex w-full flex-col items-center justify-center rounded-md bg-[#EAF4FF] pb-2 pt-2 md:flex-row md:gap-20 md:pt-6">
+          <div className="flex gap-3 py-4 md:flex-col md:gap-0 md:py-0">
+            <h1 className="whitespace-nowrap font-extrabold text-[#0F172A] sm:text-2xl">
+              Exciting news!
+            </h1>
+            <p className="whitespace-nowrap font-medium text-[#0F172A] sm:text-xl">
+              New litter coming soon
+            </p>
+          </div>
+          {localIsEventActive && timeRemaining && (
+            <div className="flex items-center gap-4 text-[#0F172A]">
+              <div>
+                <div className="flex flex-col items-center rounded-md bg-white px-3 py-2 shadow sm:px-6 sm:py-4">
+                  <span className="font-bold md:text-2xl">
+                    {parsedTime.days}
+                  </span>
+                </div>
+                <div className="sm:text-md py-2 text-center text-sm">Days</div>
+              </div>
+              <span className="self-start pt-1 text-xl font-bold sm:pt-3 md:text-3xl">
+                :
+              </span>
+              <div>
+                <div className="flex flex-col items-center rounded-md bg-white px-3 py-2 shadow sm:px-6 sm:py-4">
+                  <span className="font-bold md:text-2xl">
+                    {parsedTime.hours}
+                  </span>
+                </div>
+                <div className="sm:text-md py-2 text-center text-sm">Hours</div>
+              </div>
+              <span className="self-start pt-1 text-xl font-bold sm:pt-3 md:text-3xl">
+                :
+              </span>
+              <div>
+                <div className="flex flex-col items-center rounded-md bg-white px-3 py-2 shadow sm:px-6 sm:py-4">
+                  <span className="font-bold md:text-2xl">
+                    {parsedTime.minutes}
+                  </span>
+                </div>
+                <div className="sm:text-md py-2 text-center text-sm">
+                  Minutes
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Show the form only if the user is an admin */}
       {isAdmin && (
         <div className="mt-5 flex flex-row">
           <label>
             Event Date:
             <input
               type="date"
-              value={date} // Use fallback in case date is empty
+              value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="block border rounded p-4 mx-2"
+              className="mx-2 block rounded border p-4"
             />
           </label>
 
@@ -156,12 +199,15 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
               checked={showBanner}
               onChange={(e) => handleShowBanner(e.target.checked)}
               className="mr-2"
-              disabled={localIsEventActive} // Disable checkbox if event is active
+              disabled={localIsEventActive}
             />
             Show Banner
           </label>
 
-          <button className="p-2 text-sm bg-green-600 text-white rounded" onClick={handleSubmit}>
+          <button
+            className="rounded bg-green-600 p-2 text-sm text-white"
+            onClick={handleSubmit}
+          >
             {localIsEventActive ? "Clear Event" : "Start Countdown"}
           </button>
         </div>

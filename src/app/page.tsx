@@ -14,8 +14,9 @@ export default async function Home() {
       <div id="home" className="">
         <HomeView isAdmin={false} />
       </div>
+      <EventView isAdmin={false} />
 
-      <div id="available_puppies" className="mt-10">
+      <div id="available_puppies" className="mt-5">
         {/* <PuppyManagement isAdmin={false} /> */}
       </div>
 
@@ -30,7 +31,6 @@ export default async function Home() {
         <FaqView isAdmin={false} />
       </div>
 
-      <EventView isAdmin={false} />
       <div id="contact">
         <ContactView isAdmin={false} />
       </div>
