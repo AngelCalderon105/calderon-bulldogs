@@ -44,6 +44,7 @@ export default {
   			'custom-30': '30px'
   		},
   		colors: {
+			darker_blue: '#133591',
   			dark_blue: '#1E2D67',
   			light_blue: '#F2F7FF',
   			font_light_blue: '#4E76BB',

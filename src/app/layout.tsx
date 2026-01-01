@@ -4,6 +4,9 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { TRPCReactProvider } from "~/trpc/react";
+import Footer from "./_components/Footer";
+import Navigation from "./_components/Navigation"
+
 
 export const metadata: Metadata = {
   title: "Calderon Bulldogs",
@@ -18,7 +21,10 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable} scroll-smooth`}>
       <body>
         <TRPCReactProvider>
+          <Navigation isAdmin={false}/>
           {children}
+          <Footer/>
+
           <Analytics />
         </TRPCReactProvider>
       </body>
