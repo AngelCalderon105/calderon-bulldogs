@@ -1,4 +1,3 @@
-import Navigation from "./Navigation";
 
 interface HomeProps {
   isAdmin: boolean;
@@ -11,7 +10,6 @@ const HomeView: React.FC<HomeProps> = ({ isAdmin }) => {
       style={{ background: "linear-gradient(160deg, #D6E5FF, #73A1F1)" }}
     >
       <div className="px-5 lg:px-14">
-        <Navigation isAdmin={isAdmin} />
         <div className="mt-4 flex max-w-7xl flex-col justify-center gap-8 px-4 md:flex-row md:justify-start lg:top-0">
           {/* Left Text Content */}
           <div className="flex flex-col items-center justify-center self-center text-center md:w-[70%] md:items-start md:justify-start md:text-left">

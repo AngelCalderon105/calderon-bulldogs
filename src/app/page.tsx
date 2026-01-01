@@ -6,11 +6,14 @@ import PuppyManagement from "./_components/PuppyManagement";
 import EventView from "./_components/EventView";
 import StudServiceCard from "./_components/StudService";
 import HowItWorks from "./_components/Howitworks";
-import Footer from "./_components/Footer";
 import HomeView from "./_components/HomeView";
+import Navigation from "./_components/Navigation";
+import Footer from "./_components/Footer";
+
 export default async function Home() {
   return (
     <>
+      <Navigation isAdmin={false} />
       <div id="home" className="">
         <HomeView isAdmin={false} />
       </div>

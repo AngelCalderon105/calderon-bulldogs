@@ -8,6 +8,8 @@
 import Image from "next/image";
 import HowItWorks from "../_components/Howitworks";
 import FeatureCard from "../_components/FeatureCard";
+import Navigation from "../_components/Navigation";
+import Footer from "../_components/Footer";
 
 export default function AboutUsPage(){
 
@@ -15,6 +17,7 @@ const fillerText = "Lorem ipsum dolor sit amet consectetur. Dolor pretium ornare
 
     return (
         <div className = "about-us-page">
+            <Navigation isAdmin={false} />
 
         {/* About Us Section */}
         <section style={{ background: "linear-gradient(160deg, #D6E5FF, #73A1F1)"}} className="relative z-0">
@@ -77,11 +80,11 @@ const fillerText = "Lorem ipsum dolor sit amet consectetur. Dolor pretium ornare
 
 
         {/* Available Puppies*/}
-        <div className="flex">
-            <div className="hidden lg:flex">
-            <Image src="/assets/leftPaw.svg" alt="Paw-left" width={100} height={10} className="absolute mt-14 ml-3"></Image>
-            <Image src="/assets/smallRightPaw.svg" alt="Paw-right" width={190} height={10} className="absolute ml-64 mt-44"></Image>
-            <Image src="/assets/available_dog.png" alt="AvailableDog" width={450} height={10} className="absolute mt-16"></Image>
+        <div className="relative flex pb-8 lg:pb-12">
+            <div className="hidden lg:block relative">
+            <Image src="/assets/leftPaw.svg" alt="Paw-left" width={100} height={100} className="absolute top-14 left-3"></Image>
+            <Image src="/assets/smallRightPaw.svg" alt="Paw-right" width={190} height={100} className="absolute top-44 left-64"></Image>
+            <Image src="/assets/available_dog.png" alt="AvailableDog" width={450} height={450} className="relative top-16"></Image>
             </div>
                 
             <div className="mx-auto lg:mr-40 mt-10 lg:mt-20 max-w-lg">
@@ -95,6 +98,9 @@ const fillerText = "Lorem ipsum dolor sit amet consectetur. Dolor pretium ornare
                     <Image src="/assets/available_dog.png" alt="AvailableDog" width={450} height={10} className="absolute mt-16 md:ml-6"></Image>
                 </div>
             </div>
+        </div>
+        <div className="m-2 my-20 lg:mx-10 lg:mb-20 lg:mt-10">
+            <Footer />
         </div>
         </div>
 
