@@ -195,7 +195,7 @@ const ContactView: React.FC<ContactProps> = ({ isAdmin }) => {
             <option value="PURCHASE" className="text-blue_darker">Purchase Puppy</option>
           </select>
           <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-            <Arrow classname=""/>
+            <Arrow className=""/>
           </div>
         </div>
           <textarea
