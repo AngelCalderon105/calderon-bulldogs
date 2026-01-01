@@ -30,20 +30,22 @@ const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
   }, [isOpen]);
 
   return (
-    <div className="top-0 z-50 flex w-full justify-between py-4 md:px-2 md:pb-0 md:pt-4">
-      {/* Logo and Title */}
-      <div className="flex flex-row items-center">
-        <Image src="/Vector.svg" alt="Logo" width={20} height={20} />
-        <p className="px-2 font-georgia text-lg font-bold md:text-lg lg:text-xl">
-          Calderon Bulldogs
-        </p>
-      </div>
+    <nav className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm shadow-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6 md:py-4 lg:px-8">
+        {/* Logo and Title */}
+        <div className="flex flex-row items-center gap-2">
+          <Image src="/Vector.svg" alt="Logo" width={24} height={24} className="md:w-6 md:h-6" />
+          <p className="font-georgia text-lg font-bold md:text-xl lg:text-2xl">
+            Calderon Bulldogs
+          </p>
+        </div>
 
-      {/* Hamburger Icon for Mobile/Tablet */}
-      <button
-        className="block text-black focus:outline-none md:hidden"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+        {/* Hamburger Icon for Mobile/Tablet */}
+        <button
+          className="block text-gray_dark focus:outline-none md:hidden"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle menu"
+        >
         <svg
           className="h-6 w-6"
           fill="none"
@@ -138,23 +140,24 @@ const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
         </div>
       </div>
 
-      {/* Desktop Menu */}
-      <div className="hidden items-center space-x-8 md:flex">
-        <Link href="#stud_service">
-          <p className={`font-medium text-gray_dark`}>Stud Service</p>
-        </Link>
+        {/* Desktop Menu */}
+        <div className="hidden items-center gap-6 md:flex lg:gap-8">
+          <Link href="#stud_service" className="transition-colors hover:text-blue_darker">
+            <p className="font-medium text-gray_dark">Stud Service</p>
+          </Link>
 
-        <Link href="#faq">
-          <p className={`font-medium text-gray_dark`}>FAQs</p>
-        </Link>
+          <Link href="#faq" className="transition-colors hover:text-blue_darker">
+            <p className="font-medium text-gray_dark">FAQs</p>
+          </Link>
 
-        <Link href="#contact">
-          <button className="rounded-full bg-blue_darker px-8 py-2 text-white">
-            Contact Us
-          </button>
-        </Link>
+          <Link href="#contact">
+            <button className="rounded-full bg-blue_darker px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue_primary lg:px-8 lg:text-base">
+              Contact Us
+            </button>
+          </Link>
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
