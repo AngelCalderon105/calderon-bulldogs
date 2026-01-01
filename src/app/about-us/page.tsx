@@ -20,54 +20,54 @@ const fillerText = "Lorem ipsum dolor sit amet consectetur. Dolor pretium ornare
             <Navigation isAdmin={false} />
 
         {/* About Us Section */}
-        <section style={{ background: "linear-gradient(160deg, #D6E5FF, #73A1F1)"}} className="relative z-0">
-            <Image src={"/assets/puppies&paw.png"} alt="Puppies&Paws" width={1300} height={100} className="pt-20"/>
+        <section style={{ background: "linear-gradient(160deg, #D6E5FF, #73A1F1)"}} className="relative z-0 overflow-hidden">
+            <Image src={"/assets/puppies&paw.png"} alt="Puppies&Paws" width={1300} height={100} className="pt-12 sm:pt-16 md:pt-20 w-full h-auto object-cover"/>
 
-            <div className="pl-3 pt-8 md:pl-10 md:pt-16 lg:pl-16 lg:pt-24 absolute top-0 left-0">
-                <h1 className="text-xl md:text-3xl lg:text-5xl font-bold font-georgia">About Us</h1>
-                <p className="text-[#344EAD] text-sm text-md mt-1 lg:mt-4 font-semibold font-montserrat">Learn more about our story, our process and our family...</p>
+            <div className="pl-4 pr-4 pt-6 sm:pl-6 sm:pt-8 md:pl-10 md:pt-16 lg:pl-16 lg:pt-24 absolute top-0 left-0 right-0">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-georgia">About Us</h1>
+                <p className="text-[#344EAD] text-xs sm:text-sm md:text-base mt-2 sm:mt-3 lg:mt-4 font-semibold font-montserrat max-w-md">Learn more about our story, our process and our family...</p>
             </div>
         </section>
 
 
         {/* Our Story */}
-        <section className = "bg-white items-center px-4 py-12 relative w-full xl:max-w-100">        
-            <div className = "grid grid-cols-1 lg:grid-cols-2 gap-8">
-
+        <section className = "bg-white items-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 relative w-full xl:max-w-100">        
+            <div className = "grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                 {/* Desktop */}
                 <div className="hidden lg:flex lg:ml-14 lg:mt-8 w-[400px] h-[450px]">
                     <Image src={"/assets/owner.svg"} width={500} height={600} alt="dog-owner" className="rounded-2xl"></Image>
                 </div>
 
-                <div className="mb-24 text-center mx-auto lg:text-left flex flex-col lg:justify-center lg:-ml-10">
-                    <h2 className = "text-3xl font-georgia font-bold mb-6">Our Story</h2>
-                    <p className = "leading-loose text-black mb-8">{fillerText}</p>
+                <div className="mb-12 sm:mb-16 lg:mb-24 text-center mx-auto lg:text-left flex flex-col lg:justify-center lg:-ml-10">
+                    <h2 className = "text-2xl sm:text-3xl font-georgia font-bold mb-4 sm:mb-6">Our Story</h2>
+                    <p className = "leading-relaxed sm:leading-loose text-sm sm:text-base text-black mb-6 sm:mb-8">{fillerText}</p>
                 
                     {/* Mobile & Tablet */}
-                    <div className="mb-8 flex justify-center lg:hidden">
-                        <Image src={"/assets/owner.svg"} width={500} height={600} alt="dog-owner" className="rounded-2xl"></Image>
+                    <div className="mb-6 sm:mb-8 flex justify-center lg:hidden">
+                        <Image src={"/assets/owner.svg"} width={500} height={600} alt="dog-owner" className="rounded-2xl w-full max-w-sm h-auto"></Image>
                     </div>
 
                     
-                    <div className="lg:w-[200px]">
-                    <button className="bg-darker_blue font-montserrat text-white px-20 lg:px-14 py-2 rounded-full hover:bg-designblue">Contact Us</button>
+                    <div className="w-full sm:w-auto lg:w-[200px] flex justify-center lg:justify-start">
+                    <button className="bg-darker_blue font-montserrat text-white px-8 sm:px-12 md:px-20 lg:px-14 py-2 text-sm sm:text-base rounded-full hover:bg-designblue">Contact Us</button>
                     </div>
                 </div>
 
                 
-                <Image src={"/assets/smallRightPaw.svg"} alt="Paw-right" width={60} height={10} className="absolute md:w-[80px] left-[240px] top-[810px] md:left-[650px] md:top-[800px] lg:left-[950px] lg:top-[305px] xl:left-[1180px]"></Image>
-                <Image src={"/assets/smallUpPaw.svg"} alt="Paw-straight" width={60} height={10} className="absolute md:w-[80px] left-[220px] top-[880px] md:left-[580px] md:top-[890px] lg:left-[890px] lg:top-[400px] xl:left-[1120px]"></Image>
-                <Image src={"/assets/smallRightPaw.svg"} alt="Paw-right" width={65} height={10} className="absolute md:w-[85px] left-[235px] top-[940px] md:left-[620px] md:top-[960px] lg:left-[930px] lg:top-[480px] xl:left-[1160px]"></Image>
+                {/* Decorative paw images - hidden on mobile, visible on larger screens */}
+                <Image src={"/assets/smallRightPaw.svg"} alt="Paw-right" width={60} height={10} className="hidden md:block absolute md:w-[80px] md:left-[650px] md:top-[800px] lg:left-[950px] lg:top-[305px] xl:left-[1180px]"></Image>
+                <Image src={"/assets/smallUpPaw.svg"} alt="Paw-straight" width={60} height={10} className="hidden md:block absolute md:w-[80px] md:left-[580px] md:top-[890px] lg:left-[890px] lg:top-[400px] xl:left-[1120px]"></Image>
+                <Image src={"/assets/smallRightPaw.svg"} alt="Paw-right" width={65} height={10} className="hidden md:block absolute md:w-[85px] md:left-[620px] md:top-[960px] lg:left-[930px] lg:top-[480px] xl:left-[1160px]"></Image>
             </div>
             
 
             {/* Features */}
-            <section>
-                <div className="text-center mt-12 lg:mt-24">
-                    <h2 className="font-semibold font-montserrat text-[#1E2D67] text-xl lg:text-2xl tracking-wide">Committed to Quality, Health, and Trust</h2>
+            <section className="px-4 sm:px-6">
+                <div className="text-center mt-8 sm:mt-12 lg:mt-24">
+                    <h2 className="font-semibold font-montserrat text-[#1E2D67] text-lg sm:text-xl lg:text-2xl tracking-wide px-4">Committed to Quality, Health, and Trust</h2>
                 </div>
 
-                <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-16 px-10 mt-10 text-center">
+                <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12 lg:gap-16 px-4 sm:px-6 md:px-10 mt-6 sm:mt-8 lg:mt-10 text-center">
                     <FeatureCard imageSrc={"/certificate.svg"} imageAlt={"certificateLogo"} text={<>One Year<br />Health Guarantee</>}/>
                     <FeatureCard imageSrc={"/medal.svg"} imageAlt={"medalLogo"} text={<>American Kennel<br />Club Registered</>}/>
                     <FeatureCard imageSrc={"/Dog.svg"} imageAlt={"puppyLogo"} text={<>Breeding<br />Since 2018</>}/>
@@ -80,26 +80,28 @@ const fillerText = "Lorem ipsum dolor sit amet consectetur. Dolor pretium ornare
 
 
         {/* Available Puppies*/}
-        <div className="relative flex pb-8 lg:pb-12">
+        <div className="relative flex flex-col lg:flex-row pb-8 lg:pb-12 px-4 sm:px-6">
             <div className="hidden lg:block relative">
             <Image src="/assets/leftPaw.svg" alt="Paw-left" width={100} height={100} className="absolute top-14 left-3"></Image>
             <Image src="/assets/smallRightPaw.svg" alt="Paw-right" width={190} height={100} className="absolute top-44 left-64"></Image>
             <Image src="/assets/available_dog.png" alt="AvailableDog" width={450} height={450} className="relative top-16"></Image>
             </div>
                 
-            <div className="mx-auto lg:mr-40 mt-10 lg:mt-20 max-w-lg">
-                <h2 className="text-3xl text-center lg:text-start font-georgia font-bold">Ready to Bring Happiness Home with Calderon Bulldogs?</h2>
-                <p className="text-gray-700 text-center lg:text-start mt-6 mb-14 lg:mt-8 lg:mb-10">Browse our current available puppies and discover adorable puppies waiting for their forever home. </p>
-                <button className="bg-[#f9d59e] font-montserrat font-semibold px-10 py-2 text-black rounded-full mt-8 block mx-auto lg:mx-0">View Available Puppies</button>
+            <div className="mx-auto lg:mr-40 mt-6 sm:mt-8 lg:mt-20 max-w-lg w-full">
+                <h2 className="text-2xl sm:text-3xl text-center lg:text-start font-georgia font-bold px-2">Ready to Bring Happiness Home with Calderon Bulldogs?</h2>
+                <p className="text-gray-700 text-center lg:text-start mt-4 sm:mt-6 mb-8 sm:mb-10 lg:mt-8 lg:mb-10 text-sm sm:text-base">Browse our current available puppies and discover adorable puppies waiting for their forever home. </p>
+                <button className="bg-[#f9d59e] font-montserrat font-semibold px-8 sm:px-10 py-2 text-sm sm:text-base text-black rounded-full mt-6 sm:mt-8 block mx-auto lg:mx-0">View Available Puppies</button>
                 
-                <div className="lg:hidden">
-                    <Image src="/assets/leftPaw.svg" alt="Paw-left" width={65} height={10} className="absolute mt-14 ml-3 md:mt-18 md:ml-10 md:w-[100px]"></Image>
-                    <Image src="/assets/smallRightPaw.svg" alt="Paw-right" width={90} height={10} className="absolute mt-44 ml-48 md:mt-58 md:ml-72 md:w-[140px]"></Image>
-                    <Image src="/assets/available_dog.png" alt="AvailableDog" width={450} height={10} className="absolute mt-16 md:ml-6"></Image>
+                <div className="lg:hidden relative mt-8 sm:mt-12 flex justify-center">
+                    <div className="relative">
+                        <Image src="/assets/leftPaw.svg" alt="Paw-left" width={65} height={65} className="absolute -top-2 -left-2 sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px]"></Image>
+                        <Image src="/assets/smallRightPaw.svg" alt="Paw-right" width={90} height={90} className="absolute top-12 left-24 sm:top-16 sm:left-32 sm:w-[110px] sm:h-[110px] md:w-[140px] md:h-[140px]"></Image>
+                        <Image src="/assets/available_dog.png" alt="AvailableDog" width={280} height={280} className="relative sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px]"></Image>
+                    </div>
                 </div>
             </div>
         </div>
-        <div className="m-2 my-20 lg:mx-10 lg:mb-20 lg:mt-10">
+        <div className="px-4 sm:px-6 my-12 sm:my-16 lg:my-20 lg:mx-10">
             <Footer />
         </div>
         </div>
