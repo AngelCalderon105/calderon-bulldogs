@@ -131,7 +131,7 @@ const EventView: React.FC<EventProps> = ({ isAdmin }) => {
   if (isError) return <p>Error fetching event data</p>;
 
   return (
-    <div className="bg-[#F2F7FF] pb-2">
+    <div className="pb-2">
       {(showBanner || localIsEventActive) && (
         <div className="flex w-full flex-col items-center justify-center rounded-md bg-[#EAF4FF] pb-2 pt-2 md:flex-row md:gap-20 md:pt-6">
           <div className="flex gap-3 py-4 md:flex-col md:gap-0 md:py-0">

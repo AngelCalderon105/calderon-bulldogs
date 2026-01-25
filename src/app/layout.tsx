@@ -16,7 +16,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable} scroll-smooth`}>
-      <body>
+      <body className="overflow-x-hidden">
         <TRPCReactProvider>
           {children}
           <Analytics />

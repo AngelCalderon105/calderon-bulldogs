@@ -18,7 +18,11 @@ export default {
   			'custom-range-300-307': {
   				min: '300px',
   				max: '307px'
-  			}
+  			},
+			'custom-range-320-639': {
+				min: '320px',
+				max: '639px'
+			}
   		},
   		fontFamily: {
   			sans: ["var(--font-geist-sans)", ...fontFamily.sans],
@@ -52,6 +56,7 @@ export default {
   			background: 'hsl(var(--background))',
   			designred: '#D11243',
   			designblue: '#344EAD',
+			darker_blue: '#133591',
   			foreground: 'var(--foreground)',
   			secblue: 'var(--secondaryblue)',
   			buttonblue: 'var(--buttonblue)',
