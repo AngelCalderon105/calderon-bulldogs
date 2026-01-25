@@ -30,7 +30,7 @@ const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
   }, [isOpen]);
 
   return (
-    <div className="top-0 z-50 flex w-full justify-between py-4 md:px-2 md:pb-0 md:pt-4">
+    <div className="top-0 z-50 flex w-full justify-between py-4 md:px-2 md:pb-0 md:pt-4 px-5 lg:px-14">
       {/* Logo and Title */}
       <div className="flex flex-row items-center">
         <Image src="/Vector.svg" alt="Logo" width={20} height={20} />
@@ -144,8 +144,12 @@ const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
           <p className={`font-medium text-gray_dark`}>Stud Service</p>
         </Link>
 
-        <Link href="#faq">
-          <p className={`font-medium text-gray_dark`}>FAQs</p>
+        <Link href="#faq" className="transition-colors hover:text-blue_darker">
+          <p className="font-medium text-gray_dark">FAQs</p>
+        </Link>
+
+        <Link href="#about" className="transition-colors hover:text-blue_darker">
+          <p className="font-medium text-gray_dark">About</p>
         </Link>
 
         <Link href="#contact">

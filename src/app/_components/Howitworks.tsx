@@ -84,7 +84,7 @@ const HowItWorks: React.FC = () => {
               className="object-contain w-[300px] h-[300px] md:min-w-[350px] min-h-[350px]"
             />
           </div>
-          <button className="bg-blue_darker text-white px-6 py-1.5 rounded-full text-lg hover:bg-blue_dark">
+          <button className="bg-blue_darker tracking-wide font-roboto font-thin text-white py-2 px-12 lg:px-10 rounded-full text-sm hover:bg-designblue">
             Still have questions?
           </button>
         </div>
