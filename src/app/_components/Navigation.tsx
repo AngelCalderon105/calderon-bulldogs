@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Contact from "./ContactView";
@@ -10,11 +11,13 @@ interface NavProps {
 
 const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   const menuItems = [
     { name: "Available Puppies", path: "#stud_service" },
-    { name: "Stud Service", path: "#stud_service" },
-    { name: "FAQ", path: "#faq" },
+    { name: "Stud Service", path: isHome ? "#stud_service" : "/#stud_service" },
+    { name: "FAQ", path: isHome ? "#faq" : "/#faq" },
   ];
 
   // Disable scrolling when the menu is open
@@ -32,12 +35,12 @@ const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
   return (
     <div className="top-0 z-50 flex w-full justify-between py-4 md:px-2 md:pb-0 md:pt-4 px-5 lg:px-14">
       {/* Logo and Title */}
-      <div className="flex flex-row items-center">
+      <Link href="/" className="flex flex-row items-center">
         <Image src="/Vector.svg" alt="Logo" width={20} height={20} />
         <p className="px-2 font-georgia text-lg font-bold md:text-lg lg:text-xl">
           Calderon Bulldogs
         </p>
-      </div>
+      </Link>
 
       {/* Hamburger Icon for Mobile/Tablet */}
       <button
@@ -69,12 +72,12 @@ const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
         {/* Navigation Items */}
         <div className="flex w-full flex-col items-center space-y-6 px-8">
           <div className="mb-8 flex w-full flex-row items-center justify-between">
-            <div className="flex flex-row items-center">
+            <Link href="/" className="flex flex-row items-center">
               <Image src="/Vector.svg" alt="Logo" width={30} height={30} />
               <h1 className="px-4 font-georgia text-lg font-bold">
                 Calderon Bulldogs
               </h1>
-            </div>
+            </Link>
             {/* Close Button */}
             <button
               className="text-blue_darker"
@@ -140,15 +143,15 @@ const Navigation: React.FC<NavProps> = ({ isAdmin }) => {
 
       {/* Desktop Menu */}
       <div className="hidden items-center space-x-8 md:flex">
-        <Link href="#stud_service">
+        <Link href={isHome ? "#stud_service" : "/#stud_service"}>
           <p className={`font-medium text-gray_dark`}>Stud Service</p>
         </Link>
 
-        <Link href="#faq" className="transition-colors hover:text-blue_darker">
+        <Link href={isHome ? "#faq" : "/#faq"} className="transition-colors hover:text-blue_darker">
           <p className="font-medium text-gray_dark">FAQs</p>
         </Link>
 
-        <Link href="#about" className="transition-colors hover:text-blue_darker">
+        <Link href={`/about-us`} className="transition-colors hover:text-blue_darker">
           <p className="font-medium text-gray_dark">About</p>
         </Link>
 

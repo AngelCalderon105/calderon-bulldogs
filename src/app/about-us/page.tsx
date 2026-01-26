@@ -43,9 +43,9 @@ const fillerText = "We are a family-owned puppy breeding business based in Santa
        
 
         {/* Our Story */}
-        <section className=" overflow-x-hidden mx-10">        
-            <div className=" ">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 lg:gap-0  md:my-10 items-center max-w-screen-xl mx-auto">
+        <section className="overflow-x-hidden mx-10 relative">        
+            <div className="relative max-w-screen-xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 lg:gap-0  md:my-10 items-center">
                     {/* Text Content - Right side on md+ */}
                     <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left order-1 md:order-2">
                         <h2 className = " text-2xl font-georgia font-bold my-5 md:mb-1 sm:text-4xl md:text-3xl lg:text-4xl  lg:mb-7 ">Our Story</h2>
@@ -67,68 +67,28 @@ const fillerText = "We are a family-owned puppy breeding business based in Santa
                     </div>
                 </div>
 
-                {/* Paw Prints - positioned below filler text and maintaining ratio */}
-                {/* Top paw: starts below filler text, maintaining ~5% spacing ratio between paws */}
-                <Image 
-                    src={"/vectorpaw.svg"} 
-                    alt="Paw-right" 
-                    width={45} 
-                    height={500} 
-                    className="opacity-40 absolute left-[90%] top-[100%] rotate-[30deg] w-[10vw] 
-                    sm:left-[90%] sm:top-[100%] 
-                    md:top-[80%] md:left-[90%] md:w-[6vw] 
-                    lg:top-[82%] lg:left-[92%] lg:w-[6vw] 
-                    xl:top-[75%] xl:left-[92%] xl:w-[5.5vw]
-                    2xl:top-[70%] 2xl:left-[92%] 2xl:w-[5vw]
-                    min-[2176px]:top-[97%] min-[2176px]:left-[92%] min-[2176px]:w-[4.5vw]"
-                />
-                
-                {/* Middle paw: ~5% below top paw */}
-                <Image 
-                    src={"/vectorpaw.svg"} 
-                    alt="Paw-right" 
-                    width={45} 
-                    height={500} 
-                    className="opacity-40 z-0 absolute left-[80%] top-[106%] w-[10vw] 
-                    sm:left-[78%] sm:top-[107%] 
-                    md:top-[95%] md:left-[82%] md:w-[6vw] 
-                    lg:top-[95%] lg:left-[85%] lg:w-[6vw] 
-                    xl:top-[89%] xl:left-[83%] xl:w-[5.5vw]
-                    2xl:top-[90%] 2xl:left-[85%] 2xl:w-[5vw]
-                    min-[2176px]:top-[102%] min-[2176px]:left-[83%] min-[2176px]:w-[4.5vw]"
-                />
-               
-                {/* Bottom paw: ~5% below middle paw */}
-                <Image 
-                    src={"/vectorpaw.svg"} 
-                    alt="Paw-right" 
-                    width={45} 
-                    height={500} 
-                    className="opacity-40 absolute left-[90%] top-[113%] rotate-[30deg] w-[10vw] 
-                    sm:left-[91%] sm:top-[115%] 
-                    md:top-[110%] md:left-[92%] md:w-[6vw] 
-                    lg:top-[110%] lg:left-[92%] lg:w-[6vw] 
-                    xl:top-[110%] xl:left-[92%] xl:w-[5.5vw]
-                    2xl:top-[115%] 2xl:left-[92%] 2xl:w-[5vw]
-                    min-[2176px]:top-[107%] min-[2176px]:left-[92%] min-[2176px]:w-[4.5vw]"
-                />
+                {/* Paw Print - fixed to bottom right of Our Story section */}
+                <div className="absolute -bottom-32 sm:-bottom-40 lg:-bottom-56 -right-0 pointer-events-none">
+                    <Image src={"/assets/paw-prints.svg"} width={200} height={100} alt="paw-prints" className="
+                    w-[100px] sm:w-[160px] lg:w-[200px] "></Image>
+                </div>
             </div>
            
 
             {/* Features */}
             <section className="relative z-10 md:my-40">
                 <div className="text-center mt-12 lg:mt-24">
-                    <h2 className="font-semibold font-montserrat text-dark_blue text-xl sm:text-3xl xl:text-4xl px-4 relative z-10 ">Committed to Quality, Health, <span className="block md:hidden"></span><span className="hidden md:inline"> </span> and Trust</h2>
+                    <h2 className="font-semibold font-montserrat text-dark_blue text-xl sm:text-3xl xl:text-4xl relative z-10 ">Committed to Quality, Health, <span className="block md:hidden"></span><span className="hidden md:inline"> </span> and Trust</h2>
                 </div>
 
                 <div className="text-center  flex flex-col items-center gap-8 md:flex-row md:justify-evenly xl:justify-center md:items-stretch m-10">
-                    <div className="w-10/12 max-w-72 md:w-[280px] md:max-w-[280px] md:h-full">
+                    <div className="w-full max-w-72 md:w-[280px] md:max-w-[280px] md:h-full">
                         <FeatureCard imageSrc={"/certificate.svg"} imageAlt={"certificateLogo"} text={<>One Year<br />Health Guarantee</>}/>
                     </div>
-                    <div className="w-10/12 max-w-72 md:w-[280px] md:max-w-[280px] md:h-full">
+                    <div className="w-full max-w-72 md:w-[280px] md:max-w-[280px] md:h-full">
                         <FeatureCard imageSrc={"/assets/medal.svg"} imageAlt={"medalLogo"} text={<>American Kennel Club<br />Registered</>}/>
                     </div>
-                    <div className="w-10/12 max-w-72 md:w-[280px] md:max-w-[280px] md:h-full">
+                    <div className="w-full max-w-72 md:w-[280px] md:max-w-[280px] md:h-full">
                         <FeatureCard imageSrc={"/Dog.svg"} imageAlt={"puppyLogo"} text={<>Breeding<br />Since 2018</>}/>
                     </div>
                 </div>
